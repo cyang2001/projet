@@ -40,7 +40,7 @@
 
 1. 克隆仓库：
 ```bash
-git clone https://github.com/yourusername/paris-metro-recognition.git
+git clone https://github.com/cyang2001/projet.git
 cd paris-metro-recognition
 ```
 
