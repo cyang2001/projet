@@ -2,7 +2,7 @@
 
 # Resizing
 resize_enabled: true
-resize_shape: [224, 224]  # Target size for CNNs
+resize_shape: [64, 64]  # Target size for CNNs
 keep_aspect_ratio: false   # Whether to maintain aspect ratio when resizing
 
 # Color processing

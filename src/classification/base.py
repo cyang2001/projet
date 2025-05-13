@@ -143,7 +143,9 @@ def get_classifier(cfg: DictConfig, logger: Optional[logging.Logger] = None) -> 
     
     if logger:
         logger.info(f"Creating classifier of type: {classifier_name}")
-    
+    else:
+        logger = get_logger(__name__)
+        logger.info(f"Creating classifier of type: {classifier_name}")
     if classifier_name == "template_classifier":
         from src.classification.template_classifier import TemplateClassifier
         return TemplateClassifier(cfg, logger)

@@ -1,10 +1,14 @@
 import logging
 import os
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from typing import List, Optional, Tuple, Dict, Any, Union
+from typing import List, Optional, Tuple, Dict, Any, Union, Callable
 from omegaconf import DictConfig
+import tensorflow as tf
+import keras
+import keras_tuner as kt
 
 from src.data.dataset import MetroDataset
 from src.preprocessing.preprocessor import PreprocessingPipeline
@@ -94,9 +98,18 @@ class MetroTrainPipeline:
         # Load dataset
         train_data, val_data = self._load_datasets()
         
+        # Optimize ROI detector if requested
+        if self.cfg.mode.train.get("optimize_detector", True):
+            self._optimize_detector(train_data)
+        
         # Create templates if requested
         if self.cfg.mode.train.get("create_templates", True):
             self._create_templates(train_data)
+        
+        if self.cfg.mode.tuning.get("enabled", False):
+            self.logger.info("Starting hyperparameter tuning...")
+            best_params = self._hyperparameter_tuning(train_data, val_data)
+            self.logger.info(f"Best hyperparameters found: {best_params}")
         
         # Train CNN if requested
         if self.cfg.mode.train.get("train_cnn", True):
@@ -226,7 +239,103 @@ class MetroTrainPipeline:
                 self.logger.info("Detector parameters saved successfully")
             else:
                 self.logger.warning("Failed to save detector parameters")
-                
+    def _hyperparameter_tuning(self,train_dataset: MetroDataset,val_dataset: MetroDataset) -> Dict[str, Any]:
+
+        self.logger.info("=== Begin Hyperparameter Tuning (ResNet50) ===")
+        max_trials = self.cfg.mode.tuning.get("max_trials", 10)
+        executions_per_trial = self.cfg.mode.tuning.get("executions_per_trial", 1)
+        tuning_dir = self.cfg.mode.tuning.get("directory", "models/tuning")
+        project_name = self.cfg.mode.tuning.get("project_name", "resnet50_tuning")
+
+        ensure_dir(tuning_dir)
+
+        X_train_raw, y_train = train_dataset.get_all()
+        X_val_raw,   y_val   = val_dataset.get_all()
+        X_train = []
+        X_val = []
+        for img in X_train_raw:
+            X_train.append(self.preprocessor.process(img))
+        for img in X_val_raw:
+            X_val.append(self.preprocessor.process(img))
+        X_train = np.array(X_train)
+        X_val = np.array(X_val)
+        h, w = self.cfg.preprocessing.resize_shape
+        input_shape = (h, w, 3)
+        num_classes = self.cfg.classification.cnn.num_classes
+
+        def build_resnet_model(hp):
+            base_trainable = hp.Boolean("base_trainable", default=False)
+            unfreeze_blocks = hp.Int("unfreeze_blocks", 0, 4, step=1)
+            lr = hp.Choice("learning_rate", [1e-2, 1e-3, 1e-4])
+            dr = hp.Float("dropout_rate", 0.1, 0.5, step=0.1)
+            base = keras.applications.ResNet50(
+                include_top=False,
+                weights="imagenet",
+                input_shape=input_shape
+            )
+            base.trainable = base_trainable
+            if base_trainable and unfreeze_blocks > 0:
+                for layer in base.layers[:-unfreeze_blocks * 10]:
+                    layer.trainable = False
+                for layer in base.layers[-unfreeze_blocks * 10:]:
+                    layer.trainable = True
+
+            inp = keras.Input(shape=input_shape)
+            x = base(inp, training=False)
+            x = keras.layers.GlobalAveragePooling2D()(x)
+            x = keras.layers.Dropout(dr)(x)
+            out = keras.layers.Dense(num_classes, activation="softmax")(x)
+
+            model = keras.Model(inp, out)
+            model.compile(
+                optimizer="adam",
+                loss="sparse_categorical_crossentropy",
+                metrics=["accuracy"]
+            )
+            return model
+
+        tuner = kt.Hyperband(
+            build_resnet_model,
+            objective="val_accuracy",
+            max_epochs=self.cfg.mode.train.get("epochs", 20),
+            factor=3,
+            directory=tuning_dir,
+            project_name=project_name,
+            executions_per_trial=executions_per_trial
+        )
+
+        early_stop = keras.callbacks.EarlyStopping(
+            monitor="val_loss", patience=3, restore_best_weights=True
+        )
+
+        tuner.search(
+            X_train, y_train,
+            validation_data=(X_val, y_val),
+            callbacks=[early_stop],
+            epochs=self.cfg.mode.train.get("epochs", 20),
+            batch_size=self.cfg.mode.train.get("batch_size", 32)
+        )
+
+        best_hp = tuner.get_best_hyperparameters(1)[0]
+        best_model = tuner.get_best_models(1)[0]
+
+        model_path = os.path.join(tuning_dir, "best_resnet50.h5")
+        best_model.save(model_path)
+        self.logger.info(f"Best model saved: {model_path}")
+
+        hp_values = best_hp.values
+        hp_path = os.path.join(tuning_dir, "best_hyperparams.json")
+        with open(hp_path, "w") as f:
+            json.dump(hp_values, f, indent=2)
+        self.logger.info(f"Best hyperparameters saved: {hp_path}")
+
+        self.classification_cfg = self.classifier.cfg
+        self.classification_cfg.cnn.learning_rate = hp_values["learning_rate"]
+        self.classification_cfg.cnn.dropout_rate = hp_values["dropout_rate"]
+        self.classification_cfg.cnn.base_trainable = hp_values["base_trainable"]
+        self.classification_cfg.cnn.unfreeze_blocks = hp_values["unfreeze_blocks"]
+
+        return hp_values
     def _evaluate_detector(self, val_dataset: MetroDataset):
         pass
 
@@ -254,13 +363,10 @@ class MetroTrainPipeline:
         
         processed_X_val = np.array(processed_val)
         
-        # 检查evaluate方法是否存在
         if not hasattr(self.classifier, 'evaluate'):
             self.logger.warning("Classifier does not support evaluation method")
-            # 手动计算预测结果
             metrics = self._calculate_metrics_manually(processed_X_val, y_val)
         else:
-            # 使用内置的evaluate方法
             metrics = self.classifier.evaluate(processed_X_val, y_val)
         
         # Log results
