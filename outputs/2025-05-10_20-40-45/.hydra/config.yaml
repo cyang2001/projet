@@ -1,0 +1,220 @@
+mode:
+  preprocessing:
+    resize_enabled: true
+    resize_shape:
+    - 224
+    - 224
+    keep_aspect_ratio: false
+    normalize: true
+    to_grayscale: false
+    equalize_hist: false
+    apply_clahe: false
+    clahe_clip_limit: 2.0
+    clahe_tile_grid_size:
+    - 8
+    - 8
+    augmentation:
+      enabled: true
+      rotation_range: 10
+      width_shift_range: 0.1
+      height_shift_range: 0.1
+      brightness_range:
+      - 0.9
+      - 1.1
+      zoom_range: 0.1
+      horizontal_flip: false
+  classification:
+    name: hybrid_classifier
+    template:
+      template_dir: ${base_dir}/models/templates
+      template_size:
+      - 64
+      - 64
+      method: cv2.TM_CCORR_NORMED
+      threshold: 0.7
+    cnn:
+      model_path: ${base_dir}/models/cnn/best_model.h5
+      input_shape:
+      - 64
+      - 64
+      - 3
+      num_classes: 14
+      architecture: resnet
+      dropout_rate: 0.5
+      use_augmentation: true
+      weights: null
+    hybrid:
+      primary: cnn
+      fallback_threshold: 0.6
+    threshold: 0.5
+    preprocess_input: true
+  name: train
+  test_mode: false
+  test_dir: tests
+  test_file: ''
+  template:
+    save_dir: ${base_dir}/models/templates
+    normalization: minmax
+    preprocessing: true
+  model:
+    name: metro_cnn
+    architecture: simple_cnn
+    input_shape:
+    - 64
+    - 64
+    - 3
+    num_classes: 14
+    save_dir: ${base_dir}/models/cnn
+    checkpoint_format: model_{epoch:02d}_{val_accuracy:.4f}.h5
+  train:
+    create_templates: true
+    train_cnn: false
+    epochs: 50
+    batch_size: 32
+    augmentation_factor: 3
+    input_size: 64
+    num_classes: 14
+    early_stopping: true
+    patience: 10
+    save_best_only: true
+    learning_rate: 0.001
+    optimizer: adam
+    save_checkpoints: true
+    checkpoint_dir: ${base_dir}/models/checkpoints
+    evaluate_after: true
+  dataset: null
+dataset:
+  data_root: ${base_dir}/BD_METRO
+  train_mat: Apprentissage.mat
+  test_mat: Test.mat
+  data_format: mat
+  val_split: 0.2
+  random_seed: 42
+  output_dir: results
+  image_format: .JPG
+  image_mode: RGB
+  resize_shape:
+  - 64
+  - 64
+  normalization: minmax
+  color_mode: rgb
+  roi_padding: 10
+  augmentation:
+    enabled: true
+    rotation_range: 20
+    width_shift_range: 0.1
+    height_shift_range: 0.1
+    zoom_range: 0.1
+    horizontal_flip: true
+    vertical_flip: false
+    brightness_range:
+    - 0.8
+    - 1.2
+roi_detection:
+  name: hybrid_detector
+  min_size: 20
+  max_size: 200
+  confidence_threshold: 0.5
+  color_space: HSV
+  color_ranges:
+  - name: blue
+    lower:
+    - 100
+    - 50
+    - 50
+    upper:
+    - 130
+    - 255
+    - 255
+  - name: white
+    lower:
+    - 0
+    - 0
+    - 200
+    upper:
+    - 180
+    - 30
+    - 255
+  shape_method: hough_circles
+  min_radius: 15
+  max_radius: 50
+  nms_threshold: 0.3
+  min_aspect_ratio: 0.8
+  max_aspect_ratio: 1.2
+classification:
+  name: template_classifier
+  template:
+    template_dir: ${base_dir}/models/templates
+    template_size:
+    - 64
+    - 64
+    method: cv2.TM_CCORR_NORMED
+    threshold: 0.7
+  cnn:
+    model_path: ${base_dir}/models/cnn/best_model.h5
+    input_shape:
+    - 64
+    - 64
+    - 3
+    num_classes: 14
+    architecture: mobilenet
+    dropout_rate: 0.5
+    use_augmentation: true
+    weights: null
+  hybrid:
+    primary: cnn
+    fallback_threshold: 0.6
+  threshold: 0.5
+  preprocess_input: true
+preprocessing:
+  resize_enabled: true
+  resize_shape:
+  - 224
+  - 224
+  keep_aspect_ratio: false
+  normalize: true
+  to_grayscale: false
+  equalize_hist: false
+  apply_clahe: false
+  clahe_clip_limit: 2.0
+  clahe_tile_grid_size:
+  - 8
+  - 8
+  augmentation:
+    enabled: true
+    rotation_range: 10
+    width_shift_range: 0.1
+    height_shift_range: 0.1
+    brightness_range:
+    - 0.9
+    - 1.1
+    zoom_range: 0.1
+    horizontal_flip: false
+output_dir: ${base_dir}/results
+seed: 42
+debug: false
+verbose: true
+model_dispatch:
+  train: src.pipeline.train_pipeline:main
+  test: src.pipeline.test_pipeline:main
+  demo: src.pipeline.demo_pipeline:main
+data_root: dataset
+device: cpu
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+data:
+  data_root: BD_METRO
+  train_mat: Apprentissage.mat
+  test_mat: Test.mat
+  val_split: 0.2
+common:
+  template_dir: templates
+  model_path: models/cnn_model.h5
+  evaluate: false
+visualization:
+  enabled: true
+  show_images: false
+  save_plots: true
+  plot_dir: ${base_dir}/results/plots
+base_dir: ${oc.env:BASE_DIR}

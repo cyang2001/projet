@@ -1,0 +1,30 @@
+# Default classification configuration
+
+name: hybrid_classifier  # Classifier implementation to use
+                       # Options: template_classifier, cnn_classifier, hybrid_classifier
+
+# Template classifier settings
+template:
+  template_dir: "${base_dir}/models/templates"  # Directory for storing templates
+  template_size: [64, 64]           # Size for template images
+  method: "cv2.TM_CCORR_NORMED"     # Template matching method
+  threshold: 0.7                    # Matching threshold
+
+# CNN classifier settings
+cnn:
+  model_path: "${base_dir}/models/cnn/best_model.h5"  # Path for saving/loading CNN model
+  input_shape: [64, 64, 3]           # Input image shape
+  num_classes: 14                    # Number of metro line classes
+  architecture: "resnet"          # Model architecture
+  dropout_rate: 0.5                  # Dropout rate
+  use_augmentation: true             # Whether to use data augmentation
+  weights: null                      # Pre-trained weights path (null for none)
+  
+# Hybrid classifier settings
+hybrid:
+  primary: "cnn"                     # Primary classifier (cnn or template)
+  fallback_threshold: 0.6            # Threshold to trigger fallback classifier
+  
+# Common settings
+threshold: 0.5                       # Classification confidence threshold
+preprocess_input: true               # Whether to preprocess images before classification 

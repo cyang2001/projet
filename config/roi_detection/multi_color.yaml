@@ -1,0 +1,12 @@
+name: multi_color_detector
+
+
+min_area: 300        
+max_area: 20000      
+min_aspect_ratio: 0.5  
+max_aspect_ratio: 2.0  
+
+color_params_path: "${base_dir}/models/color_params.json"
+
+params_dir: "${base_dir}/models"
+debug: false 

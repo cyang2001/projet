@@ -1,0 +1,33 @@
+# Default dataset configuration
+
+data_root: "${base_dir}/BD_METRO"         # Root directory for images
+train_mat: "Apprentissage.mat" # Training set annotations
+test_mat: "Test.mat"           # Test set annotations
+data_format: mat
+# Dataset split rules 
+# Training: image_id % 3 == 0
+# Validation: (image_id % 3 == 0) & (image_id % 2 == 0) - subset of training
+# Test: image_id % 3 != 0
+
+val_split: 0.2   
+random_seed: 42             # Validation split within training set
+output_dir: "results"         # Directory for output files
+
+# Technical parameters
+image_format: ".JPG"          # Image file format
+image_mode: "RGB"             # Image color mode
+
+resize_shape: [64, 64]    
+normalization: "minmax"   
+color_mode: "rgb"         
+roi_padding: 10           
+
+augmentation:
+  enabled: true          
+  rotation_range: 20     
+  width_shift_range: 0.1 
+  height_shift_range: 0.1 
+  zoom_range: 0.1        
+  horizontal_flip: true   
+  vertical_flip: false    
+  brightness_range: [0.8, 1.2]  

@@ -1,0 +1,9 @@
+# Demo mode configuration
+
+name: demo
+
+# Demo parameters
+view_images: true      # Whether to display detection results 
+input_path: "BD_METRO" # Path to images or single image
+batch_mode: true       # Whether to process all images in directory
+save_results: true     # Whether to save detection results 

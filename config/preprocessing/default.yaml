@@ -1,0 +1,26 @@
+# Default preprocessing configuration
+
+# Resizing
+resize_enabled: true
+resize_shape: [224, 224]  # Target size for CNNs
+keep_aspect_ratio: false   # Whether to maintain aspect ratio when resizing
+
+# Color processing
+normalize: true           # Whether to normalize pixel values to [0-1]
+to_grayscale: false       # Whether to convert to grayscale
+equalize_hist: false      # Whether to apply histogram equalization
+
+# Image enhancement
+apply_clahe: false        # Whether to apply CLAHE (Contrast Limited AHE)
+clahe_clip_limit: 2.0     # Clip limit for CLAHE
+clahe_tile_grid_size: [8, 8]  # Tile grid size for CLAHE
+
+# Data augmentation (applied during training)
+augmentation:
+  enabled: true
+  rotation_range: 10      # Degree range for random rotations
+  width_shift_range: 0.1  # Range for random horizontal shifts
+  height_shift_range: 0.1 # Range for random vertical shifts
+  brightness_range: [0.9, 1.1]  # Range for random brightness
+  zoom_range: 0.1         # Range for random zoom
+  horizontal_flip: false  # Whether to randomly flip horizontally

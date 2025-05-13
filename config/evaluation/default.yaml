@@ -1,0 +1,27 @@
+
+ref_path: "${base_dir}/Test.mat"        
+test_path: "${base_dir}/results/myResults.mat"  
+resize_factor: 1.0          
+output_dir: "${base_dir}/results/evaluation"  
+
+metrics:
+  accuracy: true            
+  precision: true           
+  recall: true              
+  f1_score: true            
+  confusion_matrix: true    
+
+visualization:
+  enabled: true            
+  plot_confusion_matrix: true  
+  plot_recognition_rates: true  
+  normalize: true           
+  save_plots: true          
+  show_plots: true         
+  figsize: [10, 8]          
+  cmap: "Blues"             
+
+save:
+  enabled: true            
+  format: "npy"             
+  include_timestamp: true   

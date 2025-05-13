@@ -1,0 +1,22 @@
+# Testing mode configuration
+
+name: test
+
+
+test:
+  type: "Test"               
+  view_images: false          
+  save_results: true         
+  results_file: "${base_dir}/results/myResults.mat"  
+  evaluate_after: true       
+
+classification:
+  method: "hybrid"           
+  template_dir: "${base_dir}/models/templates"  
+  model_path: "${base_dir}/models/cnn/best_model.h5"  
+  confidence_threshold: 0.6  
+
+defaults:
+  - /preprocessing/default
+  - /roi_detection/default
+  - /classification/default

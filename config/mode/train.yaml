@@ -1,0 +1,46 @@
+# Training mode configuration
+
+name: train
+
+test_mode: false
+test_dir: "tests"
+test_file: ""
+
+         
+
+
+template:
+  save_dir: "${base_dir}/models/templates"   
+  normalization: "minmax"        
+  preprocessing: true            
+
+
+model:
+  name: "metro_cnn"             
+  architecture: "simple_cnn"     
+  input_shape: [64, 64, 3]       
+  num_classes: 14                
+  save_dir: "${base_dir}/models/cnn"        
+  checkpoint_format: "model_{epoch:02d}_{val_accuracy:.4f}.h5"  
+
+
+train:
+  create_templates: true
+  train_cnn: false
+  epochs: 50
+  batch_size: 32
+  augmentation_factor: 3
+  input_size: 64
+  num_classes: 14
+  early_stopping: true
+  patience: 10
+  save_best_only: true
+  learning_rate: 0.001
+  optimizer: adam
+  save_checkpoints: true    
+  checkpoint_dir: "${base_dir}/models/checkpoints"  
+  evaluate_after: true       
+defaults:
+  - /preprocessing/default
+  - /classification/default 
+
