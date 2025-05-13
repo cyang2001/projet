@@ -234,7 +234,7 @@ class MetroTrainPipeline:
         optimized_params = optimize_color_parameters(train_dataset)
         self.detector.update_params(optimized_params)
         if self.cfg.roi_detection.get("save_params", True):
-            is_saved = self.detector.save_params(self.cfg.roi_detection.get("params_dir", "models"))
+            is_saved = self.detector.save_params(self.cfg.roi_detection.get("params_dir", "models"), optimized_params)
             if is_saved:
                 self.logger.info("Detector parameters saved successfully")
             else:

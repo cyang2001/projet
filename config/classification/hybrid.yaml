@@ -8,7 +8,7 @@ template:
   template_dir: "${base_dir}/models/templates"  # Directory for storing templates
   template_size: [64, 64]           # Size for template images
   method: "cv2.TM_CCORR_NORMED"     # Template matching method
-  threshold: 0.7                    # Matching threshold
+  threshold: 0.5                    # Matching threshold
 
 # CNN classifier settings
 cnn:

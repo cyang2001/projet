@@ -25,9 +25,9 @@ model:
 
 
 train:
-  create_templates: false
-  train_cnn: true
-  optimize_detector: true
+  create_templates: true
+  train_cnn: false
+  optimize_detector: false
   epochs: 50
   batch_size: 32
   augmentation_factor: 3
@@ -47,7 +47,7 @@ defaults:
 
 
 tuning:
-  enabled: true
+  enabled: false
   max_trials: 20
   executions_per_trial: 1
   directory: "${base_dir}/models/tuning"

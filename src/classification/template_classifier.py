@@ -11,7 +11,7 @@ from pathlib import Path
 from utils.utils import get_logger, ensure_dir
 from src.data.utils import convert_to_uint8, resize_image
 from src.classification.base import BaseClassifier
-
+from skimage.metrics import structural_similarity as ssim
 class TemplateClassifier(BaseClassifier):
     """
     Template Matching Classifier
@@ -147,14 +147,15 @@ class TemplateClassifier(BaseClassifier):
                 self.logger.warning(f"Error matching template for class {class_id}: {e}")
         
         # Convert score to confidence (0-1 range)
-        confidence = best_score if self.method in [cv2.TM_CCORR_NORMED, cv2.TM_CCOEFF_NORMED] else 1.0 - best_score
+        confidence = best_score 
         
         # Apply threshold
         if confidence < self.threshold:
             return -1, confidence
             
         return best_match, confidence
-    
+    def _compute_ssim_score(self, template: np.ndarray, image: np.ndarray) -> float:
+        return ssim(template, image)
     def train(self, X_train: np.ndarray, y_train: np.ndarray) -> None:
         """
         Create templates from training data.

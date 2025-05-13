@@ -103,7 +103,7 @@ class MetroTestPipeline:
             image, annotations = test_dataset.get_image_with_annotations(idx)
             image_id = test_dataset.df.iloc[idx]['image_id']
             self.logger.info(f"Processing image ID: {image_id}")
-            visualize_detection_steps(self.detector, image)
+            #visualize_detection_steps(self.detector, image)
             processed_image = self.preprocessor.process(image)
             
             detected_rois = self.detector.detect(processed_image)
@@ -112,7 +112,7 @@ class MetroTestPipeline:
             
             detected_classes = []
             for roi in detected_rois:
-                x1, y1, x2, y2, _ = roi
+                x1, y1, x2, y2 = roi['bbox']
                 
                 roi_img = processed_image[y1:y2, x1:x2]
                 
@@ -123,8 +123,9 @@ class MetroTestPipeline:
                 try:
                     class_id, confidence = self.classifier.predict(roi_img)
                     
-                    if class_id != -1:  
+                    if class_id != -1 and confidence > 0.5:  
                         detected_classes.append((class_id, (x1, y1, x2, y2), confidence))
+                        debug_roi_matching(image, (x1, y1, x2, y2), class_id, confidence)
                 except Exception as e:
                     self.logger.error(f"Error classifying ROI: {e}")
             
@@ -135,6 +136,7 @@ class MetroTestPipeline:
                 'detected': [(cls, bbox, conf) for cls, bbox, conf in detected_classes],
                 'ground_truth': gt_classes
             }
+            print(image_result)
             results.append(image_result)
             
             for cls, _, _ in detected_classes:
@@ -340,3 +342,36 @@ def main(cfg: DictConfig):
     except Exception as e:
         logger.error(f"Test pipeline execution failed: {e}")
         raise 
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+def debug_roi_matching(image: np.ndarray, roi: Tuple[int, int, int, int], match_class: int, confidence: float):
+    """
+    Visualize an ROI in the full image and the cropped region.
+
+    Args:
+        image: full RGB image
+        roi: (x1, y1, x2, y2)
+        match_class: class ID returned by classifier
+        confidence: matching confidence score
+    """
+    x1, y1, x2, y2 = roi
+    roi_img = image[y1:y2, x1:x2]  # 注意：cv2 是 (y1:y2, x1:x2)
+
+    plt.figure(figsize=(12, 5))
+
+    # Full image with bounding box
+    plt.subplot(1, 2, 1)
+    plt.imshow(image)
+    plt.title("Full Image")
+    plt.gca().add_patch(Rectangle((x1, y1), x2 - x1, y2 - y1, edgecolor='red', linewidth=2, fill=False))
+    plt.text(x1, y1 - 10, f"Predicted: {match_class}, Conf: {confidence:.2f}", color='red')
+
+    # ROI image
+    plt.subplot(1, 2, 2)
+    plt.imshow(roi_img)
+    plt.title("Matched ROI")
+
+    plt.tight_layout()
+    plt.show()

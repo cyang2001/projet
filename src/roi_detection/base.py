@@ -31,7 +31,7 @@ class BaseDetector(ABC):
         self.logger = logger or get_logger(__name__)
     
     @abstractmethod
-    def detect(self, image: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
+    def detect(self, image: np.ndarray) -> List[Dict[str, Any]]:
         """
         Detect ROIs in the image.
         
@@ -39,7 +39,10 @@ class BaseDetector(ABC):
             image: Input image
             
         Returns:
-            List of detected ROIs as (x1, y1, x2, y2, confidence)
+            List of detected ROIs as Dicts with keys:
+            - 'bbox': List[int] (x1, y1, x2, y2)
+            - 'line_id': str
+            - 'confidence': float
         """
         pass
     

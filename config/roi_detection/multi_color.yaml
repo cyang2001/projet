@@ -10,3 +10,19 @@ color_params_path: "${base_dir}/models/color_params.json"
 
 params_dir: "${base_dir}/models"
 debug: false 
+
+threshold_error_dict: 
+  "1": 10
+  "2": 10
+  "3": 10
+  "4": 25
+  "5": 10
+  "6": 10
+  "7": 10
+  "8": 10
+  "9": 10
+  "10": 10
+  "11": 10
+  "12": 0
+  "13": 5
+  "14": 10

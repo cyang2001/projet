@@ -287,7 +287,7 @@ class ModelTrainer:
         """
         try:
             import tensorflow as tf
-            from tensorflow.keras.preprocessing.image import ImageDataGenerator
+            from keras.preprocessing.image import ImageDataGenerator
             
             # 创建数据增强器
             datagen = ImageDataGenerator(

@@ -5,7 +5,7 @@ name: test
 
 test:
   type: "Test"               
-  view_images: false          
+  view_images: true          
   save_results: true         
   results_file: "${base_dir}/results/myResults.mat"  
   evaluate_after: true       

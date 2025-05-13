@@ -1,7 +1,3 @@
-"""
-Multi-color detector for Paris Metro line signs.
-"""
-
 from typing import List, Dict, Tuple, Any, Optional
 import numpy as np
 import cv2
@@ -10,204 +6,159 @@ import logging
 import os
 import json
 import matplotlib.pyplot as plt
-
-from src.data.dataset import MetroDataset
+from collections import defaultdict
 
 from .base import BaseDetector
 from utils.utils import get_logger
 
 class MultiColorDetector(BaseDetector):
-    """
-    Multi-color ROI detector for Paris Metro line signs.
-    
-    Uses specific color ranges for each of the 14 metro lines.
-    """
-    
     def __init__(self, cfg: DictConfig, logger: Optional[logging.Logger] = None):
-        """
-        Initialize the multi-color detector.
-        
-        Args:
-            cfg: Configuration dictionary
-            logger: Optional logger
-        """
         super().__init__(cfg, logger)
-        
+
         self.min_area = cfg.get("min_area", 300)
         self.max_area = cfg.get("max_area", 20000)
         self.min_aspect_ratio = cfg.get("min_aspect_ratio", 0.5)
         self.max_aspect_ratio = cfg.get("max_aspect_ratio", 2.0)
-        
+
         self.color_params = self._load_color_params(cfg)
-        
+        self.threshold_error_dict = cfg.get("threshold_error_dict", {})
         self.debug = cfg.get("debug", False)
-    
+
     def _load_color_params(self, cfg: DictConfig) -> Dict:
-        """
-        Load color parameters for each metro line.
-        
-        Args:
-            cfg: Configuration dictionary
-            
-        Returns:
-            Dictionary of color parameters
-        """
-        params_path = cfg.get("params_dir", "")
-        
+        params_dir = cfg.get("params_dir", "")
+        params_path = os.path.join(params_dir, "color_params.json")
         if params_path and os.path.exists(params_path):
             try:
+                self.logger.info(f"Loading color parameters from {params_path}")
                 with open(params_path, 'r') as f:
                     return json.load(f)
             except Exception as e:
                 self.logger.error(f"Failed to load color parameters from {params_path}: {e}")
-        
-        self.logger.info("Using default color parameters for metro lines")
-        # Todo  hard code 写在 config 里
-        return {
-            "1": {"hsv_lower": [14, 108, 85], "hsv_upper": [47, 218, 213]},
-            "2": {"hsv_lower": [73, 64, 121], "hsv_upper": [125, 189, 210]},
-            "3": {"hsv_lower": [25, 81, 80], "hsv_upper": [60, 199, 165]},
-            "4": {"hsv_lower": [122, 71, 40], "hsv_upper": [153, 144, 181]},
-            "5": {"hsv_lower": [10, 163, 91], "hsv_upper": [33, 192, 172]},
-            "6": {"hsv_lower": [46, 11, 56], "hsv_upper": [93, 105, 182]},
-            "7": {"hsv_lower": [104, 43, 113], "hsv_upper": [180, 113, 165]},
-            "8": {"hsv_lower": [105, 33, 47], "hsv_upper": [160, 81, 198]},
-            "9": {"hsv_lower": [28, 148, 98], "hsv_upper": [54, 199, 117]},
-            "10": {"hsv_lower": [20, 151, 37], "hsv_upper": [40, 179, 186]},
-            "11": {"hsv_lower": [0, 57, 91], "hsv_upper": [61, 119, 115]},
-            "12": {"hsv_lower": [60, 51, 48], "hsv_upper": [104, 105, 132]},
-            "13": {"hsv_lower": [71, 37, 72], "hsv_upper": [119, 133, 180]},
-            "14": {"hsv_lower": [89, 67, 25], "hsv_upper": [146, 131, 205]}
-        }
-    
-    def detect(self, image: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
-        """
-        Detect ROIs in the image.
-        
-        Args:
-            image: Input image (RGB)
-            
-        Returns:
-            List of detected ROIs as (x1, y1, x2, y2, confidence)
-        """
-        if image is None or image.size == 0:
-            self.logger.warning("Empty image provided for detection")
-            return []
-        
-        if image.dtype == np.float32 and image.max() <= 1.0:
-            img_bgr = cv2.cvtColor((image * 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
-        else:
-            img_bgr = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
-        
-        img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-        
-        all_regions = []
-        
-        for line_id, params in self.color_params.items():
-            hsv_lower = np.array(params["hsv_lower"])
-            hsv_upper = np.array(params["hsv_upper"])
-            
-            mask = cv2.inRange(img_hsv, hsv_lower, hsv_upper)
-            
-            kernel = np.ones((5, 5), np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-            
-            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-            if self.debug:
-                self.logger.info(f"Line {line_id}: Found {len(contours)} potential regions")
-            
-            for contour in contours:
-                area = cv2.contourArea(contour)
-                
-                if area < self.min_area or area > self.max_area:
-                    continue
-                
-                x, y, w, h = cv2.boundingRect(contour)
-                
-                aspect_ratio = w / h if h > 0 else 0
-                if aspect_ratio < self.min_aspect_ratio or aspect_ratio > self.max_aspect_ratio:
-                    continue
-                
-                if area / (w * h) < 0.3:  # 区域填充率太低
-                    continue
-                
-                confidence = area / (w * h)
-                all_regions.append((x, y, x + w, y + h, confidence))
-        final_boxes = []
-        for box in self._apply_nms(all_regions):
-            x1, y1, x2, y2, conf = box
-            final_boxes.append((int(x1), int(y1), int(x2), int(y2), conf))
-        return final_boxes
-    
-    def _apply_nms(self, regions, iou_threshold=0.5):
-        """
-        Apply non-maximum suppression to remove overlapping boxes.
-        
-        Args:
-            regions: List of regions (x1, y1, x2, y2, confidence)
-            iou_threshold: IoU threshold for overlap
-            
-        Returns:
-            List of filtered regions
-        """
+        self.logger.info("Using default color parameters for metro lines")
+        return {}  
+
+    def detect(self, image: np.ndarray) -> List[Dict[str, Any]]:
+        img_hsv = self._preprocess_image(image)
+        detections = []
+
+        for line_id in self.color_params:
+            mask = self._extract_line_mask(img_hsv, line_id)
+            boxes = self._extract_boxes_from_mask(mask)
+            for x1, y1, x2, y2, conf in boxes:
+                detections.append({
+                    "bbox": [x1, y1, x2, y2],
+                    "line_id": line_id,
+                    "confidence": conf
+                })
+
+        return self._nms_by_line(detections)
+
+    def _preprocess_image(self, image: np.ndarray) -> np.ndarray:
+        if image is None or image.size == 0:
+            raise ValueError("Empty image provided for preprocessing")
+
+        if image.dtype == np.float32 and image.max() <= 1.0:
+            img_rgb_uint8 = (image * 255).astype(np.uint8)
+        else:
+            img_rgb_uint8 = image.astype(np.uint8)
+
+        img_bgr = cv2.cvtColor(img_rgb_uint8, cv2.COLOR_RGB2BGR)
+        img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+        return img_hsv
+
+    def _extract_line_mask(self, img_hsv: np.ndarray, line_id: str) -> np.ndarray:
+        params = self.color_params[line_id]
+        lower = np.maximum(0, np.array(params["hsv_lower"]) - self.threshold_error_dict.get(line_id, 0))
+        upper = np.minimum(255, np.array(params["hsv_upper"]) + self.threshold_error_dict.get(line_id, 0))
+
+        mask = cv2.inRange(img_hsv, lower, upper)
+
+        kernel_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (18, 18))
+        kernel_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (18, 18))
+        kernel_dilate = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (30, 30))
+
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel_close)
+        mask = cv2.dilate(mask, kernel_dilate, iterations=1)
+
+        return mask
+
+    def _extract_boxes_from_mask(self, mask: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
+
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        boxes = []
+
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area < self.min_area or area > self.max_area:
+                continue
+
+            x, y, w, h = cv2.boundingRect(cnt)
+            aspect_ratio = w / h if h > 0 else 0
+            fill_ratio = area / (w * h)
+            if not (self.min_aspect_ratio <= aspect_ratio <= self.max_aspect_ratio):
+                continue
+            if fill_ratio < 0.3:
+                continue
+
+            (cx, cy), r = cv2.minEnclosingCircle(cnt)
+            circle_area = np.pi * r * r
+            circularity = area / circle_area
+            if circularity < 0.5:
+                continue
+
+            confidence = fill_ratio
+            boxes.append((x, y, x + w, y + h, confidence))
+
+        return boxes
+
+    def _nms_by_line(self, detections: List[Dict[str, Any]], iou_thresh=0.5) -> List[Dict[str, Any]]:
+        grouped = defaultdict(list)
+        for det in detections:
+            grouped[det['line_id']].append(det)
+
+        final = []
+        for line_id, group in grouped.items():
+            final.extend(self._apply_nms_for_group(group, iou_thresh))
+        return final
+
+    def _apply_nms_for_group(self, regions: List[Dict[str, Any]], iou_threshold=0.5) -> List[Dict[str, Any]]:
         if not regions:
             return []
-        
-        boxes = np.array(regions)
 
+        boxes = np.array([r["bbox"] + [r["confidence"]] for r in regions])
         scores = boxes[:, 4]
-        
         indices = np.argsort(scores)[::-1]
-        
         keep = []
+
         while indices.size > 0:
             i = indices[0]
             keep.append(i)
-            
+
             overlaps = self._calculate_iou(boxes[i, :4], boxes[indices[1:], :4])
-            
             inds = np.where(overlaps <= iou_threshold)[0]
-            
             indices = indices[inds + 1]
-        
-        return boxes[keep].tolist()
-    
+
+        return [regions[i] for i in keep]
+
     def _calculate_iou(self, box, boxes):
-        """
-        Calculate IoU between one box and multiple boxes.
-        
-        Args:
-            box: Single box (x1, y1, x2, y2)
-            boxes: Array of boxes (N, 4)
-            
-        Returns:
-            Array of IoU values
-        """
         area_box = (box[2] - box[0]) * (box[3] - box[1])
         area_boxes = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
-        
+
         xx1 = np.maximum(box[0], boxes[:, 0])
         yy1 = np.maximum(box[1], boxes[:, 1])
         xx2 = np.minimum(box[2], boxes[:, 2])
         yy2 = np.minimum(box[3], boxes[:, 3])
-        
+
         w = np.maximum(0, xx2 - xx1)
         h = np.maximum(0, yy2 - yy1)
-        
         inter = w * h
-        
-        iou = inter / (area_box + area_boxes - inter)
+
+        iou = inter / (area_box + area_boxes - inter + 1e-6)
         return iou
-    
+
     def update_params(self, params: Dict[str, Any]) -> None:
-        """
-        Update detector parameters.
-        
-        Args:
-            params: Parameter dictionary
-        """
         if 'min_area' in params:
             self.min_area = params['min_area']
         if 'max_area' in params:
@@ -216,13 +167,10 @@ class MultiColorDetector(BaseDetector):
             self.min_aspect_ratio = params['min_aspect_ratio']
         if 'max_aspect_ratio' in params:
             self.max_aspect_ratio = params['max_aspect_ratio']
-        
         if 'color_params' in params:
             self.color_params.update(params['color_params'])
-        
+
         self.logger.info("MultiColorDetector parameters updated")
-
-
 def optimize_color_parameters(dataset, logger=None, visualize=False)->Dict[str, Any]:
     """
     Optimize color parameters based on training data.
@@ -389,43 +337,45 @@ def extract_dominant_hsv(
     return tuple(map(int, dominant_center))
 
 def visualize_detection_steps(detector, image: np.ndarray):
-    """
-    在五个子图里可视化 MultiColorDetector 的每一步：
-    1. 原图
-    2. 各线路 HSV 掩膜 (sum)
-    3. 形态学清洗后掩膜
-    4. 轮廓高亮
-    5. NMS 后的最终 ROI
-    """
     # 1. 原图 (Original)
+    print("image dtype:", image.dtype)
+    print("image shape:", image.shape)
+    print("image[100, 100]:", image[100, 100])
     fig, axes = plt.subplots(1, 5, figsize=(20, 5))
     axes[0].imshow(image)
     axes[0].set_title("Original / Originale")
     axes[0].axis('off')
 
     # 转 BGR→HSV
-    img_bgr = cv2.cvtColor((image).astype(np.uint8), cv2.COLOR_RGB2BGR)
+    img_rgb_uint8 = (image * 255).astype(np.uint8)
+    img_bgr = cv2.cvtColor(img_rgb_uint8, cv2.COLOR_RGB2BGR)
     img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-
+    print("img_hsv[100, 100]:", img_hsv[100, 100])
     # 2. 所有线路的 HSV 掩膜累加 (Combined HSV Mask)
-    #combined_mask = np.zeros(img_hsv.shape[:2], dtype=np.uint8)
+    combined_mask = np.zeros(img_hsv.shape[:2], dtype=np.uint8)
     #for params in detector.color_params.values():
     #    lower = np.array(params["hsv_lower"])
     #    upper = np.array(params["hsv_upper"])
     #    mask = cv2.inRange(img_hsv, lower, upper)
     #    combined_mask = cv2.bitwise_or(combined_mask, mask)
-    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
-    lower = np.array([60, 51, 48], np.uint8)
-    upper = np.array([104,105,132], np.uint8)
-    mask12 = cv2.inRange(hsv, lower, upper)
-    axes[1].imshow(mask12, cmap='gray')
+    mask12_lower = np.array(detector.color_params["12"]["hsv_lower"])
+    mask12_upper = np.array(detector.color_params["12"]["hsv_upper"])
+    print(detector.threshold_error_dict)
+    threshold_error = detector.threshold_error_dict["12"]
+    mask12_lower = np.maximum(0, mask12_lower - threshold_error)
+    mask12_upper = np.minimum(255, mask12_upper + threshold_error)
+    print(mask12_lower, mask12_upper)
+
+    mask = cv2.inRange(img_hsv, mask12_lower, mask12_upper)
+    print("Non-zero pixels in mask:", np.count_nonzero(mask))
+    #combined_mask = cv2.bitwise_and(img_bgr, img_bgr, mask=mask)
+
+    axes[1].imshow(mask, cmap='gray')
     axes[1].set_title("HSV Mask / Masque HSV")
     axes[1].axis('off')
 
     # 3. 形态学清洗 (Morphological Open+Close)
-    kernel = np.ones((5,5), np.uint8)
-    opened = cv2.morphologyEx( mask12, cv2.MORPH_OPEN, kernel)
-    cleaned = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel)
+    cleaned = refine_line_mask(mask)
     axes[2].imshow(cleaned, cmap='gray')
     axes[2].set_title("Cleaned Mask / Masque nettoyé")
     axes[2].axis('off')
@@ -442,7 +392,6 @@ def visualize_detection_steps(detector, image: np.ndarray):
 
     # 5. 非极大值抑制后 ROI (Final ROIs after NMS)
     regions = []
-    # （下面简化：直接从 detector.detect 拿 final_boxes）
     final_boxes = detector.detect(image)
     final_img = image.copy()
     for x1,y1,x2,y2,conf in final_boxes:
@@ -454,3 +403,14 @@ def visualize_detection_steps(detector, image: np.ndarray):
 
     plt.tight_layout()
     plt.show()
+
+def refine_line_mask(mask: np.ndarray) -> np.ndarray:
+    open_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (18, 18))
+    close_kernel = open_kernel
+    dilate_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (30, 30))
+
+    opened = cv2.morphologyEx(mask, cv2.MORPH_OPEN, open_kernel)
+    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, close_kernel)
+    cleaned = cv2.dilate(closed, dilate_kernel, iterations=1)
+
+    return cleaned
