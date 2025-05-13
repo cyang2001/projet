@@ -103,7 +103,7 @@ class MetroTestPipeline:
             image, annotations = test_dataset.get_image_with_annotations(idx)
             image_id = test_dataset.df.iloc[idx]['image_id']
             self.logger.info(f"Processing image ID: {image_id}")
-            #visualize_detection_steps(self.detector, image)
+            visualize_detection_steps(self.detector, image)
             processed_image = self.preprocessor.process(image)
             
             detected_rois = self.detector.detect(processed_image)

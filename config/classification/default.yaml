@@ -7,8 +7,8 @@ name: template_classifier  # Classifier implementation to use
 template:
   template_dir: "${base_dir}/models/templates"  # Directory for storing templates
   template_size: [64, 64]           # Size for template images
-  method: "cv2.TM_CCORR_NORMED"     # Template matching method
-  threshold: 0.9                    # Matching threshold
+  method: "cv2.TM_SQDIFF_NORMED"    # Template matching method (changed from TM_CCORR_NORMED)
+  threshold: 0.2                    # Matching threshold (lower is better for TM_SQDIFF_NORMED)
 
 # CNN classifier settings
 cnn:

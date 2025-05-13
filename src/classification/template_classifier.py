@@ -109,7 +109,28 @@ class TemplateClassifier(BaseClassifier):
         
         # Perform template matching for each template
         best_match = -1
-        best_score = -float('inf') if self.method in [cv2.TM_CCORR_NORMED, cv2.TM_CCOEFF_NORMED] else float('inf')
+        best_score = float('inf') if self.method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED] else -float('inf')
+        ssim_scores = {}
+        template_match_scores = {}
+        
+        # Calculate variance of the input image to detect uniform regions
+        image_variance = np.var(image)
+        
+        # If image is very uniform (likely background), discard immediately
+        if image_variance < 0.001:
+            return -1, 0.0
+        
+        # Calculate image edge information - helps distinguish text/shapes from plain regions
+        if len(image.shape) == 3:
+            image_gray = cv2.cvtColor((image * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+        else:
+            image_gray = (image * 255).astype(np.uint8)
+        
+        edge_ratio = np.count_nonzero(cv2.Canny(image_gray, 100, 200)) / (image.shape[0] * image.shape[1])
+        
+        # If there are very few edges, it's likely a background region
+        if edge_ratio < 0.01:
+            return -1, 0.0
         
         for class_id, template in self.templates.items():
             # Ensure template and image have the same dimensions
@@ -117,7 +138,7 @@ class TemplateClassifier(BaseClassifier):
                 continue
                 
             try:
-                # Match templates
+                # 1. Classic template matching
                 if len(image.shape) == 3 and len(template.shape) == 3:
                     # For color images, match each channel separately
                     scores = []
@@ -137,22 +158,45 @@ class TemplateClassifier(BaseClassifier):
                         self.method
                     )[0, 0]
                 
-                # Update best match
-                if (self.method in [cv2.TM_CCORR_NORMED, cv2.TM_CCOEFF_NORMED] and score > best_score) or \
-                   (self.method not in [cv2.TM_CCORR_NORMED, cv2.TM_CCOEFF_NORMED] and score < best_score):
-                    best_score = score
-                    best_match = class_id
-                    
+                template_match_scores[class_id] = score
+                
+                # 2. Compute SSIM for more robust similarity
+                template_gray = cv2.cvtColor((template * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY) if len(template.shape) == 3 else (template * 255).astype(np.uint8)
+                ssim_score = ssim(image_gray, template_gray)
+                ssim_scores[class_id] = ssim_score
+                
+                # 3. Combine scores - weighting depends on matching method
+                if self.method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
+                    # For SQDIFF methods, lower is better
+                    combined_score = score * (1 - ssim_score)
+                    if combined_score < best_score:
+                        best_score = combined_score
+                        best_match = class_id
+                else:
+                    # For other methods, higher is better
+                    combined_score = score * ssim_score
+                    if combined_score > best_score:
+                        best_score = combined_score
+                        best_match = class_id
+                
             except Exception as e:
                 self.logger.warning(f"Error matching template for class {class_id}: {e}")
         
         # Convert score to confidence (0-1 range)
-        confidence = best_score 
+        if best_match == -1:
+            return -1, 0.0
+        
+        if self.method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
+            # For SQDIFF methods, 0 is perfect match, so invert
+            confidence = 1.0 - best_score
+        else:
+            confidence = best_score
         
         # Apply threshold
-        if confidence < self.threshold:
+        if (self.method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED] and best_score > self.threshold) or \
+           (self.method not in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED] and confidence < self.threshold):
             return -1, confidence
-            
+        
         return best_match, confidence
     def _compute_ssim_score(self, template: np.ndarray, image: np.ndarray) -> float:
         return ssim(template, image)
