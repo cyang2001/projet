@@ -80,14 +80,12 @@ class CNNClassifier(BaseClassifier):
         self.dropout_rate = cfg.cnn.get("dropout_rate", 0.5)
         self.threshold = cfg.get("threshold", 0.5)
         
-        # Other parameters
-        self.model: Optional[tf.keras.Model] = None
+        self.model: Optional[keras.Model] = None
         
-        # Try to load model if it exists
         try:
             if os.path.exists(self.model_path):
                 self.logger.info(f"Loading model from {self.model_path}")
-                self.model = tf.keras.models.load_model(self.model_path)
+                self.model = keras.models.load_model(self.model_path) # type: ignore
                 self.logger.info("Model loaded successfully")
         except Exception as e:
             self.logger.warning(f"Failed to load model: {e}")
@@ -102,24 +100,11 @@ class CNNClassifier(BaseClassifier):
             if self.architecture.lower() == "resnet":
                 # Use ResNet50 as base model (better for desktop/server use)
                 try:
-                    # Try different import paths for ResNet50 based on keras version
-                    if hasattr(keras.applications, 'resnet'):
-                        base_model = keras.applications.resnet.ResNet50(
-                            input_shape=self.input_shape,
-                            include_top=False,
-                            weights='imagenet'
-                        )
-                    elif hasattr(keras.applications, 'ResNet50'):
-                        base_model = keras.applications.ResNet50(
-                            input_shape=self.input_shape,
-                            include_top=False,
-                            weights='imagenet'
-                        )
-                    else:
-                        # Fallback to simpler model if ResNet50 not available
-                        self.logger.warning("ResNet50 not available, falling back to simple CNN")
-                        self.architecture = "simple"
-                        return self._build_model()
+                    base_model = keras.applications.resnet.ResNet50(
+                        input_shape=self.input_shape,
+                        include_top=False,
+                        weights='imagenet'
+                    )
                         
                 except Exception as e:
                     self.logger.warning(f"Error loading ResNet50: {e}, falling back to simple CNN")
@@ -130,33 +115,33 @@ class CNNClassifier(BaseClassifier):
                 base_model.trainable = False
                 
                 # Add classification head
-                inputs = tf.keras.layers.Input(shape=self.input_shape)
+                inputs = keras.layers.Input(shape=self.input_shape)
                 x = base_model(inputs, training=False)
-                x = tf.keras.layers.GlobalAveragePooling2D()(x)
-                x = tf.keras.layers.Dropout(self.dropout_rate)(x)
-                outputs = tf.keras.layers.Dense(self.num_classes, activation='softmax')(x)
+                x = keras.layers.GlobalAveragePooling2D()(x)
+                x = keras.layers.Dropout(self.dropout_rate)(x)
+                outputs = keras.layers.Dense(self.num_classes, activation='softmax')(x)
                 
-                self.model = tf.keras.models.Model(inputs, outputs)
+                self.model = keras.models.Model(inputs, outputs)
                 
             else:
                 # Simple custom CNN
-                model = tf.keras.models.Sequential()
+                model = keras.models.Sequential()
                 
                 # Convolutional blocks
-                model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=self.input_shape))
-                model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+                model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=self.input_shape))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
                 
-                model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same'))
-                model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same'))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
                 
-                model.add(tf.keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same'))
-                model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+                model.add(keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same'))
+                model.add(keras.layers.MaxPooling2D((2, 2)))
                 
                 # Classification head
-                model.add(tf.keras.layers.Flatten())
-                model.add(tf.keras.layers.Dense(256, activation='relu'))
-                model.add(tf.keras.layers.Dropout(self.dropout_rate))
-                model.add(tf.keras.layers.Dense(self.num_classes, activation='softmax'))
+                model.add(keras.layers.Flatten())
+                model.add(keras.layers.Dense(256, activation='relu'))
+                model.add(keras.layers.Dropout(self.dropout_rate))
+                model.add(keras.layers.Dense(self.num_classes, activation='softmax'))
                 
                 self.model = model
             
@@ -202,9 +187,8 @@ class CNNClassifier(BaseClassifier):
             if len(image.shape) == 3:
                 image = np.expand_dims(image, axis=0)
             
-            # 使用正确的类型注解进行调用
             # Make prediction
-            model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+            model_typed = cast(keras.Model, self.model) 
             predictions = model_typed.predict(image)
             
             # Get highest confidence class
@@ -244,21 +228,16 @@ class CNNClassifier(BaseClassifier):
         # Create data generators for augmentation
         if self.cfg.cnn.get("use_augmentation", True):
             try:
-                # 尝试不同的导入路径
-                if hasattr(tf.keras.preprocessing.image, 'ImageDataGenerator'):
-                    datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-                        rotation_range=10,
-                        width_shift_range=0.1,
-                        height_shift_range=0.1,
-                        horizontal_flip=False,
-                        zoom_range=0.1,
-                        brightness_range=[0.9, 1.1],
-                        validation_split=0.2  # Use 20% of data for validation
-                    )
-                else:
-                    # 备用方案：使用keras_cv或直接tf.image进行数据增强
-                    self.logger.warning("ImageDataGenerator not available, disabling augmentation")
-                    return self._train_without_augmentation(X_train, y_train)
+                datagen = keras.preprocessing.image.ImageDataGenerator( # type: ignore
+                    rotation_range=10,
+                    width_shift_range=0.1,
+                    height_shift_range=0.1,
+                    horizontal_flip=False,
+                    zoom_range=0.1,
+                    brightness_range=[0.9, 1.1],
+                    validation_split=0.2  # Use 20% of data for validation
+                )
+
                     
                 # Split data into training and validation
                 val_split = int(len(X_train) * 0.8)
@@ -280,15 +259,15 @@ class CNNClassifier(BaseClassifier):
                 
                 # Setup callbacks
                 callbacks = [
-                    tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
-                    tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
+                    keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
+                    keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
                 ]
                 
                 # Create directory for model if it doesn't exist
                 ensure_dir(os.path.dirname(self.model_path))
                 
                 callbacks.append(
-                    tf.keras.callbacks.ModelCheckpoint(
+                    keras.callbacks.ModelCheckpoint(
                         self.model_path,
                         save_best_only=True,
                         monitor='val_accuracy'
@@ -297,13 +276,12 @@ class CNNClassifier(BaseClassifier):
                 
                 # Train model
                 if self.model is not None:
-                    model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+                    model_typed = cast(keras.Model, self.model)  # 确保类型正确
                     history = model_typed.fit(
                         train_generator,
                         epochs=self.cfg.cnn.get("epochs", 50),
                         validation_data=validation_generator,
                         callbacks=callbacks,
-                        verbose=1  # 整数类型
                     )
                     
                     self.logger.info("Training completed")
@@ -341,15 +319,15 @@ class CNNClassifier(BaseClassifier):
         
         # Setup callbacks
         callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
-            tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
+            keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
+            keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
         ]
         
         # Create directory for model if it doesn't exist
         ensure_dir(os.path.dirname(self.model_path))
         
         callbacks.append(
-            tf.keras.callbacks.ModelCheckpoint(
+            keras.callbacks.ModelCheckpoint(
                 self.model_path,
                 save_best_only=True,
                 monitor='val_accuracy'
@@ -358,14 +336,13 @@ class CNNClassifier(BaseClassifier):
         
         # Train model
         if self.model is not None:
-            model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+            model_typed = cast(keras.Model, self.model)  # 确保类型正确
             history = model_typed.fit(
                 X_train, y_train,
                 epochs=self.cfg.cnn.get("epochs", 50),
                 batch_size=self.cfg.cnn.get("batch_size", 32),
                 validation_data=(X_val, y_val),
                 callbacks=callbacks,
-                verbose=1  # 整数类型
             )
             
             return history.history
@@ -389,7 +366,7 @@ class CNNClassifier(BaseClassifier):
             ensure_dir(os.path.dirname(path))
             
             # Save model
-            model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+            model_typed = cast(keras.Model, self.model)  
             model_typed.save(path)
             self.logger.info(f"Model saved to {path}")
         except Exception as e:
@@ -407,7 +384,7 @@ class CNNClassifier(BaseClassifier):
                 self.logger.warning(f"Model file does not exist: {path}")
                 return
                 
-            self.model = tf.keras.models.load_model(path)
+            self.model = keras.models.load_model(path) # type: ignore
             self.logger.info(f"Model loaded from {path}")
         except Exception as e:
             self.logger.error(f"Error loading model: {e}")
@@ -462,7 +439,7 @@ class CNNClassifier(BaseClassifier):
             
         try:
             # Evaluate model
-            model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+            model_typed = cast(keras.Model, self.model)  
             scores = model_typed.evaluate(X_test, y_test)
             
             metrics = {
@@ -471,7 +448,7 @@ class CNNClassifier(BaseClassifier):
             }
             
             # Calculate confusion matrix
-            model_typed = cast(tf.keras.Model, self.model)  # 确保类型正确
+            model_typed = cast(keras.Model, self.model)  
             predictions = model_typed.predict(X_test)
             pred_classes = np.argmax(predictions, axis=1)
             

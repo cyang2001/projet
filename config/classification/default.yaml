@@ -1,6 +1,6 @@
 # Default classification configuration
 
-name: template_classifier  # Classifier implementation to use
+name: cnn_classifier  # Classifier implementation to use
                        # Options: template_classifier, cnn_classifier, hybrid_classifier
 
 # Template classifier settings
@@ -8,7 +8,7 @@ template:
   template_dir: "${base_dir}/models/templates"  # Directory for storing templates
   template_size: [64, 64]           # Size for template images
   method: "cv2.TM_CCORR_NORMED"     # Template matching method
-  threshold: 0.7                    # Matching threshold
+  threshold: 0.9                    # Matching threshold
 
 # CNN classifier settings
 cnn:
