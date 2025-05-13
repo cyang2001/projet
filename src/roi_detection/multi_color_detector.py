@@ -9,6 +9,9 @@ from omegaconf import DictConfig
 import logging
 import os
 import json
+import matplotlib.pyplot as plt
+
+from src.data.dataset import MetroDataset
 
 from .base import BaseDetector
 from utils.utils import get_logger
@@ -49,7 +52,7 @@ class MultiColorDetector(BaseDetector):
         Returns:
             Dictionary of color parameters
         """
-        params_path = cfg.get("color_params_path", "")
+        params_path = cfg.get("params_dir", "")
         
         if params_path and os.path.exists(params_path):
             try:
@@ -61,20 +64,20 @@ class MultiColorDetector(BaseDetector):
         self.logger.info("Using default color parameters for metro lines")
         # Todo  hard code 写在 config 里
         return {
-            "1": {"hsv_lower": [20, 100, 100], "hsv_upper": [30, 255, 255]},
-            "2": {"hsv_lower": [100, 100, 100], "hsv_upper": [130, 255, 255]},
-            "3": {"hsv_lower": [10, 100, 50], "hsv_upper": [20, 255, 200]},
-            "4": {"hsv_lower": [140, 50, 50], "hsv_upper": [160, 255, 255]},
-            "5": {"hsv_lower": [10, 150, 150], "hsv_upper": [25, 255, 255]},
-            "6": {"hsv_lower": [70, 50, 50], "hsv_upper": [100, 255, 255]},
-            "7": {"hsv_lower": [150, 50, 100], "hsv_upper": [170, 150, 255]},
-            "8": {"hsv_lower": [135, 50, 50], "hsv_upper": [150, 255, 200]},
-            "9": {"hsv_lower": [30, 100, 100], "hsv_upper": [50, 255, 255]},
-            "10": {"hsv_lower": [20, 100, 50], "hsv_upper": [30, 200, 200]},
-            "11": {"hsv_lower": [0, 100, 50], "hsv_upper": [10, 255, 200]},
-            "12": {"hsv_lower": [60, 100, 50], "hsv_upper": [80, 255, 200]},
-            "13": {"hsv_lower": [90, 50, 150], "hsv_upper": [110, 150, 255]},
-            "14": {"hsv_lower": [100, 150, 50], "hsv_upper": [130, 255, 150]}
+            "1": {"hsv_lower": [14, 108, 85], "hsv_upper": [47, 218, 213]},
+            "2": {"hsv_lower": [73, 64, 121], "hsv_upper": [125, 189, 210]},
+            "3": {"hsv_lower": [25, 81, 80], "hsv_upper": [60, 199, 165]},
+            "4": {"hsv_lower": [122, 71, 40], "hsv_upper": [153, 144, 181]},
+            "5": {"hsv_lower": [10, 163, 91], "hsv_upper": [33, 192, 172]},
+            "6": {"hsv_lower": [46, 11, 56], "hsv_upper": [93, 105, 182]},
+            "7": {"hsv_lower": [104, 43, 113], "hsv_upper": [180, 113, 165]},
+            "8": {"hsv_lower": [105, 33, 47], "hsv_upper": [160, 81, 198]},
+            "9": {"hsv_lower": [28, 148, 98], "hsv_upper": [54, 199, 117]},
+            "10": {"hsv_lower": [20, 151, 37], "hsv_upper": [40, 179, 186]},
+            "11": {"hsv_lower": [0, 57, 91], "hsv_upper": [61, 119, 115]},
+            "12": {"hsv_lower": [60, 51, 48], "hsv_upper": [104, 105, 132]},
+            "13": {"hsv_lower": [71, 37, 72], "hsv_upper": [119, 133, 180]},
+            "14": {"hsv_lower": [89, 67, 25], "hsv_upper": [146, 131, 205]}
         }
     
     def detect(self, image: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
@@ -91,65 +94,52 @@ class MultiColorDetector(BaseDetector):
             self.logger.warning("Empty image provided for detection")
             return []
         
-        # 将图像转换为HSV
         if image.dtype == np.float32 and image.max() <= 1.0:
-            # 归一化图像转为uint8
             img_bgr = cv2.cvtColor((image * 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
         else:
             img_bgr = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2BGR)
         
         img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
         
-        # 存储所有线路的检测结果
         all_regions = []
         
-        # 对每条线路进行颜色检测
         for line_id, params in self.color_params.items():
             hsv_lower = np.array(params["hsv_lower"])
             hsv_upper = np.array(params["hsv_upper"])
             
-            # 创建颜色掩码
             mask = cv2.inRange(img_hsv, hsv_lower, hsv_upper)
             
-            # 形态学操作 - 去噪和填充孔洞
             kernel = np.ones((5, 5), np.uint8)
             mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
             
-            # 找到连通区域
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            
-            # 调试模式 - 显示每条线路的掩码
+
             if self.debug:
                 self.logger.info(f"Line {line_id}: Found {len(contours)} potential regions")
             
-            # 处理每个连通区域
             for contour in contours:
                 area = cv2.contourArea(contour)
                 
-                # 面积筛选
                 if area < self.min_area or area > self.max_area:
                     continue
                 
-                # 计算边界框
                 x, y, w, h = cv2.boundingRect(contour)
                 
-                # 宽高比筛选
                 aspect_ratio = w / h if h > 0 else 0
                 if aspect_ratio < self.min_aspect_ratio or aspect_ratio > self.max_aspect_ratio:
                     continue
                 
-                # 形状特征验证
                 if area / (w * h) < 0.3:  # 区域填充率太低
                     continue
                 
-                # 添加到候选区域
-                # 使用区域填充率作为置信度
                 confidence = area / (w * h)
                 all_regions.append((x, y, x + w, y + h, confidence))
-        
-        # 应用非极大值抑制去除重叠框
-        return self._apply_nms(all_regions)
+        final_boxes = []
+        for box in self._apply_nms(all_regions):
+            x1, y1, x2, y2, conf = box
+            final_boxes.append((int(x1), int(y1), int(x2), int(y2), conf))
+        return final_boxes
     
     def _apply_nms(self, regions, iou_threshold=0.5):
         """
@@ -165,32 +155,23 @@ class MultiColorDetector(BaseDetector):
         if not regions:
             return []
         
-        # 转换为numpy数组方便处理
         boxes = np.array(regions)
-        
-        # 获取置信度
+
         scores = boxes[:, 4]
         
-        # 按置信度排序
         indices = np.argsort(scores)[::-1]
         
-        # 应用NMS
         keep = []
         while indices.size > 0:
-            # 保留置信度最高的框
             i = indices[0]
             keep.append(i)
             
-            # 计算其他框与当前框的IoU
             overlaps = self._calculate_iou(boxes[i, :4], boxes[indices[1:], :4])
             
-            # 找到不与当前框重叠的框
             inds = np.where(overlaps <= iou_threshold)[0]
             
-            # 更新索引
             indices = indices[inds + 1]
         
-        # 返回保留的框
         return boxes[keep].tolist()
     
     def _calculate_iou(self, box, boxes):
@@ -204,24 +185,19 @@ class MultiColorDetector(BaseDetector):
         Returns:
             Array of IoU values
         """
-        # 框的面积
         area_box = (box[2] - box[0]) * (box[3] - box[1])
         area_boxes = (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
         
-        # 计算交集
         xx1 = np.maximum(box[0], boxes[:, 0])
         yy1 = np.maximum(box[1], boxes[:, 1])
         xx2 = np.minimum(box[2], boxes[:, 2])
         yy2 = np.minimum(box[3], boxes[:, 3])
         
-        # 交集的宽高
         w = np.maximum(0, xx2 - xx1)
         h = np.maximum(0, yy2 - yy1)
         
-        # 交集面积
         inter = w * h
         
-        # 计算IoU
         iou = inter / (area_box + area_boxes - inter)
         return iou
     
@@ -232,7 +208,6 @@ class MultiColorDetector(BaseDetector):
         Args:
             params: Parameter dictionary
         """
-        # 更新通用参数
         if 'min_area' in params:
             self.min_area = params['min_area']
         if 'max_area' in params:
@@ -242,20 +217,22 @@ class MultiColorDetector(BaseDetector):
         if 'max_aspect_ratio' in params:
             self.max_aspect_ratio = params['max_aspect_ratio']
         
-        # 更新线路颜色参数
         if 'color_params' in params:
             self.color_params.update(params['color_params'])
         
         self.logger.info("MultiColorDetector parameters updated")
 
 
-def optimize_color_parameters(dataset, logger=None):
+def optimize_color_parameters(dataset, logger=None, visualize=False)->Dict[str, Any]:
     """
     Optimize color parameters based on training data.
     
     Args:
-        dataset: Dataset with ground truth annotations
+        dataset: Dataset with ground truth annotations, must implement:
+                - __len__() method
+                - get_image_with_annotations(idx) method that returns (image, annotations)
         logger: Optional logger
+        visualize: Whether to visualize the dominant color extraction process
         
     Returns:
         Dictionary of optimized color parameters
@@ -266,17 +243,13 @@ def optimize_color_parameters(dataset, logger=None):
     logger = logger or get_logger(__name__)
     logger.info("Starting color parameter optimization...")
     
-    # 初始化颜色参数字典
     optimized_params = {}
     
-    # 按线路ID分组收集颜色样本
     color_samples = {}
     
-    # 遍历数据集
+    rois = []
     for idx in range(len(dataset)):
         image, annotations = dataset.get_image_with_annotations(idx)
-        
-        # 转换为HSV
         if image.dtype == np.float32 and image.max() <= 1.0:
             image_cv = (image * 255).astype(np.uint8)
         else:
@@ -286,75 +259,198 @@ def optimize_color_parameters(dataset, logger=None):
             bgr = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
             hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
         else:
-            # 灰度图无法提取颜色信息
             continue
-        
-        # 分析每个标注
-        for ann in annotations:
-            x1, y1, x2, y2, line_id = ann
-            
-            # 确保边界框有效
-            if x2 <= x1 or y2 <= y1 or x1 < 0 or y1 < 0:
-                continue
-            
-            # 提取ROI
+        for annotation in annotations:
+            x1, y1, x2, y2 = annotation[:4]
             roi_hsv = hsv[y1:y2, x1:x2]
-            
-            if roi_hsv.size == 0:
-                continue
-            
-            # 计算HSV均值
-            h_mean, s_mean, v_mean = cv2.mean(roi_hsv)[:3]
-            
-            # 将颜色样本按线路ID分组
-            line_id_str = str(int(line_id))
-            if line_id_str not in color_samples:
-                color_samples[line_id_str] = []
-            
-            color_samples[line_id_str].append((h_mean, s_mean, v_mean))
+            roi_bgr = bgr[y1:y2, x1:x2]
+            line_id = annotation[4]
+            try:
+                dominant_hsv = extract_dominant_hsv(roi_hsv, K=3)
+                if line_id not in color_samples:
+                    color_samples[line_id] = []
+                color_samples[line_id].append(dominant_hsv)
+                if visualize:
+                    visualize_dominant_color(image, roi_bgr, dominant_hsv, line_id, x1, y1, x2, y2)
+            except Exception as e:
+                logger.error(f"Error processing ROI ")
     
-    # 对每条线路优化颜色参数
     for line_id, samples in color_samples.items():
         if not samples:
-            logger.warning(f"Line {line_id}: No color samples available")
             continue
         
-        hsv_array = np.array(samples)
+        samples_array = np.array(samples)
         
-        # 计算HSV范围（均值±2倍标准差）
-        hsv_mean = np.mean(hsv_array, axis=0)
-        hsv_std = np.std(hsv_array, axis=0)
-        
-        hsv_lower = np.clip(hsv_mean - 2 * hsv_std, 0, 255).astype(int)
-        hsv_upper = np.clip(hsv_mean + 2 * hsv_std, 0, 255).astype(int)
-        
-        # 处理H通道的环状特性
-        if hsv_upper[0] - hsv_lower[0] > 90:
-            h_values = hsv_array[:, 0]
-            
-            # 调整H值，处理跨越0/180边界的情况
+        h_values = samples_array[:, 0]
+        if np.max(h_values) - np.min(h_values) > 90:
+            h_values_adjusted = h_values.copy()
             if np.median(h_values) < 90:
-                h_values[h_values > 90] -= 180
+                h_values_adjusted[h_values > 90] -= 180
             else:
-                h_values[h_values < 90] += 180
+                h_values_adjusted[h_values < 90] += 180
             
-            h_mean = np.mean(h_values)
-            h_std = np.std(h_values)
-            
-            if h_mean < 0:
-                h_mean += 180
-            elif h_mean > 180:
-                h_mean -= 180
-                
-            hsv_lower[0] = max(0, int(h_mean - 2 * h_std))
-            hsv_upper[0] = min(180, int(h_mean + 2 * h_std))
+            avg_h = np.mean(h_values_adjusted)
+            if avg_h < 0:
+                avg_h += 180
+            elif avg_h > 180:
+                avg_h -= 180
+        else:
+            avg_h = np.mean(h_values)
         
-        # 保存该线路的颜色参数
-        optimized_params[line_id] = {
-            "hsv_lower": hsv_lower.tolist(),
-            "hsv_upper": hsv_upper.tolist()
+        avg_s = np.mean(samples_array[:, 1])
+        avg_v = np.mean(samples_array[:, 2])
+        
+        std_h = np.std(h_values)
+        std_s = np.std(samples_array[:, 1])
+        std_v = np.std(samples_array[:, 2])
+        
+        optimized_params[str(line_id)] = {
+            "hsv_mean": (int(avg_h), int(avg_s), int(avg_v)),
+            "hsv_std": (int(std_h), int(std_s), int(std_v)),
+            "hsv_lower": [max(0, int(avg_h - 2 * std_h)), 
+                          max(0, int(avg_s - 2 * std_s)), 
+                          max(0, int(avg_v - 2 * std_v))],
+            "hsv_upper": [min(180, int(avg_h + 2 * std_h)), 
+                          min(255, int(avg_s + 2 * std_s)), 
+                          min(255, int(avg_v + 2 * std_v))]
         }
-        
-        logger.info(f"Line {line_id}: Optimized HSV range: {hsv_lower} to {hsv_upper}")
-    
     return optimized_params 
+def visualize_dominant_color(img, roi, hsv_color, line_id, x1, y1, x2, y2):
+
+    plt.figure(figsize=(15, 5))
+    
+    plt.subplot(1, 3, 1)
+    plt.imshow(img)
+    plt.gca().add_patch(plt.Rectangle((x1, y1), x2-x1, y2-y1, 
+                                    edgecolor='g', facecolor='none', linewidth=2)) 
+    plt.title(f"Original Image with Line {line_id} ROI")
+
+    plt.subplot(1, 3, 2)
+    roi_rgb = cv2.cvtColor(roi, cv2.COLOR_BGR2RGB)
+    plt.imshow(roi_rgb)
+    plt.title(f"ROI of Line {line_id}")
+    
+    plt.subplot(1, 3, 3)
+    color_patch = np.ones((100, 100, 3), dtype=np.uint8)
+    h, s, v = hsv_color
+    color_patch_hsv = np.full((100, 100, 3), (h, s, v), dtype=np.uint8)
+    color_patch = cv2.cvtColor(color_patch_hsv, cv2.COLOR_HSV2BGR)
+    color_patch_rgb = cv2.cvtColor(color_patch, cv2.COLOR_BGR2RGB)
+    plt.imshow(color_patch_rgb)
+    plt.title(f"Dominant Color\nHSV: ({h}, {s}, {v})")
+    
+    plt.tight_layout()
+    plt.show()
+def extract_dominant_hsv(
+    roi_hsv: np.ndarray,
+    K: int = 3,
+    attempts: int = 10
+) -> Tuple[int, int, int]:
+    """
+    从单个 ROI 的 HSV 像素中提取主峰色 (dominant HSV color / couleur HSV dominante)。
+
+    Args:
+        roi_hsv: ROI 在 HSV 空间的像素 (h, w, 3)
+        K: 聚类簇数量 (clusters)
+        attempts: kmeans 重启次数，选取最佳质心
+
+    Returns:
+        hsv_dominant: 三元组 (H, S, V)，代表主峰色
+    """
+    # 1. 准备样本 (Prepare samples / Préparer échantillons)
+    pixels = roi_hsv.reshape(-1, 3).astype(np.float32)  # N × 3
+
+    # 2. 定义 KMeans 终止条件 (KMeans criteria)
+    criteria = (
+        cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
+        100,    # 最多迭代次数 (max iterations)
+        0.2     # 误差阈值 (epsilon)
+    )
+
+    # 3. 执行 K-Means 聚类
+    ret, labels, centers = cv2.kmeans(
+        pixels,
+        K,
+        None,
+        criteria,
+        attempts,
+        flags=cv2.KMEANS_PP_CENTERS
+    ) #type: ignore
+    # centers: shape (K, 3), dtype float32
+
+    # 4. 统计每个簇的样本数 (Count cluster sizes / Taille des clusters)
+    _, counts = np.unique(labels, return_counts=True)
+
+    # 5. 选择主峰簇 (Select dominant cluster / Sélection du cluster dominant)
+    dominant_idx = np.argmax(counts)
+    dominant_center = centers[dominant_idx]  # HSV 坐标
+
+    # 6. 返回整数化的 HSV 三元组
+    return tuple(map(int, dominant_center))
+
+def visualize_detection_steps(detector, image: np.ndarray):
+    """
+    在五个子图里可视化 MultiColorDetector 的每一步：
+    1. 原图
+    2. 各线路 HSV 掩膜 (sum)
+    3. 形态学清洗后掩膜
+    4. 轮廓高亮
+    5. NMS 后的最终 ROI
+    """
+    # 1. 原图 (Original)
+    fig, axes = plt.subplots(1, 5, figsize=(20, 5))
+    axes[0].imshow(image)
+    axes[0].set_title("Original / Originale")
+    axes[0].axis('off')
+
+    # 转 BGR→HSV
+    img_bgr = cv2.cvtColor((image).astype(np.uint8), cv2.COLOR_RGB2BGR)
+    img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+
+    # 2. 所有线路的 HSV 掩膜累加 (Combined HSV Mask)
+    #combined_mask = np.zeros(img_hsv.shape[:2], dtype=np.uint8)
+    #for params in detector.color_params.values():
+    #    lower = np.array(params["hsv_lower"])
+    #    upper = np.array(params["hsv_upper"])
+    #    mask = cv2.inRange(img_hsv, lower, upper)
+    #    combined_mask = cv2.bitwise_or(combined_mask, mask)
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+    lower = np.array([60, 51, 48], np.uint8)
+    upper = np.array([104,105,132], np.uint8)
+    mask12 = cv2.inRange(hsv, lower, upper)
+    axes[1].imshow(mask12, cmap='gray')
+    axes[1].set_title("HSV Mask / Masque HSV")
+    axes[1].axis('off')
+
+    # 3. 形态学清洗 (Morphological Open+Close)
+    kernel = np.ones((5,5), np.uint8)
+    opened = cv2.morphologyEx( mask12, cv2.MORPH_OPEN, kernel)
+    cleaned = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel)
+    axes[2].imshow(cleaned, cmap='gray')
+    axes[2].set_title("Cleaned Mask / Masque nettoyé")
+    axes[2].axis('off')
+
+    # 4. 轮廓 (Contours Highlight)
+    cont_img = image.copy()
+    contours, _ = cv2.findContours(cleaned, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        x,y,w,h = cv2.boundingRect(cnt)
+        cv2.rectangle(cont_img, (x,y), (x+w,y+h), (0,255,0), 2)  # green box
+    axes[3].imshow(cont_img)
+    axes[3].set_title("Contours / Contours")
+    axes[3].axis('off')
+
+    # 5. 非极大值抑制后 ROI (Final ROIs after NMS)
+    regions = []
+    # （下面简化：直接从 detector.detect 拿 final_boxes）
+    final_boxes = detector.detect(image)
+    final_img = image.copy()
+    for x1,y1,x2,y2,conf in final_boxes:
+        cv2.rectangle(final_img, (x1,y1), (x2,y2), (255,0,0), 2)  # blue box
+        axes[4].text(x1, y1-5, f"{conf:.2f}", color='blue', fontsize=8)
+    axes[4].imshow(final_img)
+    axes[4].set_title("Final ROIs / ROI finales")
+    axes[4].axis('off')
+
+    plt.tight_layout()
+    plt.show()

@@ -2,8 +2,10 @@
 Base classes and factory functions for ROI detection.
 """
 
+import json
 import logging
 from abc import ABC, abstractmethod
+import os
 from typing import List, Tuple, Dict, Any, Optional
 import numpy as np
 from omegaconf import DictConfig
@@ -50,21 +52,25 @@ class BaseDetector(ABC):
         """
         self.logger.warning("update_params not implemented in this detector")
 
-    def save_params(self, params_dir: str) -> bool:
+    def save_params(self, params_dir: str, params: Dict[str, Any]) -> bool:
         """
         Save detector parameters.
         
         Args:
             params_dir: Directory to save parameters
         """
-        #ToDo: Implement save_params
-        return False
+        try:
+            with open(os.path.join(params_dir, "params.json"), "w") as f:
+                json.dump(params, f)
+            return True
+        except Exception as e:
+            self.logger.error(f"Failed to save parameters: {e}")
+            return False
 
 def get_detector(cfg: DictConfig, logger: Optional[logging.Logger] = None) -> BaseDetector:
     """
     Factory function to get ROI detector based on configuration.
     
-    Args:
         cfg: Configuration dictionary
         logger: Optional logger
         

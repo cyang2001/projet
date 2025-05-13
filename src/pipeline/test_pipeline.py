@@ -10,7 +10,7 @@ from omegaconf import DictConfig
 
 from src.data.dataset import MetroDataset
 from src.preprocessing.preprocessor import PreprocessingPipeline
-from src.roi_detection import get_detector
+from src.roi_detection import get_detector, visualize_detection_steps 
 from src.classification.base import get_classifier
 from utils.utils import get_logger, ensure_dir, save_confusion_matrix, visualize_detection
 
@@ -102,9 +102,8 @@ class MetroTestPipeline:
         for idx in range(len(test_dataset)):
             image, annotations = test_dataset.get_image_with_annotations(idx)
             image_id = test_dataset.df.iloc[idx]['image_id']
-            
-            self.logger.info(f"Processing image {idx+1}/{len(test_dataset)}, ID: {image_id}")
-            
+            self.logger.info(f"Processing image ID: {image_id}")
+            visualize_detection_steps(self.detector, image)
             processed_image = self.preprocessor.process(image)
             
             detected_rois = self.detector.detect(processed_image)
