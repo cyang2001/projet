@@ -186,7 +186,7 @@ class MetroTestPipeline:
             self.logger.info(f"Detected {len(detected_rois)} ROIs")
             
             # 可视化检测过程 - 使用原始图像，便于理解
-            visualize_detection_steps(self.detector, image)
+            #visualize_detection_steps(self.detector, image)
             
             detected_classes = []
             for roi in detected_rois:

@@ -8,7 +8,7 @@ template:
   template_dir: "${base_dir}/models/templates"  # Directory for storing templates
   template_size: [64, 64]           # Size for template images
   method: "cv2.TM_SQDIFF_NORMED"    # Template matching method (changed from TM_CCORR_NORMED)
-  threshold: 0.15                   # 降低匹配阈值，提高系统对弱匹配的接受程度
+  threshold: 0.05                   # 降低匹配阈值，提高系统对弱匹配的接受程度
 
 # CNN classifier settings
 cnn:
