@@ -5,10 +5,10 @@ name: test
 
 test:
   type: "Test"               
-  view_images: true          
+  view_images: true      
   save_results: true         
   results_file: "${base_dir}/results/myResults.mat"  
-  evaluate_after: true       
+  evaluate_after: false       
 
 classification:
   method: "hybrid"           

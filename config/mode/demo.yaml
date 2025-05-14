@@ -1,9 +1,29 @@
 # Demo mode configuration
 
 name: demo
+type: Demo
 
-# Demo parameters
-view_images: true      # Whether to display detection results 
-input_path: "BD_METRO" # Path to images or single image
-batch_mode: true       # Whether to process all images in directory
-save_results: true     # Whether to save detection results 
+demo:
+# Input settings
+  input_path: "${base_dir}/BD_METRO/IM (1).JPG" # Path to input image or directory
+  batch_mode: false                        # Whether to process a directory of images
+  file_pattern: "*.JPG"                   # Pattern for image files in batch mode
+
+  # Visualization settings
+  view_images: true                       # Whether to display results interactively
+  save_results: true                      # Whether to save results to disk
+  output_format: "png"                    # Format for saved visualizations
+  show_debug_info: true                   # Whether to show detailed detection info
+
+  # Confidence thresholds
+  detection_threshold: 0.5                # Minimum confidence for detection
+  classification_threshold: 0.5           # Minimum confidence for classification
+
+  # Environment settings
+  ui_mode: "desktop"                      # Options: desktop, headless, web
+  max_display_results: 50                 # Maximum number of results to display
+
+  # Specialized configurations
+  use_roi_mask: true                     # Apply masking on regions of interest
+  highlight_uncertain: true              # Highlight uncertain classifications
+  focus_lines: []                         # Focus on specific metro lines [1,7,14]

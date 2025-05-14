@@ -9,6 +9,7 @@ from omegaconf import DictConfig
 import tensorflow as tf
 import keras
 import keras_tuner as kt
+import cv2
 
 from src.data.dataset import MetroDataset
 from src.preprocessing.preprocessor import PreprocessingPipeline
@@ -167,11 +168,30 @@ class MetroTrainPipeline:
         if len(X_train_raw) == 0:
             self.logger.warning("No training samples available for template creation")
             return
-            
+        
+        # record original shapes
+        original_shapes = []
         processed_images = []
         for i, img in enumerate(X_train_raw):
-            X_train_processed = self.preprocessor.process(img)
-            processed_images.append(X_train_processed)
+            original_shapes.append(img.shape)
+            processed_img = self.preprocessor.process(img)
+            processed_images.append(processed_img)
+        
+        # check if all processed images have the same shape
+        first_shape = processed_images[0].shape if processed_images else None
+        shapes_consistent = all(img.shape == first_shape for img in processed_images)
+        
+        # this is not a good idea, but it's a quick fix. Only for the case that the image is not resized.
+        if not shapes_consistent:
+            self.logger.warning("Processed images have inconsistent shapes. This may affect template quality.")
+            # try to resize all images to the same size
+            target_shape = tuple(self.cfg.preprocessing.get("resize_shape", [64, 64]))
+            self.logger.info(f"Resizing all images to consistent shape: {target_shape}")
+            resized_processed = []
+            for img in processed_images:
+                resized = cv2.resize(img, (target_shape[1], target_shape[0]))
+                resized_processed.append(resized)
+            processed_images = resized_processed
         
         X_train_processed = np.array(processed_images)
         

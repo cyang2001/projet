@@ -8,7 +8,7 @@ template:
   template_dir: "${base_dir}/models/templates"  # Directory for storing templates
   template_size: [64, 64]           # Size for template images
   method: "cv2.TM_SQDIFF_NORMED"    # Template matching method (changed from TM_CCORR_NORMED)
-  threshold: 0.2                    # Matching threshold (lower is better for TM_SQDIFF_NORMED)
+  threshold: 0.15                   # 降低匹配阈值，提高系统对弱匹配的接受程度
 
 # CNN classifier settings
 cnn:
@@ -28,3 +28,18 @@ hybrid:
 # Common settings
 threshold: 0.5                       # Classification confidence threshold
 preprocess_input: true               # Whether to preprocess images before classification 
+
+# 线路特定设置
+line_specific:
+  # 对常被漏检的线路使用较低的阈值
+  "11": 
+    threshold: 0.12
+    weight_multiplier: 1.2  # 增加该线路的权重
+  "7": 
+    threshold: 0.15
+    weight_multiplier: 1.1
+  # 针对容易误识别为背景的线路
+  "1": 
+    edge_ratio_min: 0.008  # 降低边缘比率检查门槛
+  "14": 
+    edge_ratio_min: 0.008 

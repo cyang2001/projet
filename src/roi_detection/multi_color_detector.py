@@ -72,39 +72,35 @@ class MultiColorDetector(BaseDetector):
         lower = np.maximum(0, np.array(params["hsv_lower"]) - self.threshold_error_dict.get(line_id, 0))
         upper = np.minimum(255, np.array(params["hsv_upper"]) + self.threshold_error_dict.get(line_id, 0))
 
-        # 创建初始掩码
+        # create initial color mask
         mask = cv2.inRange(img_hsv, lower, upper)
         
-        # 保存原始掩码用于后续比较
         original_mask = mask.copy()
         
-        # 计算图像尺寸，用于动态调整形态学操作的核大小
+        # calculate image size, for dynamic adjustment of the kernel size of morphological operations
         height, width = mask.shape[:2]
-        kernel_size = max(3, min(18, int(min(height, width) * 0.05)))  # 动态核大小，基于图像尺寸
+        kernel_size = max(3, min(18, int(min(height, width) * 0.05)))  # dynamic kernel size, based on image size
         
-        # 创建形态学操作的核
         kernel_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
         kernel_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
         
-        # 应用开操作来移除噪点
         mask_opened = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel_open)
         
-        # 应用闭操作来填充孔洞
         mask_closed = cv2.morphologyEx(mask_opened, cv2.MORPH_CLOSE, kernel_close)
         
-        # 轻微膨胀以连接近邻区域
         dilate_size = max(3, kernel_size // 2)
         kernel_dilate = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (dilate_size, dilate_size))
         mask_dilated = cv2.dilate(mask_closed, kernel_dilate, iterations=1)
         
-        # 分析原始掩码和处理后掩码的差异
-        # 如果处理后掩码丢失了大部分原始信息，可能需要使用不同的处理策略
+        # analyze the difference between the original mask and the processed mask
+        # if the processed mask loses most of the original information, it may need a different processing strategy
         original_pixels = np.count_nonzero(original_mask)
         processed_pixels = np.count_nonzero(mask_dilated)
         
-        # 如果处理后的掩码丢失了过多信息，使用更保守的处理
+        # if the processed mask loses too much information, use a more conservative processing strategy
+        # but sometimes we do need to clean most of the noise
         if original_pixels > 0 and processed_pixels / original_pixels < 0.5:
-            # 使用更小的核和更少的操作
+            # use a smaller kernel and fewer operations
             small_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
             mask = cv2.morphologyEx(original_mask, cv2.MORPH_OPEN, small_kernel)
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, small_kernel)
@@ -114,59 +110,46 @@ class MultiColorDetector(BaseDetector):
         return mask
 
     def _extract_boxes_from_mask(self, mask: np.ndarray) -> List[Tuple[int, int, int, int, float]]:
-        """
-        从掩码中提取边界框，应用更智能的筛选条件。
-        """
-        # 找到掩码中的轮廓
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         boxes = []
         
-        # 计算图像尺寸，用于动态调整面积阈值
         height, width = mask.shape[:2]
         image_area = height * width
         
-        # 动态调整最小和最大面积
-        dynamic_min_area = max(self.min_area, int(image_area * 0.001))  # 至少占图像的0.1%
-        dynamic_max_area = min(self.max_area, int(image_area * 0.3))   # 最多占图像的30%
+        dynamic_min_area = max(self.min_area, int(image_area * 0.001))  # at least 1% of the image
+        dynamic_max_area = min(self.max_area, int(image_area * 0.007))   # at most 0.5% of the image
 
         for cnt in contours:
             area = cv2.contourArea(cnt)
             
-            # 面积筛选
             if area < dynamic_min_area or area > dynamic_max_area:
                 continue
             
-            # 获取边界矩形
             x, y, w, h = cv2.boundingRect(cnt)
             
-            # 计算长宽比
             aspect_ratio = w / h if h > 0 else 0
             if not (self.min_aspect_ratio <= aspect_ratio <= self.max_aspect_ratio):
                 continue
             
-            # 计算填充率 (轮廓面积/边界矩形面积)
             fill_ratio = area / (w * h)
             if fill_ratio < 0.3:
                 continue
             
-            # 计算圆度 (轮廓面积/最小外接圆面积)
             (cx, cy), r = cv2.minEnclosingCircle(cnt)
             circle_area = np.pi * r * r
             circularity = area / circle_area if circle_area > 0 else 0
-            if circularity < 0.4:  # 稍微降低圆度要求
+            if circularity < 0.4:  
                 continue
             
-            # 检查轮廓的复杂度 (轮廓周长^2/面积)
             perimeter = cv2.arcLength(cnt, True)
             complexity = perimeter * perimeter / (4 * np.pi * area) if area > 0 else float('inf')
-            if complexity > 3.0:  # 过于复杂的形状可能不是标识
+            if complexity > 3.0:  
                 continue
             
-            # 使用多种特征计算置信度
             confidence = (
-                0.4 * fill_ratio +                # 填充率
-                0.3 * (1 - abs(0.75 - aspect_ratio)) +  # 接近理想长宽比的程度
-                0.3 * circularity                 # 圆度
+                0.4 * fill_ratio +                
+                0.3 * (1 - abs(0.75 - aspect_ratio)) +  
+                0.3 * circularity                 
             )
             
             boxes.append((x, y, x + w, y + h, confidence))
@@ -517,7 +500,7 @@ def visualize_detection_steps(detector, image: np.ndarray):
     plt.tight_layout()
     plt.show()
     
-    # 显示检测数据日志
+
     print(f"检测线路 {line_id} 统计:")
     print(f"  - 原始掩码非零像素: {np.count_nonzero(original_mask)}")
     print(f"  - 清洗后掩码非零像素: {np.count_nonzero(cleaned_mask)}")

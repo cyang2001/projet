@@ -80,6 +80,62 @@ class MetroTestPipeline:
             self.logger.error(f"Failed to initialize components: {e}")
             raise
     
+    def _transform_coords(self, bbox, original_shape, processed_shape):
+        """
+        转换边界框坐标以适应图像处理（如缩放）后的尺寸。
+        
+        Args:
+            bbox: 边界框坐标 (x1, y1, x2, y2)
+            original_shape: 原始图像尺寸 (高度, 宽度)
+            processed_shape: 处理后图像尺寸 (高度, 宽度)
+            
+        Returns:
+            转换后的坐标 (x1, y1, x2, y2)
+        """
+        x1, y1, x2, y2 = bbox
+        orig_h, orig_w = original_shape[:2]
+        proc_h, proc_w = processed_shape[:2]
+        
+        # 计算缩放比例
+        scale_w = proc_w / orig_w
+        scale_h = proc_h / orig_h
+        
+        # 应用缩放
+        new_x1 = int(x1 * scale_w)
+        new_y1 = int(y1 * scale_h)
+        new_x2 = int(x2 * scale_w)
+        new_y2 = int(y2 * scale_h)
+        
+        return new_x1, new_y1, new_x2, new_y2
+    
+    def _transform_coords_inverse(self, bbox, processed_shape, original_shape):
+        """
+        将处理后图像上的坐标转换回原始图像坐标系。
+        
+        Args:
+            bbox: 处理后图像上的边界框坐标 (x1, y1, x2, y2)
+            processed_shape: 处理后图像尺寸 (高度, 宽度)
+            original_shape: 原始图像尺寸 (高度, 宽度)
+            
+        Returns:
+            原始图像上的坐标 (x1, y1, x2, y2)
+        """
+        x1, y1, x2, y2 = bbox
+        proc_h, proc_w = processed_shape[:2]
+        orig_h, orig_w = original_shape[:2]
+        
+        # 计算逆向缩放比例
+        scale_w = orig_w / proc_w
+        scale_h = orig_h / proc_h
+        
+        # 应用缩放
+        orig_x1 = int(x1 * scale_w)
+        orig_y1 = int(y1 * scale_h)
+        orig_x2 = int(x2 * scale_w)
+        orig_y2 = int(y2 * scale_h)
+        
+        return orig_x1, orig_y1, orig_x2, orig_y2
+    
     def run(self):
         """
         Run the test pipeline.
@@ -103,17 +159,40 @@ class MetroTestPipeline:
             image, annotations = test_dataset.get_image_with_annotations(idx)
             image_id = test_dataset.df.iloc[idx]['image_id']
             self.logger.info(f"Processing image ID: {image_id}")
-            visualize_detection_steps(self.detector, image)
+            
+            # 保存原始图像尺寸
+            original_shape = image.shape
+            
+            # 预处理图像
             processed_image = self.preprocessor.process(image)
+            processed_shape = processed_image.shape
             
+            # 检查尺寸是否发生变化
+            if original_shape[:2] != processed_shape[:2]:
+                self.logger.info(f"Image resized from {original_shape[:2]} to {processed_shape[:2]}")
+                
+                # 转换标注坐标以适应处理后的图像尺寸
+                transformed_annotations = []
+                for ann in annotations:
+                    x1, y1, x2, y2, class_id = ann
+                    new_x1, new_y1, new_x2, new_y2 = self._transform_coords(
+                        (x1, y1, x2, y2), original_shape, processed_shape)
+                    transformed_annotations.append((new_x1, new_y1, new_x2, new_y2, class_id))
+            else:
+                transformed_annotations = annotations
+            
+            # 检测ROI - 在处理后的图像上
             detected_rois = self.detector.detect(processed_image)
-            
             self.logger.info(f"Detected {len(detected_rois)} ROIs")
+            
+            # 可视化检测过程 - 使用原始图像，便于理解
+            #visualize_detection_steps(self.detector, image)
             
             detected_classes = []
             for roi in detected_rois:
                 x1, y1, x2, y2 = roi['bbox']
                 
+                # 从处理后的图像中提取ROI
                 roi_img = processed_image[y1:y2, x1:x2]
                 
                 if roi_img.size == 0 or roi_img.shape[0] == 0 or roi_img.shape[1] == 0:
@@ -123,13 +202,20 @@ class MetroTestPipeline:
                 try:
                     class_id, confidence = self.classifier.predict(roi_img)
                     
-                    if class_id != -1 and confidence > 0.5:  
-                        detected_classes.append((class_id, (x1, y1, x2, y2), confidence))
-                        debug_roi_matching(image, (x1, y1, x2, y2), class_id, confidence)
+                    if class_id != -1 and confidence > 0.5:
+                        # 将检测到的坐标转换回原始图像坐标系，用于可视化和评估
+                        orig_x1, orig_y1, orig_x2, orig_y2 = self._transform_coords_inverse(
+                            (x1, y1, x2, y2), processed_shape, original_shape)
+                        
+                        detected_classes.append((class_id, (orig_x1, orig_y1, orig_x2, orig_y2), confidence))
+                        
+                        # 使用转换后的坐标在原始图像上进行可视化
+                        #debug_roi_matching(image, (orig_x1, orig_y1, orig_x2, orig_y2), class_id, confidence)
                 except Exception as e:
                     self.logger.error(f"Error classifying ROI: {e}")
             
-            gt_classes = [(ann[4], ann[:4]) for ann in annotations]  
+            # 使用原始坐标的ground truth进行评估
+            gt_classes = [(ann[4], ann[:4]) for ann in annotations]
             
             image_result = {
                 'image_id': int(image_id),
@@ -249,75 +335,82 @@ class MetroTestPipeline:
                 metrics = {
                     'confusion_matrix': cm,
                     'classification_report': report,
-                    'accuracy': accuracy,
-                    'correct': correct,
-                    'total': total
+                    'accuracy': accuracy
                 }
                 
-                output_dir = self.cfg.get("output_dir", "results")
-                ensure_dir(output_dir)
+                # Save metrics
+                self._save_metrics(metrics)
                 
-                np.savez(
-                    os.path.join(output_dir, "test_metrics.npz"),
-                    **metrics
-                )
-                
-                self.logger.info(f"Evaluation metrics saved to {output_dir}/test_metrics.npz")
             else:
                 self.logger.warning("No predictions or ground truth available for evaluation")
-        
+                
         except Exception as e:
             self.logger.error(f"Error calculating metrics: {e}")
     
+    def _save_metrics(self, metrics: Dict):
+        """
+        Save evaluation metrics.
+        
+        Args:
+            metrics: Dictionary of metrics
+        """
+        try:
+            import json
+            output_dir = os.path.join(self.cfg.get("output_dir", "results"), "metrics")
+            ensure_dir(output_dir)
+            
+            # Save report as JSON
+            with open(os.path.join(output_dir, "test_metrics.json"), 'w') as f:
+                # Convert numpy arrays to lists
+                for k, v in metrics.items():
+                    if hasattr(v, 'tolist'):
+                        metrics[k] = v.tolist()
+                json.dump(metrics, f, indent=4)
+                
+            self.logger.info(f"Metrics saved to {output_dir}")
+                
+        except Exception as e:
+            self.logger.error(f"Error saving metrics: {e}")
+    
     def _save_results(self, results: List[Dict]):
         """
-        Save test results.
+        Save detection results.
         
         Args:
             results: List of detection results per image
         """
-        if not results:
-            self.logger.warning("No results to save")
-            return
-            
         try:
-            if self.cfg.mode.test.get("save_mat", True):
-                output_dir = self.cfg.get("output_dir", "results")
-                ensure_dir(output_dir)
-                
-                mat_results = []
-                
-                for result in results:
-                    image_id = result['image_id']
-                    
-                    for cls, bbox, conf in result['detected']:
-                        x1, y1, x2, y2 = bbox
-                        
-                        mat_results.append([image_id, y1, y2, x1, x2, cls])
-                
-                from src.data.utils import save_results
-                mat_path = os.path.join(output_dir, "test_results.mat")
-                save_results(mat_results, mat_path)
-                
-                self.logger.info(f"Results saved to {mat_path}")
-                
-            output_dir = self.cfg.get("output_dir", "results")
+            output_dir = os.path.join(self.cfg.get("output_dir", "results"), "detections")
             ensure_dir(output_dir)
             
-            serialized_results = {
-                f"result_{i}": str(result) for i, result in enumerate(results)
-            }
+            # Convert to format suitable for MATLAB
+            bd_data = []
             
-            np.savez(
-                os.path.join(output_dir, "test_results.npz"),
-                **serialized_results
-            )
+            for result in results:
+                image_id = result['image_id']
+                # Save detections (optional)
+                if self.cfg.mode.test.get("save_detections", True):
+                    for cls, bbox, _ in result['detected']:
+                        x1, y1, x2, y2 = bbox
+                        bd_data.append([image_id, y1, y2, x1, x2, cls])
             
-            self.logger.info(f"Detailed results saved to {output_dir}/test_results.npz")
+            # Save as MATLAB file
+            mat_path = os.path.join(output_dir, "test_results.mat")
+            sio.savemat(mat_path, {'BD': np.array(bd_data)})
             
+            self.logger.info(f"Results saved to {mat_path}")
+            
+            # Save as JSON (more readable)
+            json_path = os.path.join(output_dir, "test_results.json")
+            
+            with open(json_path, 'w') as f:
+                import json
+                json.dump(results, f, indent=4, default=lambda x: str(x) if isinstance(x, np.ndarray) else x)
+                
+            self.logger.info(f"Results also saved to {json_path}")
+                
         except Exception as e:
             self.logger.error(f"Error saving results: {e}")
-
 
 def main(cfg: DictConfig):
     """
@@ -327,24 +420,10 @@ def main(cfg: DictConfig):
         cfg: Configuration object
     """
     logger = get_logger(__name__)
+    logger.info("Initializing test pipeline")
     
-    try:
-        # Create test pipeline
-        pipeline = MetroTestPipeline(
-            cfg=cfg,
-        )
-        
-        # Run testing
-        pipeline.run()
-        
-        logger.info("Test pipeline completed successfully")
-        
-    except Exception as e:
-        logger.error(f"Test pipeline execution failed: {e}")
-        raise 
-
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+    pipeline = MetroTestPipeline(cfg)
+    pipeline.run()
 
 def debug_roi_matching(image: np.ndarray, roi: Tuple[int, int, int, int], match_class: int, confidence: float):
     """
