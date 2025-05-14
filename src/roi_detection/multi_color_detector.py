@@ -389,14 +389,16 @@ def visualize_detection_steps(detector, image: np.ndarray):
     2. 原始HSV掩码
     3. 形态学清洗后掩码
     4. 轮廓提取
-    5. ROI检测结果
+    5. ROI检测结果（应用过滤条件后）
     6. 最终NMS结果
+
+    确保与MultiColorDetector中的方法保持完全一致的清洗和检测逻辑。
     """
     # 设置更大的图像以显示更多细节
     fig, axes = plt.subplots(2, 3, figsize=(18, 10))
     axes = axes.flatten()
     
-    # 原始图像检查
+    # 原始图像检查与转换
     if image.dtype == np.float32 and image.max() <= 1.0:
         img_uint8 = (image * 255).astype(np.uint8)
     else:
@@ -407,14 +409,14 @@ def visualize_detection_steps(detector, image: np.ndarray):
     axes[0].set_title("1. Original Image / Image Originale")
     axes[0].axis('off')
 
-    # 转 BGR→HSV
+    # 转 BGR→HSV，与_preprocess_image方法保持一致
     img_bgr = cv2.cvtColor(img_uint8, cv2.COLOR_RGB2BGR)
     img_hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
     
     # 选择要展示的线路ID - 以12为例或使用配置
     line_id = "12" if "12" in detector.color_params else list(detector.color_params.keys())[0]
     
-    # 获取颜色参数
+    # 获取颜色参数 - 与_extract_line_mask保持一致
     params = detector.color_params[line_id]
     lower = np.maximum(0, np.array(params["hsv_lower"]) - detector.threshold_error_dict.get(line_id, 0))
     upper = np.minimum(255, np.array(params["hsv_upper"]) + detector.threshold_error_dict.get(line_id, 0))
@@ -425,82 +427,190 @@ def visualize_detection_steps(detector, image: np.ndarray):
     axes[1].set_title(f"2. Original Mask (Line {line_id})")
     axes[1].axis('off')
     
-    # 计算形态学操作的各步骤
-    # 计算核大小
+    # 3. 形态学清洗 - 完全按照_extract_line_mask方法的实现
+    # 计算图像尺寸，用于动态调整形态学操作的核大小
     height, width = original_mask.shape[:2]
-    kernel_size = max(3, min(18, int(min(height, width) * 0.05)))
+    kernel_size = max(3, min(18, int(min(height, width) * 0.05)))  # 动态核大小，基于图像尺寸
     
-    # 开操作
+    # 创建形态学操作的核
     kernel_open = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+    kernel_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+    
+    # 应用开操作来移除噪点
     mask_opened = cv2.morphologyEx(original_mask, cv2.MORPH_OPEN, kernel_open)
     
-    # 闭操作
-    kernel_close = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+    # 应用闭操作来填充孔洞
     mask_closed = cv2.morphologyEx(mask_opened, cv2.MORPH_CLOSE, kernel_close)
     
-    # 膨胀
+    # 轻微膨胀以连接近邻区域
     dilate_size = max(3, kernel_size // 2)
     kernel_dilate = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (dilate_size, dilate_size))
     mask_dilated = cv2.dilate(mask_closed, kernel_dilate, iterations=1)
     
-    # 3. 形态学清洗后掩码
-    cleaned_mask = detector._extract_line_mask(img_hsv, line_id)
+    # 分析原始掩码和处理后掩码的差异
+    original_pixels = np.count_nonzero(original_mask)
+    processed_pixels = np.count_nonzero(mask_dilated)
+    
+    # 根据差异选择最终掩码，与_extract_line_mask方法相同
+    if original_pixels > 0 and processed_pixels / original_pixels < 0.5:
+        # 使用更小的核和更少的操作
+        small_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+        cleaned_mask = cv2.morphologyEx(original_mask, cv2.MORPH_OPEN, small_kernel)
+        cleaned_mask = cv2.morphologyEx(cleaned_mask, cv2.MORPH_CLOSE, small_kernel)
+        process_text = "使用保守处理（信息损失>50%）"
+    else:
+        cleaned_mask = mask_dilated
+        process_text = "使用标准处理"
+    
     axes[2].imshow(cleaned_mask, cmap='gray')
-    axes[2].set_title("3. Cleaned Mask / Masque nettoyé")
+    axes[2].set_title(f"3. Cleaned Mask / {process_text}")
     axes[2].axis('off')
     
-    # 4. 轮廓提取
+    # 4. 轮廓提取 - 使用与detector.detect完全相同的逻辑
     contour_img = image.copy()
     contours, _ = cv2.findContours(cleaned_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    # 动态计算面积阈值，与_extract_boxes_from_mask保持一致
+    image_area = height * width
+    dynamic_min_area = max(detector.min_area, int(image_area * 0.001))  # 至少占图像的0.1%
+    dynamic_max_area = min(detector.max_area, int(image_area * 0.3))    # 最多占图像的30%
+    
+    # 绘制所有轮廓并显示其属性
     for cnt in contours:
-        x, y, w, h = cv2.boundingRect(cnt)
-        cv2.rectangle(contour_img, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 绿色框
-        
-        # 显示过滤条件相关信息
         area = cv2.contourArea(cnt)
+        x, y, w, h = cv2.boundingRect(cnt)
+        
+        # 计算与_extract_boxes_from_mask相同的特征
         aspect_ratio = w / h if h > 0 else 0
         fill_ratio = area / (w * h) if w * h > 0 else 0
         
+        # 计算圆度
+        (cx, cy), r = cv2.minEnclosingCircle(cnt)
+        circle_area = np.pi * r * r
+        circularity = area / circle_area if circle_area > 0 else 0
+        
+        # 计算复杂度
+        perimeter = cv2.arcLength(cnt, True)
+        complexity = perimeter * perimeter / (4 * np.pi * area) if area > 0 else float('inf')
+        
+        # 在图像上绘制轮廓矩形
+        cv2.rectangle(contour_img, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 绿色框
+        
+        # 确定轮廓是否通过检测标准，用于颜色编码
+        passes_area = dynamic_min_area <= area <= dynamic_max_area
+        passes_aspect = detector.min_aspect_ratio <= aspect_ratio <= detector.max_aspect_ratio
+        passes_fill = fill_ratio >= 0.3
+        passes_circularity = circularity >= 0.4
+        passes_complexity = complexity <= 3.0
+        passes_all = passes_area and passes_aspect and passes_fill and passes_circularity and passes_complexity
+        
+        # 显示更详细的轮廓信息
+        feature_text = f"A:{area:.0f} R:{aspect_ratio:.2f} F:{fill_ratio:.2f}\nC:{circularity:.2f} X:{complexity:.2f}"
+        box_color = 'lime' if passes_all else 'red'
+        
         # 显示每个轮廓的信息
-        axes[3].text(x, y-5, f"A:{area:.0f} R:{aspect_ratio:.2f} F:{fill_ratio:.2f}", 
-                    color='white', fontsize=8, bbox=dict(facecolor='green', alpha=0.7))
+        axes[3].text(x, y-5, feature_text, color='white', fontsize=7, 
+                     bbox=dict(facecolor=box_color, alpha=0.7))
     
     axes[3].imshow(contour_img)
-    axes[3].set_title("4. All Contours / Tous les contours")
+    axes[3].set_title(f"4. All Contours ({len(contours)})")
     axes[3].axis('off')
     
-    # 5. 应用过滤后的轮廓
+    # 5. 应用过滤后的轮廓 - 使用与_extract_boxes_from_mask完全相同的逻辑
     filtered_img = image.copy()
-    boxes = detector._extract_boxes_from_mask(cleaned_mask)
-    for x1, y1, x2, y2, conf in boxes:
-        cv2.rectangle(filtered_img, (x1, y1), (x2, y2), (255, 165, 0), 2)  # 橙色框
-        axes[4].text(x1, y1-5, f"{conf:.2f}", color='white', fontsize=8, 
+    boxes = []
+    valid_contours = 0
+    
+    # 重新实现_extract_boxes_from_mask的逻辑来显示过滤后的框
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        
+        # 面积筛选
+        if area < dynamic_min_area or area > dynamic_max_area:
+            continue
+        
+        # 获取边界矩形
+        x, y, w, h = cv2.boundingRect(cnt)
+        
+        # 计算长宽比
+        aspect_ratio = w / h if h > 0 else 0
+        if not (detector.min_aspect_ratio <= aspect_ratio <= detector.max_aspect_ratio):
+            continue
+        
+        # 计算填充率
+        fill_ratio = area / (w * h)
+        if fill_ratio < 0.3:
+            continue
+        
+        # 计算圆度
+        (cx, cy), r = cv2.minEnclosingCircle(cnt)
+        circle_area = np.pi * r * r
+        circularity = area / circle_area if circle_area > 0 else 0
+        if circularity < 0.4:
+            continue
+        
+        # 检查轮廓的复杂度
+        perimeter = cv2.arcLength(cnt, True)
+        complexity = perimeter * perimeter / (4 * np.pi * area) if area > 0 else float('inf')
+        if complexity > 3.0:
+            continue
+        
+        # 使用多种特征计算置信度
+        confidence = (
+            0.4 * fill_ratio +                # 填充率
+            0.3 * (1 - abs(0.75 - aspect_ratio)) +  # 接近理想长宽比的程度
+            0.3 * circularity                 # 圆度
+        )
+        
+        boxes.append((x, y, x + w, y + h, confidence))
+        valid_contours += 1
+        
+        # 在图像上绘制过滤后的框
+        cv2.rectangle(filtered_img, (x, y), (x + w, y + h), (255, 165, 0), 2)  # 橙色框
+        axes[4].text(x, y-5, f"{confidence:.2f}", color='white', fontsize=8, 
                     bbox=dict(facecolor='orange', alpha=0.7))
     
     axes[4].imshow(filtered_img)
-    axes[4].set_title("5. Filtered Boxes / Boîtes filtrées")
+    axes[4].set_title(f"5. Filtered Boxes ({valid_contours}/{len(contours)})")
     axes[4].axis('off')
     
-    # 6. 最终NMS结果
+    # 6. 最终NMS结果 - 使用detector.detect来展示最终结果
     final_img = image.copy()
     detections = detector.detect(image)
+    
+    # 按照线路分组展示检测结果
+    line_detections = {}
     for det in detections:
-        x1, y1, x2, y2 = det["bbox"]
         line_id = det["line_id"]
-        confidence = det["confidence"]
+        if line_id not in line_detections:
+            line_detections[line_id] = []
+        line_detections[line_id].append(det)
+    
+    # 为不同线路使用不同颜色
+    cmap = plt.cm.get_cmap('tab10', 10)
+    
+    for i, (line_id, line_dets) in enumerate(line_detections.items()):
+        color_idx = i % 10
+        color = tuple(int(c*255) for c in cmap(color_idx)[:3])  # 转换为BGR
         
-        cv2.rectangle(final_img, (x1, y1), (x2, y2), (255, 0, 0), 2)  # 蓝色框
-        axes[5].text(x1, y1-5, f"Line {line_id}: {confidence:.2f}", color='white', fontsize=8,
-                   bbox=dict(facecolor='blue', alpha=0.7))
+        for det in line_dets:
+            x1, y1, x2, y2 = det["bbox"]
+            confidence = det["confidence"]
+            
+            # 在最终图像上绘制框
+            cv2.rectangle(final_img, (x1, y1), (x2, y2), (255, 0, 0), 2)  # 蓝色框
+            axes[5].text(x1, y1-5, f"Line {line_id}: {confidence:.2f}", color='white', fontsize=8,
+                       bbox=dict(facecolor=cmap(color_idx), alpha=0.7))
     
     axes[5].imshow(final_img)
-    axes[5].set_title("6. Final Detections / Détections finales")
+    axes[5].set_title(f"6. Final Detections ({len(detections)})")
     axes[5].axis('off')
     
+    # 紧凑布局
     plt.tight_layout()
     plt.show()
     
-
+    # 显示处理统计信息
     print(f"检测线路 {line_id} 统计:")
     print(f"  - 原始掩码非零像素: {np.count_nonzero(original_mask)}")
     print(f"  - 清洗后掩码非零像素: {np.count_nonzero(cleaned_mask)}")
