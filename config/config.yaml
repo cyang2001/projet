@@ -48,6 +48,15 @@ data:
   test_mat: Test.mat
   val_split: 0.2
 
+# ROI Dataset configuration (for CNN training)
+roi_dataset:
+  roi_dataset_dir: ${base_dir}/data/
+  add_background_samples: true
+  background_class_id: -1
+  num_bg_samples_per_image: 2
+  random_seed: ${seed}
+  train_dir: ${base_dir}/data/train
+  val_dir: ${base_dir}/data/val
 
 common:
   template_dir: templates

@@ -12,6 +12,11 @@ import keras
 from utils.utils import get_logger, ensure_dir
 from src.data.utils import resize_image
 from src.classification.base import BaseClassifier
+from sklearn.metrics import confusion_matrix, classification_report
+import numpy as np
+from typing import Dict, Any, List, Union
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 @dataclass
@@ -57,9 +62,9 @@ class ModelLoadError(Exception):
 
 class CNNClassifier(BaseClassifier):
     """
-    CNN Classifier
+    CNN-based classifier for metro line pictograms.
     
-    Uses a convolutional neural network to classify metro line signs.
+    Uses a deep learning model to classify ROI images.
     """
     
     def __init__(self, cfg: DictConfig, logger: Optional[logging.Logger] = None):
@@ -67,260 +72,216 @@ class CNNClassifier(BaseClassifier):
         Initialize CNN classifier.
         
         Args:
-            cfg: Configuration dictionary
+            cfg: Configuration object
             logger: Optional logger
         """
         super().__init__(cfg, logger)
+        self.model = None
+        self.model_path = os.path.join(
+            self.cfg.get("model_dir", "models"),
+            self.cfg.get("model_file", "cnn_model.h5")
+        )
         
-        # Get configuration
-        self.model_path = cfg.cnn.get("model_path", "models/cnn_model.h5")
-        self.input_shape = tuple(cfg.cnn.get("input_shape", [64, 64, 3]))
-        self.num_classes = cfg.cnn.get("num_classes", 14)
-        self.architecture = cfg.cnn.get("architecture", "resnet")
-        self.dropout_rate = cfg.cnn.get("dropout_rate", 0.5)
-        self.threshold = cfg.get("threshold", 0.5)
+        # CNN hyperparameters
+        self.batch_size = self.cfg.cnn.get("batch_size", 32)
+        self.epochs = self.cfg.cnn.get("epochs", 50)
+        self.learning_rate = self.cfg.cnn.get("learning_rate", 0.001)
+        self.dropout_rate = self.cfg.cnn.get("dropout_rate", 0.3)
         
-        self.model: Optional[keras.Model] = None
+        # Initialize preprocessor
+        self.preprocessor = None
         
-        try:
-            if os.path.exists(self.model_path):
-                self.logger.info(f"Loading model from {self.model_path}")
-                self.model = keras.models.load_model(self.model_path) # type: ignore
-                self.logger.info("Model loaded successfully")
-        except Exception as e:
-            self.logger.warning(f"Failed to load model: {e}")
-    
     def _build_model(self) -> None:
         """
-        Build the CNN model architecture.
+        Build CNN model architecture.
         """
-        self.logger.info(f"Building CNN model with {self.architecture} architecture")
+        input_shape = self.cfg.cnn.get("input_shape", (64, 64, 3))
+        num_classes = self.cfg.cnn.get("num_classes", 14)  # 巴黎地铁线路数+背景类
+        base_filters = self.cfg.cnn.get("base_filters", 32)
         
-        try:
-            if self.architecture.lower() == "resnet":
-                # Use ResNet50 as base model (better for desktop/server use)
-                try:
-                    base_model = keras.applications.resnet.ResNet50(
-                        input_shape=self.input_shape,
-                        include_top=False,
-                        weights='imagenet'
-                    )
-                        
-                except Exception as e:
-                    self.logger.warning(f"Error loading ResNet50: {e}, falling back to simple CNN")
-                    self.architecture = "simple"
-                    return self._build_model()
-                
-                # Freeze base model layers
-                base_model.trainable = False
-                
-                # Add classification head
-                inputs = keras.layers.Input(shape=self.input_shape)
-                x = base_model(inputs, training=False)
-                x = keras.layers.GlobalAveragePooling2D()(x)
-                x = keras.layers.Dropout(self.dropout_rate)(x)
-                outputs = keras.layers.Dense(self.num_classes, activation='softmax')(x)
-                
-                self.model = keras.models.Model(inputs, outputs)
-                
-            else:
-                # Simple custom CNN
-                model = keras.models.Sequential()
-                
-                # Convolutional blocks
-                model.add(keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same', input_shape=self.input_shape))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
-                
-                model.add(keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same'))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
-                
-                model.add(keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same'))
-                model.add(keras.layers.MaxPooling2D((2, 2)))
-                
-                # Classification head
-                model.add(keras.layers.Flatten())
-                model.add(keras.layers.Dense(256, activation='relu'))
-                model.add(keras.layers.Dropout(self.dropout_rate))
-                model.add(keras.layers.Dense(self.num_classes, activation='softmax'))
-                
-                self.model = model
-            
-            # Compile model
-            if self.model is not None:
-                self.model.compile(
-                    optimizer='adam',
-                    loss='sparse_categorical_crossentropy',
-                    metrics=['accuracy']
-                )
-                
-                self.logger.info(f"Model built with {self.model.count_params()} parameters")
-            
-        except Exception as e:
-            self.logger.error(f"Error building model: {e}")
-            raise
-    
-    def predict(self, image: np.ndarray) -> Tuple[int, float]:
-        """
-        Predict class for an image.
+        self.logger.info(f"Building CNN model with input shape {input_shape}, {num_classes} classes")
         
-        Args:
-            image: Image to classify (preprocessed ROI)
+        model_type = self.cfg.cnn.get("model_type", "simple")
+        
+        if model_type == "resnet":
+            self.model = self._build_resnet_model(input_shape, num_classes)
+        else:  # simple CNN
+            self.model = self._build_simple_cnn(input_shape, num_classes, base_filters)
             
-        Returns:
-            Tuple of (class_id, confidence)
+    def _build_simple_cnn(self, input_shape, num_classes, base_filters):
         """
+        Build a simple CNN architecture.
+        """
+        model = keras.Sequential()
+        
+        # First convolutional block
+        model.add(keras.layers.Conv2D(base_filters, (3, 3), padding='same', input_shape=input_shape))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Activation('relu'))
+        model.add(keras.layers.MaxPooling2D((2, 2)))
+        
+        # Second convolutional block
+        model.add(keras.layers.Conv2D(base_filters*2, (3, 3), padding='same'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Activation('relu'))
+        model.add(keras.layers.MaxPooling2D((2, 2)))
+        
+        # Third convolutional block
+        model.add(keras.layers.Conv2D(base_filters*4, (3, 3), padding='same'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Activation('relu'))
+        model.add(keras.layers.MaxPooling2D((2, 2)))
+        
+        # Classification layers
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(256))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Activation('relu'))
+        model.add(keras.layers.Dropout(self.dropout_rate))
+        model.add(keras.layers.Dense(num_classes, activation='softmax'))
+        
+        # Compile the model
+        optimizer = keras.optimizers.Adam(learning_rate=self.learning_rate)
+        model.compile(
+            optimizer=optimizer, # type: ignore
+            loss='sparse_categorical_crossentropy',
+            metrics=['accuracy']
+        )
+        
+        return model
+        
+    def _build_resnet_model(self, input_shape, num_classes):
+        """
+        Build a model based on ResNet50.
+        """
+        base_trainable = self.cfg.cnn.get("base_trainable", False)
+        
+        # Load ResNet50 base
+        base_model = keras.applications.ResNet50(
+            include_top=False,
+            weights='imagenet',
+            input_shape=input_shape
+        )
+        
+        # Set trainable layers
+        base_model.trainable = base_trainable
+        
+        # Create new model
+        inputs = keras.Input(shape=input_shape)
+        x = base_model(inputs, training=False)
+        x = keras.layers.GlobalAveragePooling2D()(x)
+        x = keras.layers.Dense(256, activation='relu')(x)
+        x = keras.layers.Dropout(self.dropout_rate)(x)
+        outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+        
+        model = keras.Model(inputs, outputs)
+        
+        # Compile the model
+        optimizer = keras.optimizers.Adam(learning_rate=self.learning_rate)
+        model.compile(
+            optimizer=optimizer, # type: ignore
+            loss='sparse_categorical_crossentropy',
+            metrics=['accuracy']
+        )
+        
+        return model
+        
+    def predict(self, image: np.ndarray, threshold: float = 0.7) -> Tuple[int, float]:
         if self.model is None:
-            self.logger.warning("Model not loaded yet")
-            return -1, 0.0
-        
+            if os.path.exists(self.model_path):
+                self.load(self.model_path)
+            else:
+                self.logger.error(f"Model not found at {self.model_path}")
+                return -1, 0.0
+
+        if len(image.shape) == 3:
+            image_batch = np.expand_dims(image, axis=0)
+        else:
+            image_batch = image
+
         try:
-            # Ensure image has right dimensions and type
-            if len(image.shape) == 2:  # Grayscale image
-                image = np.stack([image] * 3, axis=-1)
-            
-            # Ensure image has right shape
-            if image.shape[:2] != self.input_shape[:2]:
-                from cv2 import resize
-                image = resize(image, (self.input_shape[1], self.input_shape[0]))
-            
-            # Add batch dimension if needed
-            if len(image.shape) == 3:
-                image = np.expand_dims(image, axis=0)
-            
-            # Make prediction
-            model_typed = cast(keras.Model, self.model) 
-            predictions = model_typed.predict(image)
-            
-            # Get highest confidence class
-            class_id = np.argmax(predictions[0])
-            confidence = predictions[0][class_id]
-            
-            # Apply threshold
-            if confidence < self.threshold:
-                return -1, float(confidence)
-            
-            return int(class_id), float(confidence)
-            
+            predictions = self.model.predict(image_batch) # type: ignore
+            class_id = int(np.argmax(predictions[0]))
+            confidence = float(predictions[0][class_id])
+
+            if confidence < threshold or class_id == self.cfg.cnn.get("num_classes", 14):
+                return -1, confidence
+
+            return class_id, confidence
+
         except Exception as e:
             self.logger.error(f"Error during prediction: {e}")
             return -1, 0.0
-    
-    def train(self, X_train: np.ndarray, y_train: np.ndarray) -> Dict[str, Any]:
+            
+    def train(self, X_train: np.ndarray, y_train: np.ndarray, 
+              X_val: Optional[np.ndarray] = None,
+              y_val: Optional[np.ndarray] = None, 
+              class_weights: Optional[Dict[int, float]] = None) -> Dict[str, Any]:
         """
-        Train the classifier with provided data.
+        Train the CNN model.
         
         Args:
             X_train: Training images
             y_train: Training labels
+            X_val: Optional validation images
+            y_val: Optional validation labels
+            class_weights: Optional class weights for imbalanced data
             
         Returns:
-            Dictionary with training history
+            Training history
         """
+        if len(X_train) == 0:
+            self.logger.error("No training data provided")
+            return {}
+            
         self.logger.info(f"Training CNN classifier with {len(X_train)} samples")
         
-        # Build model if not already built
+        # Build or load model
         if self.model is None:
             self._build_model()
-        
-        # 初始化一个空的历史记录，以防后续代码提前返回
-        empty_history: Dict[str, Any] = {}
-        
-        # Create data generators for augmentation
-        if self.cfg.cnn.get("use_augmentation", True):
-            try:
-                datagen = keras.preprocessing.image.ImageDataGenerator( # type: ignore
-                    rotation_range=10,
-                    width_shift_range=0.1,
-                    height_shift_range=0.1,
-                    horizontal_flip=False,
-                    zoom_range=0.1,
-                    brightness_range=[0.9, 1.1],
-                    validation_split=0.2  # Use 20% of data for validation
-                )
-
-                    
-                # Split data into training and validation
-                val_split = int(len(X_train) * 0.8)
-                X_val = X_train[val_split:]
-                y_val = y_train[val_split:]
-                X_train = X_train[:val_split]
-                y_train = y_train[:val_split]
-                
-                # Create train and validation generators
-                train_generator = datagen.flow(
-                    X_train, y_train,
-                    batch_size=self.cfg.cnn.get("batch_size", 32)
-                )
-                
-                validation_generator = datagen.flow(
-                    X_val, y_val,
-                    batch_size=self.cfg.cnn.get("batch_size", 32)
-                )
-                
-                # Setup callbacks
-                callbacks = [
-                    keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
-                    keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
-                ]
-                
-                # Create directory for model if it doesn't exist
-                ensure_dir(os.path.dirname(self.model_path))
-                
-                callbacks.append(
-                    keras.callbacks.ModelCheckpoint(
-                        self.model_path,
-                        save_best_only=True,
-                        monitor='val_accuracy'
-                    )
-                )
-                
-                # Train model
-                if self.model is not None:
-                    model_typed = cast(keras.Model, self.model)  # 确保类型正确
-                    history = model_typed.fit(
-                        train_generator,
-                        epochs=self.cfg.cnn.get("epochs", 50),
-                        validation_data=validation_generator,
-                        callbacks=callbacks,
-                    )
-                    
-                    self.logger.info("Training completed")
-                    return history.history
-                else:
-                    self.logger.error("Model is not initialized, cannot train")
-                    return empty_history
-            except Exception as e:
-                self.logger.error(f"Error training with augmentation: {e}, falling back to simple training")
-                return self._train_without_augmentation(X_train, y_train)
             
-        else:
-            return self._train_without_augmentation(X_train, y_train)
-    
-    def _train_without_augmentation(self, X_train: np.ndarray, y_train: np.ndarray) -> Dict[str, Any]:
+        # Prepare callbacks
+        callbacks = self._get_callbacks()
+        
+        # Prepare class weights if provided
+        train_class_weights = None
+        if class_weights is not None:
+            train_class_weights = class_weights
+            self.logger.info(f"Using class weights: {train_class_weights}")
+            
+        # Train model
+        validation_data = None
+        if X_val is not None and y_val is not None and len(X_val) > 0:
+            validation_data = (X_val, y_val)
+        
+        history = self.model.fit( # type: ignore
+            X_train, y_train,
+            batch_size=self.batch_size,
+            epochs=self.epochs,
+            validation_data=validation_data,
+            callbacks=callbacks,
+            class_weight=train_class_weights
+        )
+        
+        self.logger.info("CNN training completed")
+        return history.history
+        
+    def _get_callbacks(self):
         """
-        Train model without using data augmentation.
+        Get callbacks for model training.
         
-        Args:
-            X_train: Training images
-            y_train: Training labels
-            
         Returns:
-            Dictionary with training history
+            List of Keras callbacks
         """
-        # 初始化一个空的历史记录，以防后续代码返回None
-        empty_history: Dict[str, Any] = {}
-        
-        # Without augmentation, use simple train/val split
-        val_split = int(len(X_train) * 0.8)
-        X_val = X_train[val_split:]
-        y_val = y_train[val_split:]
-        X_train = X_train[:val_split]
-        y_train = y_train[:val_split]
-        
-        # Setup callbacks
         callbacks = [
-            keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True),
-            keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5)
+            keras.callbacks.EarlyStopping(
+                patience=self.cfg.cnn.get("early_stopping_patience", 10), 
+                restore_best_weights=True
+            ),
+            keras.callbacks.ReduceLROnPlateau(
+                factor=0.5, 
+                patience=self.cfg.cnn.get("reduce_lr_patience", 5)
+            )
         ]
         
         # Create directory for model if it doesn't exist
@@ -334,60 +295,59 @@ class CNNClassifier(BaseClassifier):
             )
         )
         
-        # Train model
-        if self.model is not None:
-            model_typed = cast(keras.Model, self.model)  # 确保类型正确
-            history = model_typed.fit(
-                X_train, y_train,
-                epochs=self.cfg.cnn.get("epochs", 50),
-                batch_size=self.cfg.cnn.get("batch_size", 32),
-                validation_data=(X_val, y_val),
-                callbacks=callbacks,
-            )
+        return callbacks
+        
+    def get_preprocessor(self):
+        """
+        Get the preprocessor used by this classifier.
+        
+        Returns:
+            Preprocessor instance or None if not available
+        """
+        from src.preprocessing.cnn_preprocessor import CNNPreprocessor
+        
+        if hasattr(self, 'preprocessor') and self.preprocessor is not None:
+            return self.preprocessor
             
-            return history.history
-        else:
-            self.logger.error("Model is not initialized, cannot train")
-            return empty_history
+        preprocessor = CNNPreprocessor(self.cfg)
+        self.preprocessor = preprocessor
+        return preprocessor
     
     def save(self, path: str) -> None:
         """
-        Save the model to disk.
+        Save the classifier model to disk.
         
         Args:
             path: Path to save the model
         """
         if self.model is None:
-            self.logger.warning("No model to save")
+            self.logger.error("No model to save")
             return
             
+        ensure_dir(os.path.dirname(path))
         try:
-            # Create directory if it doesn't exist
-            ensure_dir(os.path.dirname(path))
-            
-            # Save model
-            model_typed = cast(keras.Model, self.model)  
-            model_typed.save(path)
+            self.model.save(path) # type: ignore
             self.logger.info(f"Model saved to {path}")
         except Exception as e:
             self.logger.error(f"Error saving model: {e}")
     
     def load(self, path: str) -> None:
         """
-        Load the model from disk.
+        Load the classifier model from disk.
         
         Args:
             path: Path to load the model from
         """
+        if not os.path.exists(path):
+            self.logger.error(f"Model file not found: {path}")
+            return
+            
         try:
-            if not os.path.exists(path):
-                self.logger.warning(f"Model file does not exist: {path}")
-                return
-                
-            self.model = keras.models.load_model(path) # type: ignore
+            self.model = keras.models.load_model(path)
             self.logger.info(f"Model loaded from {path}")
         except Exception as e:
             self.logger.error(f"Error loading model: {e}")
+            self.model = None
     
     def visualize_training_history(self, history: Dict[str, List]) -> None:
         """
@@ -411,7 +371,6 @@ class CNNClassifier(BaseClassifier):
         ax1.set_xlabel('Epoch')
         ax1.legend(['Train', 'Validation'], loc='upper left')
         
-        # Plot training & validation loss
         ax2.plot(history.get('loss', []))
         ax2.plot(history.get('val_loss', []))
         ax2.set_title('Model Loss')
@@ -422,48 +381,106 @@ class CNNClassifier(BaseClassifier):
         plt.tight_layout()
         plt.show()
         
-    def evaluate(self, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, Any]:
+
+
+    def evaluate(self, X_test: np.ndarray, y_test: np.ndarray, threshold: float = 0.7) -> Dict[str, Any]:
         """
-        Evaluate the model on test data.
+        Evaluate the model on test data, including rejection (-1) class.
         
         Args:
             X_test: Test images
             y_test: Test labels
+            threshold: Confidence threshold for rejection
             
         Returns:
-            Dictionary with evaluation metrics
+            Dictionary with metrics and evaluation artifacts
         """
         if self.model is None:
             self.logger.warning("Model not loaded yet")
             return {}
-            
+
         try:
-            # Evaluate model
-            model_typed = cast(keras.Model, self.model)  
-            scores = model_typed.evaluate(X_test, y_test)
-            
-            metrics = {
-                'test_loss': scores[0],
-                'test_accuracy': scores[1]
-            }
-            
-            # Calculate confusion matrix
-            model_typed = cast(keras.Model, self.model)  
+            model_typed = cast(keras.Model, self.model)
+            scores = model_typed.evaluate(X_test, y_test, verbose=0)
+
             predictions = model_typed.predict(X_test)
             pred_classes = np.argmax(predictions, axis=1)
-            
-            from sklearn.metrics import confusion_matrix, classification_report
-            
-            cm = confusion_matrix(y_test, pred_classes)
-            report = classification_report(y_test, pred_classes, output_dict=True)
-            
-            metrics['confusion_matrix'] = cm
-            metrics['classification_report'] = report
-            
-            self.logger.info(f"Evaluation results: loss={metrics['test_loss']:.4f}, accuracy={metrics['test_accuracy']:.4f}")
-            
-            return metrics
-            
+            confidences = np.max(predictions, axis=1)
+            import matplotlib.pyplot as plt
+
+            plt.hist(confidences, bins=20, range=(0, 1))
+            plt.title("Distribution of softmax max confidence")
+            plt.xlabel("Confidence")
+            plt.ylabel("Number of samples")
+            plt.axvline(0.7, color='red', linestyle='--', label='Rejection threshold')
+            plt.legend()
+            plt.tight_layout()
+            plt.show()
+            # Reject if confidence < threshold
+            pred_classes = np.where(confidences < threshold, -1, pred_classes)
+
+            # Convert ground truth background label to -1
+            num_classes = self.cfg.cnn.get("num_classes", 14)
+            original_bg_id = num_classes - 1  # 假设背景类在最后一类
+            background_class_id = self.cfg.get("background_class_id", -1)
+            y_test_mapped = np.where(y_test == original_bg_id, background_class_id, y_test)
+
+            # All labels (0~N-1 + -1)
+            all_labels = list(range(num_classes - 1)) + [background_class_id]
+
+            # Compute metrics
+            cm = confusion_matrix(y_test_mapped, pred_classes, labels=all_labels)
+            report = classification_report(y_test_mapped, pred_classes, labels=all_labels, output_dict=True, zero_division=0)
+
+            # Custom metrics
+            correct = (pred_classes == y_test_mapped)
+            accuracy = correct.mean()
+
+            rejected = pred_classes == -1
+            total_rejected = rejected.sum()
+            total = len(y_test)
+
+            bg_mask = y_test_mapped == -1
+            correct_rejection = (pred_classes[bg_mask] == -1).sum()
+            bg_total = bg_mask.sum()
+            bg_rejection_rate = correct_rejection / bg_total if bg_total > 0 else 0.0
+
+            rejection_rate = total_rejected / total
+
+            self.logger.info(f"→ Total accuracy (with rejection): {accuracy:.4f}")
+            self.logger.info(f"→ Background rejection rate: {correct_rejection}/{bg_total} = {bg_rejection_rate:.2%}")
+            self.logger.info(f"→ Overall rejection rate: {total_rejected}/{total} = {rejection_rate:.2%}")
+
+            self._plot_confusion_matrix(cm, labels=all_labels)
+
+            return {
+                "test_loss": scores[0],
+                "test_accuracy": scores[1],
+                "confusion_matrix": cm,
+                "classification_report": report,
+                "total_accuracy": accuracy,
+                "rejection_rate": rejection_rate,
+                "background_rejection_rate": bg_rejection_rate,
+            }
+
         except Exception as e:
             self.logger.error(f"Error during evaluation: {e}")
             return {}
+
+    def _plot_confusion_matrix(self, cm: np.ndarray, labels: List[Union[int, str]]) -> None:
+        """
+        Plot confusion matrix with labels.
+        """
+        label_names = [str(l) if l != -1 else "Rejected" for l in labels]
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=label_names, yticklabels=label_names)
+        plt.xlabel("Predicted")
+        plt.ylabel("True")
+        plt.title("Confusion Matrix with Rejection Class")
+        plt.tight_layout()
+
+        save_path = os.path.join(self.cfg.get("output_dir", "results"), "plots", "confusion_matrix.png")
+        ensure_dir(os.path.dirname(save_path))
+        plt.savefig(save_path)
+        plt.close()
+        self.logger.info(f"Confusion matrix saved to {save_path}")

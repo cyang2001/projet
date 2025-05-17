@@ -1,6 +1,6 @@
 # Default classification configuration
 
-name: template_classifier  # Classifier implementation to use
+name: cnn_classifier  # Classifier implementation to use
                        # Options: template_classifier, cnn_classifier, hybrid_classifier
 
 # Template classifier settings

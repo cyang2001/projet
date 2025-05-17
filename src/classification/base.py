@@ -38,18 +38,33 @@ class BaseClassifier(ABC):
         pass
         
     @abstractmethod
-    def train(self, X_train: np.ndarray, y_train: np.ndarray) -> Dict[str, Any]:
+    def train(self, X_train: np.ndarray, y_train: np.ndarray, 
+              X_val: Optional[np.ndarray] = None, 
+              y_val: Optional[np.ndarray] = None,
+              class_weights: Optional[Dict[int, float]] = None) -> Dict[str, Any]:
         """
         Train the classifier with provided data.
         
         Args:
             X_train: Training images
             y_train: Training labels
+            X_val: Optional validation images
+            y_val: Optional validation labels
+            class_weights: Optional class weights for imbalanced data
             
         Returns:
             Dictionary with training history or metrics
         """
         pass
+    
+    def get_preprocessor(self):
+        """
+        Get the preprocessor used by this classifier.
+        
+        Returns:
+            Preprocessor instance or None if not available
+        """
+        return None
     
     def evaluate(self, X_test: np.ndarray, y_test: np.ndarray) -> Dict[str, Any]:
         """

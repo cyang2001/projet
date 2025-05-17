@@ -12,7 +12,9 @@ import keras_tuner as kt
 import cv2
 
 from src.data.dataset import MetroDataset
+from src.data.roi_dataset import ROIDatasetGenerator, ROIDatasetLoader
 from src.preprocessing.preprocessor import PreprocessingPipeline
+from src.preprocessing.cnn_preprocessor import CNNPreprocessor
 from src.classification.base import get_classifier
 from utils.utils import get_logger, ensure_dir, plot_training_history, save_confusion_matrix
 from src.roi_detection import get_detector, optimize_color_parameters
@@ -72,7 +74,10 @@ class MetroTrainPipeline:
             self.preprocessor = PreprocessingPipeline(
                 cfg=self.cfg.preprocessing
             )
-            
+
+            self.cnn_preprocessor = CNNPreprocessor(
+                cfg=self.cfg.mode.preprocessing.cnn_preprocessing
+            )
             # Initialize classifier
             self.classifier = get_classifier(
                 cfg=self.cfg.classification,
@@ -82,7 +87,9 @@ class MetroTrainPipeline:
             self.detector = get_detector(
                 cfg=self.cfg.roi_detection,
             )
-            
+
+            # Initialize ROI dataset configuration
+            self.roi_dataset_cfg = self.cfg.get("roi_dataset", {})
             self.logger.info("Training components initialized")
         except Exception as e:
             self.logger.error(f"Failed to initialize components: {e}")
@@ -201,7 +208,7 @@ class MetroTrainPipeline:
     
     def _train_cnn(self, train_dataset: MetroDataset, val_dataset: MetroDataset) -> Dict[str, Any]:
         """
-        Train CNN classifier.
+        Train CNN classifier using ROIs extracted from dataset.
         
         Args:
             train_dataset: Training dataset
@@ -210,41 +217,106 @@ class MetroTrainPipeline:
         Returns:
             Training history
         """
-        self.logger.info("Training CNN classifier...")
+        self.logger.info("Training CNN classifier using ROI-based approach...")
         
-        # Get all training samples
-        X_train, y_train = train_dataset.get_all()
-        X_val, y_val = val_dataset.get_all()
+
+        roi_dataset_config = self.roi_dataset_cfg
+        train_roi_dir = os.path.join(self.roi_dataset_cfg.get("train_dir", "data/train"))
+        val_roi_dir = os.path.join(self.roi_dataset_cfg.get("val_dir", "data/val"))
+        
+        ensure_dir(train_roi_dir)
+        ensure_dir(val_roi_dir)
+        
+        self.logger.info("Generating ROI datasets for training...")
+        
+        cnn_preprocessor = None
+        if hasattr(self.classifier, 'get_preprocessor'):
+            cnn_preprocessor = self.classifier.get_preprocessor()
+        else:
+            cnn_preprocessor = self.cnn_preprocessor
+        
+        train_roi_generator = ROIDatasetGenerator(
+            cfg=roi_dataset_config,
+        )
+        
+        train_roi_generator.output_dir = train_roi_dir
+        train_roi_generator.roi_dir = os.path.join(train_roi_dir, "rois")
+        train_roi_generator.metadata_path = os.path.join(train_roi_dir, "metadata.json")
+        
+        ensure_dir(train_roi_generator.roi_dir)
+        
+        train_metadata = train_roi_generator.generate_from_dataset(train_dataset)
+        self.logger.info(f"Generated training ROI dataset with {train_metadata['total_samples']} samples")
+        
+        val_roi_generator = ROIDatasetGenerator(
+            cfg=roi_dataset_config,
+        )
+
+        val_roi_generator.output_dir = val_roi_dir
+        val_roi_generator.roi_dir = os.path.join(val_roi_dir, "rois")
+        val_roi_generator.metadata_path = os.path.join(val_roi_dir, "metadata.json")
+        
+        ensure_dir(val_roi_generator.roi_dir)
+        
+        val_metadata = val_roi_generator.generate_from_dataset(val_dataset)
+        self.logger.info(f"Generated validation ROI dataset with {val_metadata['total_samples']} samples")
+        
+        train_roi_config = {**roi_dataset_config, "roi_dataset_dir": train_roi_dir}
+        val_roi_config = {**roi_dataset_config, "roi_dataset_dir": val_roi_dir}
+        
+        train_roi_loader = ROIDatasetLoader(
+            cfg=DictConfig(train_roi_config),
+        )
+        
+        val_roi_loader = ROIDatasetLoader(
+            cfg=DictConfig(val_roi_config),
+        )
+        if cnn_preprocessor:
+            train_roi_loader.set_preprocessor(cnn_preprocessor)
+            val_roi_loader.set_preprocessor(cnn_preprocessor)
+        X_train, y_train = train_roi_loader.get_all_data()
+        X_val, y_val = val_roi_loader.get_all_data()
         
         if len(X_train) == 0:
-            self.logger.warning("No training samples available for CNN training")
+            self.logger.error("No training samples available for CNN training")
             return {}
             
-        # Preprocess images
-        processed_train = []
-        for img in X_train:
-            processed = self.preprocessor.process(img)
-            processed_train.append(processed)
+        if len(X_val) == 0:
+            self.logger.warning("No validation samples available, using a portion of training data for validation")
+            # 如果没有验证数据，则从训练数据中分割出一部分作为验证数据
+            val_split = self.cfg.get("dataset", {}).get("val_split", 0.2)
+            indices = np.random.permutation(len(X_train))
+            split_idx = int(len(indices) * (1 - val_split))
+            train_idx, val_idx = indices[:split_idx], indices[split_idx:]
+            
+            X_val, y_val = X_train[val_idx], y_train[val_idx]
+            X_train, y_train = X_train[train_idx], y_train[train_idx]
+            
+        self.logger.info(f"Training CNN with {len(X_train)} ROI samples, validating with {len(X_val)} samples")
         
-        processed_val = []
-        for img in X_val:
-            processed = self.preprocessor.process(img)
-            processed_val.append(processed)
-        
-        processed_X_train = np.array(processed_train)
-        processed_X_val = np.array(processed_val)
-        
-        # Train CNN
-        history = self.classifier.train(processed_X_train, y_train)
+        # 计算类别权重，处理不平衡数据
+        class_weights = train_roi_loader.get_class_balance_weights()
+        if class_weights:
+            self.logger.info(f"Using class weights to handle imbalanced data: {class_weights}")
+            
+        # 4. 训练CNN (注意数据已经预处理过)
+        history = self.classifier.train(X_train, y_train, X_val, y_val, class_weights=class_weights)
         if history is None:
             history = {}
         
-        # Save model
+        # 5. 保存训练完成的模型
         model_path = os.path.join(self.cfg.get("output_dir", "results"), "models")
         ensure_dir(model_path)
         self.classifier.save(os.path.join(model_path, "trained_model.h5"))
         
-        self.logger.info("CNN training completed")
+        # 6. 保存训练配置
+        roi_config_path = os.path.join(model_path, "roi_dataset_config.json")
+        with open(roi_config_path, 'w') as f:
+            # 将DictConfig转换为普通字典
+            roi_config_dict = dict(roi_dataset_config)
+            json.dump(roi_config_dict, f, indent=2)
+        
+        self.logger.info("CNN training completed using ROI-based approach")
         
         return history
     
@@ -274,12 +346,12 @@ class MetroTrainPipeline:
         X_train = []
         X_val = []
         for img in X_train_raw:
-            X_train.append(self.preprocessor.process(img))
+            X_train.append(self.cnn_preprocessor.process(img))
         for img in X_val_raw:
-            X_val.append(self.preprocessor.process(img))
+            X_val.append(self.cnn_preprocessor.process(img))
         X_train = np.array(X_train)
         X_val = np.array(X_val)
-        h, w = self.cfg.preprocessing.resize_shape
+        h, w = self.cfg.cnn_preprocessing.resize_shape
         input_shape = (h, w, 3)
         num_classes = self.cfg.classification.cnn.num_classes
 
@@ -378,7 +450,7 @@ class MetroTrainPipeline:
         # Preprocess images
         processed_val = []
         for img in X_val:
-            processed = self.preprocessor.process(img)
+            processed = self.cnn_preprocessor.process(img)
             processed_val.append(processed)
         
         processed_X_val = np.array(processed_val)

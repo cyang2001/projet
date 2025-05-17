@@ -1,19 +1,21 @@
 # Default preprocessing configuration
 
 # Resizing
-resize_enabled: true
-resize_shape: [1200, 1600]  # Target size for CNNs
-keep_aspect_ratio: false   # Whether to maintain aspect ratio when resizing
+name: default
+default:
+  resize_enabled: true
+  resize_shape: [1200, 1600]  # Target size for CNNs
+  keep_aspect_ratio: false   # Whether to maintain aspect ratio when resizing
 
-# Color processing
-normalize: true           # Whether to normalize pixel values to [0-1]
-to_grayscale: false       # Whether to convert to grayscale
-equalize_hist: false      # Whether to apply histogram equalization
+  # Color processing
+  normalize: true           # Whether to normalize pixel values to [0-1]
+  to_grayscale: false       # Whether to convert to grayscale
+  equalize_hist: false      # Whether to apply histogram equalization
 
-# Image enhancement
-apply_clahe: false        # Whether to apply CLAHE (Contrast Limited AHE)
-clahe_clip_limit: 2.0     # Clip limit for CLAHE
-clahe_tile_grid_size: [8, 8]  # Tile grid size for CLAHE
+  # Image enhancement
+  apply_clahe: false        # Whether to apply CLAHE (Contrast Limited AHE)
+  clahe_clip_limit: 2.0     # Clip limit for CLAHE
+  clahe_tile_grid_size: [8, 8]  # Tile grid size for CLAHE
 
 # Data augmentation (applied during training)
 augmentation:
@@ -24,3 +26,17 @@ augmentation:
   brightness_range: [0.9, 1.1]  # Range for random brightness
   zoom_range: 0.1         # Range for random zoom
   horizontal_flip: false  # Whether to randomly flip horizontally
+
+cnn_preprocessing:
+  target_size: [64, 64]  # Size for resizing images (width, height)
+  normalize: false        # Normalize pixel values to [0,1]
+  channel_order: rgb     # Color channel order ('rgb' or 'bgr')
+
+  # Data augmentation settings (for training)
+  use_augmentation: true   # Whether to use data augmentation
+  rotation_range: 10       # Rotation range in degrees
+  width_shift_range: 0.1   # Width shift range as fraction of width
+  height_shift_range: 0.1  # Height shift range as fraction of height
+  horizontal_flip: false   # Whether to randomly flip images horizontally
+  zoom_range: 0.1          # Range for random zoom
+  brightness_range: [0.9, 1.1]  # Range for random brightness adjustment 

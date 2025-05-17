@@ -1,0 +1,5709 @@
+{
+  "samples": [
+    {
+      "id": "6_0",
+      "image_id": "6",
+      "roi_file": "roi_6_0.png",
+      "class_id": 7,
+      "bbox": [
+        519,
+        919,
+        637,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_1",
+      "image_id": "6",
+      "roi_file": "roi_6_1.png",
+      "class_id": 1,
+      "bbox": [
+        523,
+        755,
+        645,
+        867
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_2",
+      "image_id": "6",
+      "roi_file": "roi_6_2.png",
+      "class_id": 4,
+      "bbox": [
+        525,
+        593,
+        643,
+        711
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_3",
+      "image_id": "6",
+      "roi_file": "roi_6_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        919,
+        777,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_4",
+      "image_id": "6",
+      "roi_file": "roi_6_4.png",
+      "class_id": 14,
+      "bbox": [
+        665,
+        757,
+        781,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_6_0",
+      "image_id": "6",
+      "roi_file": "bg_6_0.png",
+      "class_id": -1,
+      "bbox": [
+        1130,
+        1044,
+        1242,
+        1182
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_6_1",
+      "image_id": "6",
+      "roi_file": "bg_6_1.png",
+      "class_id": -1,
+      "bbox": [
+        330,
+        87,
+        432,
+        188
+      ],
+      "is_background": true
+    },
+    {
+      "id": "6_0",
+      "image_id": "6",
+      "roi_file": "roi_6_0.png",
+      "class_id": 7,
+      "bbox": [
+        519,
+        919,
+        637,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_1",
+      "image_id": "6",
+      "roi_file": "roi_6_1.png",
+      "class_id": 1,
+      "bbox": [
+        523,
+        755,
+        645,
+        867
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_2",
+      "image_id": "6",
+      "roi_file": "roi_6_2.png",
+      "class_id": 4,
+      "bbox": [
+        525,
+        593,
+        643,
+        711
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_3",
+      "image_id": "6",
+      "roi_file": "roi_6_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        919,
+        777,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_4",
+      "image_id": "6",
+      "roi_file": "roi_6_4.png",
+      "class_id": 14,
+      "bbox": [
+        665,
+        757,
+        781,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_6_0",
+      "image_id": "6",
+      "roi_file": "bg_6_0.png",
+      "class_id": -1,
+      "bbox": [
+        130,
+        769,
+        240,
+        869
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_6_1",
+      "image_id": "6",
+      "roi_file": "bg_6_1.png",
+      "class_id": -1,
+      "bbox": [
+        385,
+        955,
+        513,
+        1092
+      ],
+      "is_background": true
+    },
+    {
+      "id": "6_0",
+      "image_id": "6",
+      "roi_file": "roi_6_0.png",
+      "class_id": 7,
+      "bbox": [
+        519,
+        919,
+        637,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_1",
+      "image_id": "6",
+      "roi_file": "roi_6_1.png",
+      "class_id": 1,
+      "bbox": [
+        523,
+        755,
+        645,
+        867
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_2",
+      "image_id": "6",
+      "roi_file": "roi_6_2.png",
+      "class_id": 4,
+      "bbox": [
+        525,
+        593,
+        643,
+        711
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_3",
+      "image_id": "6",
+      "roi_file": "roi_6_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        919,
+        777,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_4",
+      "image_id": "6",
+      "roi_file": "roi_6_4.png",
+      "class_id": 14,
+      "bbox": [
+        665,
+        757,
+        781,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_6_0",
+      "image_id": "6",
+      "roi_file": "bg_6_0.png",
+      "class_id": -1,
+      "bbox": [
+        21,
+        252,
+        124,
+        360
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_6_1",
+      "image_id": "6",
+      "roi_file": "bg_6_1.png",
+      "class_id": -1,
+      "bbox": [
+        1082,
+        510,
+        1197,
+        617
+      ],
+      "is_background": true
+    },
+    {
+      "id": "6_0",
+      "image_id": "6",
+      "roi_file": "roi_6_0.png",
+      "class_id": 7,
+      "bbox": [
+        519,
+        919,
+        637,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_1",
+      "image_id": "6",
+      "roi_file": "roi_6_1.png",
+      "class_id": 1,
+      "bbox": [
+        523,
+        755,
+        645,
+        867
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_2",
+      "image_id": "6",
+      "roi_file": "roi_6_2.png",
+      "class_id": 4,
+      "bbox": [
+        525,
+        593,
+        643,
+        711
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_3",
+      "image_id": "6",
+      "roi_file": "roi_6_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        919,
+        777,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_4",
+      "image_id": "6",
+      "roi_file": "roi_6_4.png",
+      "class_id": 14,
+      "bbox": [
+        665,
+        757,
+        781,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_6_0",
+      "image_id": "6",
+      "roi_file": "bg_6_0.png",
+      "class_id": -1,
+      "bbox": [
+        975,
+        189,
+        1076,
+        296
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_6_1",
+      "image_id": "6",
+      "roi_file": "bg_6_1.png",
+      "class_id": -1,
+      "bbox": [
+        1899,
+        831,
+        1998,
+        953
+      ],
+      "is_background": true
+    },
+    {
+      "id": "6_0",
+      "image_id": "6",
+      "roi_file": "roi_6_0.png",
+      "class_id": 7,
+      "bbox": [
+        519,
+        919,
+        637,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_1",
+      "image_id": "6",
+      "roi_file": "roi_6_1.png",
+      "class_id": 1,
+      "bbox": [
+        523,
+        755,
+        645,
+        867
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_2",
+      "image_id": "6",
+      "roi_file": "roi_6_2.png",
+      "class_id": 4,
+      "bbox": [
+        525,
+        593,
+        643,
+        711
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_3",
+      "image_id": "6",
+      "roi_file": "roi_6_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        919,
+        777,
+        1039
+      ],
+      "is_background": false
+    },
+    {
+      "id": "6_4",
+      "image_id": "6",
+      "roi_file": "roi_6_4.png",
+      "class_id": 14,
+      "bbox": [
+        665,
+        757,
+        781,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_6_0",
+      "image_id": "6",
+      "roi_file": "bg_6_0.png",
+      "class_id": -1,
+      "bbox": [
+        646,
+        20,
+        762,
+        154
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_6_1",
+      "image_id": "6",
+      "roi_file": "bg_6_1.png",
+      "class_id": -1,
+      "bbox": [
+        600,
+        315,
+        716,
+        409
+      ],
+      "is_background": true
+    },
+    {
+      "id": "9_0",
+      "image_id": "9",
+      "roi_file": "roi_9_0.png",
+      "class_id": 4,
+      "bbox": [
+        581,
+        539,
+        639,
+        597
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_1",
+      "image_id": "9",
+      "roi_file": "roi_9_1.png",
+      "class_id": 1,
+      "bbox": [
+        581,
+        621,
+        639,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_2",
+      "image_id": "9",
+      "roi_file": "roi_9_2.png",
+      "class_id": 7,
+      "bbox": [
+        581,
+        705,
+        637,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_3",
+      "image_id": "9",
+      "roi_file": "roi_9_3.png",
+      "class_id": 14,
+      "bbox": [
+        649,
+        621,
+        709,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_4",
+      "image_id": "9",
+      "roi_file": "roi_9_4.png",
+      "class_id": 11,
+      "bbox": [
+        651,
+        705,
+        709,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_9_0",
+      "image_id": "9",
+      "roi_file": "bg_9_0.png",
+      "class_id": -1,
+      "bbox": [
+        1369,
+        564,
+        1428,
+        619
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_9_1",
+      "image_id": "9",
+      "roi_file": "bg_9_1.png",
+      "class_id": -1,
+      "bbox": [
+        955,
+        508,
+        1006,
+        560
+      ],
+      "is_background": true
+    },
+    {
+      "id": "9_0",
+      "image_id": "9",
+      "roi_file": "roi_9_0.png",
+      "class_id": 4,
+      "bbox": [
+        581,
+        539,
+        639,
+        597
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_1",
+      "image_id": "9",
+      "roi_file": "roi_9_1.png",
+      "class_id": 1,
+      "bbox": [
+        581,
+        621,
+        639,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_2",
+      "image_id": "9",
+      "roi_file": "roi_9_2.png",
+      "class_id": 7,
+      "bbox": [
+        581,
+        705,
+        637,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_3",
+      "image_id": "9",
+      "roi_file": "roi_9_3.png",
+      "class_id": 14,
+      "bbox": [
+        649,
+        621,
+        709,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_4",
+      "image_id": "9",
+      "roi_file": "roi_9_4.png",
+      "class_id": 11,
+      "bbox": [
+        651,
+        705,
+        709,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_9_0",
+      "image_id": "9",
+      "roi_file": "bg_9_0.png",
+      "class_id": -1,
+      "bbox": [
+        1104,
+        1025,
+        1169,
+        1075
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_9_1",
+      "image_id": "9",
+      "roi_file": "bg_9_1.png",
+      "class_id": -1,
+      "bbox": [
+        1500,
+        702,
+        1556,
+        753
+      ],
+      "is_background": true
+    },
+    {
+      "id": "9_0",
+      "image_id": "9",
+      "roi_file": "roi_9_0.png",
+      "class_id": 4,
+      "bbox": [
+        581,
+        539,
+        639,
+        597
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_1",
+      "image_id": "9",
+      "roi_file": "roi_9_1.png",
+      "class_id": 1,
+      "bbox": [
+        581,
+        621,
+        639,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_2",
+      "image_id": "9",
+      "roi_file": "roi_9_2.png",
+      "class_id": 7,
+      "bbox": [
+        581,
+        705,
+        637,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_3",
+      "image_id": "9",
+      "roi_file": "roi_9_3.png",
+      "class_id": 14,
+      "bbox": [
+        649,
+        621,
+        709,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_4",
+      "image_id": "9",
+      "roi_file": "roi_9_4.png",
+      "class_id": 11,
+      "bbox": [
+        651,
+        705,
+        709,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_9_0",
+      "image_id": "9",
+      "roi_file": "bg_9_0.png",
+      "class_id": -1,
+      "bbox": [
+        201,
+        995,
+        266,
+        1052
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_9_1",
+      "image_id": "9",
+      "roi_file": "bg_9_1.png",
+      "class_id": -1,
+      "bbox": [
+        455,
+        1016,
+        515,
+        1084
+      ],
+      "is_background": true
+    },
+    {
+      "id": "9_0",
+      "image_id": "9",
+      "roi_file": "roi_9_0.png",
+      "class_id": 4,
+      "bbox": [
+        581,
+        539,
+        639,
+        597
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_1",
+      "image_id": "9",
+      "roi_file": "roi_9_1.png",
+      "class_id": 1,
+      "bbox": [
+        581,
+        621,
+        639,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_2",
+      "image_id": "9",
+      "roi_file": "roi_9_2.png",
+      "class_id": 7,
+      "bbox": [
+        581,
+        705,
+        637,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_3",
+      "image_id": "9",
+      "roi_file": "roi_9_3.png",
+      "class_id": 14,
+      "bbox": [
+        649,
+        621,
+        709,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_4",
+      "image_id": "9",
+      "roi_file": "roi_9_4.png",
+      "class_id": 11,
+      "bbox": [
+        651,
+        705,
+        709,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_9_0",
+      "image_id": "9",
+      "roi_file": "bg_9_0.png",
+      "class_id": -1,
+      "bbox": [
+        337,
+        878,
+        405,
+        944
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_9_1",
+      "image_id": "9",
+      "roi_file": "bg_9_1.png",
+      "class_id": -1,
+      "bbox": [
+        763,
+        187,
+        828,
+        242
+      ],
+      "is_background": true
+    },
+    {
+      "id": "9_0",
+      "image_id": "9",
+      "roi_file": "roi_9_0.png",
+      "class_id": 4,
+      "bbox": [
+        581,
+        539,
+        639,
+        597
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_1",
+      "image_id": "9",
+      "roi_file": "roi_9_1.png",
+      "class_id": 1,
+      "bbox": [
+        581,
+        621,
+        639,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_2",
+      "image_id": "9",
+      "roi_file": "roi_9_2.png",
+      "class_id": 7,
+      "bbox": [
+        581,
+        705,
+        637,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_3",
+      "image_id": "9",
+      "roi_file": "roi_9_3.png",
+      "class_id": 14,
+      "bbox": [
+        649,
+        621,
+        709,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "9_4",
+      "image_id": "9",
+      "roi_file": "roi_9_4.png",
+      "class_id": 11,
+      "bbox": [
+        651,
+        705,
+        709,
+        763
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_9_0",
+      "image_id": "9",
+      "roi_file": "bg_9_0.png",
+      "class_id": -1,
+      "bbox": [
+        14,
+        64,
+        72,
+        114
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_9_1",
+      "image_id": "9",
+      "roi_file": "bg_9_1.png",
+      "class_id": -1,
+      "bbox": [
+        1152,
+        647,
+        1198,
+        703
+      ],
+      "is_background": true
+    },
+    {
+      "id": "12_0",
+      "image_id": "12",
+      "roi_file": "roi_12_0.png",
+      "class_id": 7,
+      "bbox": [
+        497,
+        811,
+        635,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_1",
+      "image_id": "12",
+      "roi_file": "roi_12_1.png",
+      "class_id": 4,
+      "bbox": [
+        501,
+        439,
+        635,
+        569
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_2",
+      "image_id": "12",
+      "roi_file": "roi_12_2.png",
+      "class_id": 1,
+      "bbox": [
+        501,
+        621,
+        641,
+        759
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_3",
+      "image_id": "12",
+      "roi_file": "roi_12_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        809,
+        799,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_4",
+      "image_id": "12",
+      "roi_file": "roi_12_4.png",
+      "class_id": 14,
+      "bbox": [
+        663,
+        619,
+        801,
+        755
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_12_0",
+      "image_id": "12",
+      "roi_file": "bg_12_0.png",
+      "class_id": -1,
+      "bbox": [
+        230,
+        1017,
+        380,
+        1168
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_12_1",
+      "image_id": "12",
+      "roi_file": "bg_12_1.png",
+      "class_id": -1,
+      "bbox": [
+        804,
+        98,
+        919,
+        227
+      ],
+      "is_background": true
+    },
+    {
+      "id": "12_0",
+      "image_id": "12",
+      "roi_file": "roi_12_0.png",
+      "class_id": 7,
+      "bbox": [
+        497,
+        811,
+        635,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_1",
+      "image_id": "12",
+      "roi_file": "roi_12_1.png",
+      "class_id": 4,
+      "bbox": [
+        501,
+        439,
+        635,
+        569
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_2",
+      "image_id": "12",
+      "roi_file": "roi_12_2.png",
+      "class_id": 1,
+      "bbox": [
+        501,
+        621,
+        641,
+        759
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_3",
+      "image_id": "12",
+      "roi_file": "roi_12_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        809,
+        799,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_4",
+      "image_id": "12",
+      "roi_file": "roi_12_4.png",
+      "class_id": 14,
+      "bbox": [
+        663,
+        619,
+        801,
+        755
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_12_0",
+      "image_id": "12",
+      "roi_file": "bg_12_0.png",
+      "class_id": -1,
+      "bbox": [
+        960,
+        612,
+        1103,
+        736
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_12_1",
+      "image_id": "12",
+      "roi_file": "bg_12_1.png",
+      "class_id": -1,
+      "bbox": [
+        1028,
+        502,
+        1192,
+        657
+      ],
+      "is_background": true
+    },
+    {
+      "id": "12_0",
+      "image_id": "12",
+      "roi_file": "roi_12_0.png",
+      "class_id": 7,
+      "bbox": [
+        497,
+        811,
+        635,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_1",
+      "image_id": "12",
+      "roi_file": "roi_12_1.png",
+      "class_id": 4,
+      "bbox": [
+        501,
+        439,
+        635,
+        569
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_2",
+      "image_id": "12",
+      "roi_file": "roi_12_2.png",
+      "class_id": 1,
+      "bbox": [
+        501,
+        621,
+        641,
+        759
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_3",
+      "image_id": "12",
+      "roi_file": "roi_12_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        809,
+        799,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_4",
+      "image_id": "12",
+      "roi_file": "roi_12_4.png",
+      "class_id": 14,
+      "bbox": [
+        663,
+        619,
+        801,
+        755
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_12_0",
+      "image_id": "12",
+      "roi_file": "bg_12_0.png",
+      "class_id": -1,
+      "bbox": [
+        392,
+        206,
+        544,
+        342
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_12_1",
+      "image_id": "12",
+      "roi_file": "bg_12_1.png",
+      "class_id": -1,
+      "bbox": [
+        863,
+        742,
+        997,
+        852
+      ],
+      "is_background": true
+    },
+    {
+      "id": "12_0",
+      "image_id": "12",
+      "roi_file": "roi_12_0.png",
+      "class_id": 7,
+      "bbox": [
+        497,
+        811,
+        635,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_1",
+      "image_id": "12",
+      "roi_file": "roi_12_1.png",
+      "class_id": 4,
+      "bbox": [
+        501,
+        439,
+        635,
+        569
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_2",
+      "image_id": "12",
+      "roi_file": "roi_12_2.png",
+      "class_id": 1,
+      "bbox": [
+        501,
+        621,
+        641,
+        759
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_3",
+      "image_id": "12",
+      "roi_file": "roi_12_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        809,
+        799,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_4",
+      "image_id": "12",
+      "roi_file": "roi_12_4.png",
+      "class_id": 14,
+      "bbox": [
+        663,
+        619,
+        801,
+        755
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_12_0",
+      "image_id": "12",
+      "roi_file": "bg_12_0.png",
+      "class_id": -1,
+      "bbox": [
+        484,
+        230,
+        620,
+        369
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_12_1",
+      "image_id": "12",
+      "roi_file": "bg_12_1.png",
+      "class_id": -1,
+      "bbox": [
+        1059,
+        524,
+        1192,
+        674
+      ],
+      "is_background": true
+    },
+    {
+      "id": "12_0",
+      "image_id": "12",
+      "roi_file": "roi_12_0.png",
+      "class_id": 7,
+      "bbox": [
+        497,
+        811,
+        635,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_1",
+      "image_id": "12",
+      "roi_file": "roi_12_1.png",
+      "class_id": 4,
+      "bbox": [
+        501,
+        439,
+        635,
+        569
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_2",
+      "image_id": "12",
+      "roi_file": "roi_12_2.png",
+      "class_id": 1,
+      "bbox": [
+        501,
+        621,
+        641,
+        759
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_3",
+      "image_id": "12",
+      "roi_file": "roi_12_3.png",
+      "class_id": 11,
+      "bbox": [
+        659,
+        809,
+        799,
+        949
+      ],
+      "is_background": false
+    },
+    {
+      "id": "12_4",
+      "image_id": "12",
+      "roi_file": "roi_12_4.png",
+      "class_id": 14,
+      "bbox": [
+        663,
+        619,
+        801,
+        755
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_12_0",
+      "image_id": "12",
+      "roi_file": "bg_12_0.png",
+      "class_id": -1,
+      "bbox": [
+        1109,
+        577,
+        1223,
+        701
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_12_1",
+      "image_id": "12",
+      "roi_file": "bg_12_1.png",
+      "class_id": -1,
+      "bbox": [
+        1012,
+        645,
+        1156,
+        770
+      ],
+      "is_background": true
+    },
+    {
+      "id": "18_0",
+      "image_id": "18",
+      "roi_file": "roi_18_0.png",
+      "class_id": 4,
+      "bbox": [
+        577,
+        443,
+        721,
+        575
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_18_0",
+      "image_id": "18",
+      "roi_file": "bg_18_0.png",
+      "class_id": -1,
+      "bbox": [
+        1363,
+        189,
+        1504,
+        306
+      ],
+      "is_background": true
+    },
+    {
+      "id": "21_0",
+      "image_id": "21",
+      "roi_file": "roi_21_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        631,
+        709,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_1",
+      "image_id": "21",
+      "roi_file": "roi_21_1.png",
+      "class_id": 7,
+      "bbox": [
+        605,
+        771,
+        709,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_2",
+      "image_id": "21",
+      "roi_file": "roi_21_2.png",
+      "class_id": 14,
+      "bbox": [
+        723,
+        631,
+        827,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_3",
+      "image_id": "21",
+      "roi_file": "roi_21_3.png",
+      "class_id": 11,
+      "bbox": [
+        725,
+        769,
+        829,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_21_0",
+      "image_id": "21",
+      "roi_file": "bg_21_0.png",
+      "class_id": -1,
+      "bbox": [
+        1257,
+        683,
+        1360,
+        793
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_21_1",
+      "image_id": "21",
+      "roi_file": "bg_21_1.png",
+      "class_id": -1,
+      "bbox": [
+        1495,
+        441,
+        1588,
+        529
+      ],
+      "is_background": true
+    },
+    {
+      "id": "21_0",
+      "image_id": "21",
+      "roi_file": "roi_21_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        631,
+        709,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_1",
+      "image_id": "21",
+      "roi_file": "roi_21_1.png",
+      "class_id": 7,
+      "bbox": [
+        605,
+        771,
+        709,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_2",
+      "image_id": "21",
+      "roi_file": "roi_21_2.png",
+      "class_id": 14,
+      "bbox": [
+        723,
+        631,
+        827,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_3",
+      "image_id": "21",
+      "roi_file": "roi_21_3.png",
+      "class_id": 11,
+      "bbox": [
+        725,
+        769,
+        829,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_21_0",
+      "image_id": "21",
+      "roi_file": "bg_21_0.png",
+      "class_id": -1,
+      "bbox": [
+        1409,
+        951,
+        1532,
+        1043
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_21_1",
+      "image_id": "21",
+      "roi_file": "bg_21_1.png",
+      "class_id": -1,
+      "bbox": [
+        641,
+        219,
+        726,
+        325
+      ],
+      "is_background": true
+    },
+    {
+      "id": "21_0",
+      "image_id": "21",
+      "roi_file": "roi_21_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        631,
+        709,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_1",
+      "image_id": "21",
+      "roi_file": "roi_21_1.png",
+      "class_id": 7,
+      "bbox": [
+        605,
+        771,
+        709,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_2",
+      "image_id": "21",
+      "roi_file": "roi_21_2.png",
+      "class_id": 14,
+      "bbox": [
+        723,
+        631,
+        827,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_3",
+      "image_id": "21",
+      "roi_file": "roi_21_3.png",
+      "class_id": 11,
+      "bbox": [
+        725,
+        769,
+        829,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_21_0",
+      "image_id": "21",
+      "roi_file": "bg_21_0.png",
+      "class_id": -1,
+      "bbox": [
+        1248,
+        384,
+        1333,
+        477
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_21_1",
+      "image_id": "21",
+      "roi_file": "bg_21_1.png",
+      "class_id": -1,
+      "bbox": [
+        729,
+        246,
+        822,
+        333
+      ],
+      "is_background": true
+    },
+    {
+      "id": "21_0",
+      "image_id": "21",
+      "roi_file": "roi_21_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        631,
+        709,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_1",
+      "image_id": "21",
+      "roi_file": "roi_21_1.png",
+      "class_id": 7,
+      "bbox": [
+        605,
+        771,
+        709,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_2",
+      "image_id": "21",
+      "roi_file": "roi_21_2.png",
+      "class_id": 14,
+      "bbox": [
+        723,
+        631,
+        827,
+        733
+      ],
+      "is_background": false
+    },
+    {
+      "id": "21_3",
+      "image_id": "21",
+      "roi_file": "roi_21_3.png",
+      "class_id": 11,
+      "bbox": [
+        725,
+        769,
+        829,
+        873
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_21_0",
+      "image_id": "21",
+      "roi_file": "bg_21_0.png",
+      "class_id": -1,
+      "bbox": [
+        122,
+        400,
+        233,
+        513
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_21_1",
+      "image_id": "21",
+      "roi_file": "bg_21_1.png",
+      "class_id": -1,
+      "bbox": [
+        883,
+        197,
+        997,
+        294
+      ],
+      "is_background": true
+    },
+    {
+      "id": "24_0",
+      "image_id": "24",
+      "roi_file": "roi_24_0.png",
+      "class_id": 4,
+      "bbox": [
+        654,
+        402,
+        840,
+        584
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_24_0",
+      "image_id": "24",
+      "roi_file": "bg_24_0.png",
+      "class_id": -1,
+      "bbox": [
+        143,
+        608,
+        321,
+        813
+      ],
+      "is_background": true
+    },
+    {
+      "id": "27_0",
+      "image_id": "27",
+      "roi_file": "roi_27_0.png",
+      "class_id": 4,
+      "bbox": [
+        553,
+        175,
+        659,
+        281
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_27_0",
+      "image_id": "27",
+      "roi_file": "bg_27_0.png",
+      "class_id": -1,
+      "bbox": [
+        463,
+        659,
+        554,
+        765
+      ],
+      "is_background": true
+    },
+    {
+      "id": "30_0",
+      "image_id": "30",
+      "roi_file": "roi_30_0.png",
+      "class_id": 13,
+      "bbox": [
+        417,
+        497,
+        481,
+        561
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_1",
+      "image_id": "30",
+      "roi_file": "roi_30_1.png",
+      "class_id": 12,
+      "bbox": [
+        439,
+        603,
+        503,
+        667
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_2",
+      "image_id": "30",
+      "roi_file": "roi_30_2.png",
+      "class_id": 12,
+      "bbox": [
+        1021,
+        587,
+        1085,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_3",
+      "image_id": "30",
+      "roi_file": "roi_30_3.png",
+      "class_id": 6,
+      "bbox": [
+        414,
+        406,
+        482,
+        472
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_30_0",
+      "image_id": "30",
+      "roi_file": "bg_30_0.png",
+      "class_id": -1,
+      "bbox": [
+        1369,
+        146,
+        1429,
+        202
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_30_1",
+      "image_id": "30",
+      "roi_file": "bg_30_1.png",
+      "class_id": -1,
+      "bbox": [
+        488,
+        928,
+        549,
+        981
+      ],
+      "is_background": true
+    },
+    {
+      "id": "30_0",
+      "image_id": "30",
+      "roi_file": "roi_30_0.png",
+      "class_id": 13,
+      "bbox": [
+        417,
+        497,
+        481,
+        561
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_1",
+      "image_id": "30",
+      "roi_file": "roi_30_1.png",
+      "class_id": 12,
+      "bbox": [
+        439,
+        603,
+        503,
+        667
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_2",
+      "image_id": "30",
+      "roi_file": "roi_30_2.png",
+      "class_id": 12,
+      "bbox": [
+        1021,
+        587,
+        1085,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_3",
+      "image_id": "30",
+      "roi_file": "roi_30_3.png",
+      "class_id": 6,
+      "bbox": [
+        414,
+        406,
+        482,
+        472
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_30_0",
+      "image_id": "30",
+      "roi_file": "bg_30_0.png",
+      "class_id": -1,
+      "bbox": [
+        871,
+        640,
+        933,
+        704
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_30_1",
+      "image_id": "30",
+      "roi_file": "bg_30_1.png",
+      "class_id": -1,
+      "bbox": [
+        150,
+        262,
+        219,
+        332
+      ],
+      "is_background": true
+    },
+    {
+      "id": "30_0",
+      "image_id": "30",
+      "roi_file": "roi_30_0.png",
+      "class_id": 13,
+      "bbox": [
+        417,
+        497,
+        481,
+        561
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_1",
+      "image_id": "30",
+      "roi_file": "roi_30_1.png",
+      "class_id": 12,
+      "bbox": [
+        439,
+        603,
+        503,
+        667
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_2",
+      "image_id": "30",
+      "roi_file": "roi_30_2.png",
+      "class_id": 12,
+      "bbox": [
+        1021,
+        587,
+        1085,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_3",
+      "image_id": "30",
+      "roi_file": "roi_30_3.png",
+      "class_id": 6,
+      "bbox": [
+        414,
+        406,
+        482,
+        472
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_30_0",
+      "image_id": "30",
+      "roi_file": "bg_30_0.png",
+      "class_id": -1,
+      "bbox": [
+        1016,
+        880,
+        1085,
+        952
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_30_1",
+      "image_id": "30",
+      "roi_file": "bg_30_1.png",
+      "class_id": -1,
+      "bbox": [
+        452,
+        1060,
+        510,
+        1113
+      ],
+      "is_background": true
+    },
+    {
+      "id": "30_0",
+      "image_id": "30",
+      "roi_file": "roi_30_0.png",
+      "class_id": 13,
+      "bbox": [
+        417,
+        497,
+        481,
+        561
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_1",
+      "image_id": "30",
+      "roi_file": "roi_30_1.png",
+      "class_id": 12,
+      "bbox": [
+        439,
+        603,
+        503,
+        667
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_2",
+      "image_id": "30",
+      "roi_file": "roi_30_2.png",
+      "class_id": 12,
+      "bbox": [
+        1021,
+        587,
+        1085,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "30_3",
+      "image_id": "30",
+      "roi_file": "roi_30_3.png",
+      "class_id": 6,
+      "bbox": [
+        414,
+        406,
+        482,
+        472
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_30_0",
+      "image_id": "30",
+      "roi_file": "bg_30_0.png",
+      "class_id": -1,
+      "bbox": [
+        1256,
+        1122,
+        1330,
+        1178
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_30_1",
+      "image_id": "30",
+      "roi_file": "bg_30_1.png",
+      "class_id": -1,
+      "bbox": [
+        403,
+        151,
+        473,
+        223
+      ],
+      "is_background": true
+    },
+    {
+      "id": "36_0",
+      "image_id": "36",
+      "roi_file": "roi_36_0.png",
+      "class_id": 6,
+      "bbox": [
+        265,
+        597,
+        357,
+        691
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_1",
+      "image_id": "36",
+      "roi_file": "roi_36_1.png",
+      "class_id": 4,
+      "bbox": [
+        1095,
+        581,
+        1199,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_2",
+      "image_id": "36",
+      "roi_file": "roi_36_2.png",
+      "class_id": 12,
+      "bbox": [
+        372,
+        596,
+        468,
+        692
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_3",
+      "image_id": "36",
+      "roi_file": "roi_36_3.png",
+      "class_id": 13,
+      "bbox": [
+        478,
+        596,
+        580,
+        694
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_36_0",
+      "image_id": "36",
+      "roi_file": "bg_36_0.png",
+      "class_id": -1,
+      "bbox": [
+        627,
+        586,
+        721,
+        698
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_36_1",
+      "image_id": "36",
+      "roi_file": "bg_36_1.png",
+      "class_id": -1,
+      "bbox": [
+        103,
+        253,
+        218,
+        361
+      ],
+      "is_background": true
+    },
+    {
+      "id": "36_0",
+      "image_id": "36",
+      "roi_file": "roi_36_0.png",
+      "class_id": 6,
+      "bbox": [
+        265,
+        597,
+        357,
+        691
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_1",
+      "image_id": "36",
+      "roi_file": "roi_36_1.png",
+      "class_id": 4,
+      "bbox": [
+        1095,
+        581,
+        1199,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_2",
+      "image_id": "36",
+      "roi_file": "roi_36_2.png",
+      "class_id": 12,
+      "bbox": [
+        372,
+        596,
+        468,
+        692
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_3",
+      "image_id": "36",
+      "roi_file": "roi_36_3.png",
+      "class_id": 13,
+      "bbox": [
+        478,
+        596,
+        580,
+        694
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_36_0",
+      "image_id": "36",
+      "roi_file": "bg_36_0.png",
+      "class_id": -1,
+      "bbox": [
+        98,
+        152,
+        177,
+        233
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_36_1",
+      "image_id": "36",
+      "roi_file": "bg_36_1.png",
+      "class_id": -1,
+      "bbox": [
+        337,
+        821,
+        415,
+        905
+      ],
+      "is_background": true
+    },
+    {
+      "id": "36_0",
+      "image_id": "36",
+      "roi_file": "roi_36_0.png",
+      "class_id": 6,
+      "bbox": [
+        265,
+        597,
+        357,
+        691
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_1",
+      "image_id": "36",
+      "roi_file": "roi_36_1.png",
+      "class_id": 4,
+      "bbox": [
+        1095,
+        581,
+        1199,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_2",
+      "image_id": "36",
+      "roi_file": "roi_36_2.png",
+      "class_id": 12,
+      "bbox": [
+        372,
+        596,
+        468,
+        692
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_3",
+      "image_id": "36",
+      "roi_file": "roi_36_3.png",
+      "class_id": 13,
+      "bbox": [
+        478,
+        596,
+        580,
+        694
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_36_0",
+      "image_id": "36",
+      "roi_file": "bg_36_0.png",
+      "class_id": -1,
+      "bbox": [
+        160,
+        800,
+        256,
+        916
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_36_1",
+      "image_id": "36",
+      "roi_file": "bg_36_1.png",
+      "class_id": -1,
+      "bbox": [
+        1415,
+        400,
+        1513,
+        484
+      ],
+      "is_background": true
+    },
+    {
+      "id": "36_0",
+      "image_id": "36",
+      "roi_file": "roi_36_0.png",
+      "class_id": 6,
+      "bbox": [
+        265,
+        597,
+        357,
+        691
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_1",
+      "image_id": "36",
+      "roi_file": "roi_36_1.png",
+      "class_id": 4,
+      "bbox": [
+        1095,
+        581,
+        1199,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_2",
+      "image_id": "36",
+      "roi_file": "roi_36_2.png",
+      "class_id": 12,
+      "bbox": [
+        372,
+        596,
+        468,
+        692
+      ],
+      "is_background": false
+    },
+    {
+      "id": "36_3",
+      "image_id": "36",
+      "roi_file": "roi_36_3.png",
+      "class_id": 13,
+      "bbox": [
+        478,
+        596,
+        580,
+        694
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_36_0",
+      "image_id": "36",
+      "roi_file": "bg_36_0.png",
+      "class_id": -1,
+      "bbox": [
+        954,
+        469,
+        1044,
+        568
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_36_1",
+      "image_id": "36",
+      "roi_file": "bg_36_1.png",
+      "class_id": -1,
+      "bbox": [
+        37,
+        229,
+        126,
+        316
+      ],
+      "is_background": true
+    },
+    {
+      "id": "42_0",
+      "image_id": "42",
+      "roi_file": "roi_42_0.png",
+      "class_id": 4,
+      "bbox": [
+        917,
+        595,
+        971,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "42_1",
+      "image_id": "42",
+      "roi_file": "roi_42_1.png",
+      "class_id": 12,
+      "bbox": [
+        414,
+        590,
+        472,
+        644
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_42_0",
+      "image_id": "42",
+      "roi_file": "bg_42_0.png",
+      "class_id": -1,
+      "bbox": [
+        1306,
+        26,
+        1359,
+        88
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_42_1",
+      "image_id": "42",
+      "roi_file": "bg_42_1.png",
+      "class_id": -1,
+      "bbox": [
+        283,
+        878,
+        345,
+        932
+      ],
+      "is_background": true
+    },
+    {
+      "id": "42_0",
+      "image_id": "42",
+      "roi_file": "roi_42_0.png",
+      "class_id": 4,
+      "bbox": [
+        917,
+        595,
+        971,
+        649
+      ],
+      "is_background": false
+    },
+    {
+      "id": "42_1",
+      "image_id": "42",
+      "roi_file": "roi_42_1.png",
+      "class_id": 12,
+      "bbox": [
+        414,
+        590,
+        472,
+        644
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_42_0",
+      "image_id": "42",
+      "roi_file": "bg_42_0.png",
+      "class_id": -1,
+      "bbox": [
+        815,
+        658,
+        870,
+        705
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_42_1",
+      "image_id": "42",
+      "roi_file": "bg_42_1.png",
+      "class_id": -1,
+      "bbox": [
+        1535,
+        16,
+        1592,
+        75
+      ],
+      "is_background": true
+    },
+    {
+      "id": "45_0",
+      "image_id": "45",
+      "roi_file": "roi_45_0.png",
+      "class_id": 12,
+      "bbox": [
+        239,
+        703,
+        309,
+        771
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_1",
+      "image_id": "45",
+      "roi_file": "roi_45_1.png",
+      "class_id": 13,
+      "bbox": [
+        239,
+        801,
+        311,
+        871
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_2",
+      "image_id": "45",
+      "roi_file": "roi_45_2.png",
+      "class_id": 12,
+      "bbox": [
+        877,
+        405,
+        943,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_3",
+      "image_id": "45",
+      "roi_file": "roi_45_3.png",
+      "class_id": 6,
+      "bbox": [
+        236,
+        602,
+        310,
+        676
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_45_0",
+      "image_id": "45",
+      "roi_file": "bg_45_0.png",
+      "class_id": -1,
+      "bbox": [
+        1069,
+        517,
+        1153,
+        586
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_45_1",
+      "image_id": "45",
+      "roi_file": "bg_45_1.png",
+      "class_id": -1,
+      "bbox": [
+        279,
+        496,
+        345,
+        552
+      ],
+      "is_background": true
+    },
+    {
+      "id": "45_0",
+      "image_id": "45",
+      "roi_file": "roi_45_0.png",
+      "class_id": 12,
+      "bbox": [
+        239,
+        703,
+        309,
+        771
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_1",
+      "image_id": "45",
+      "roi_file": "roi_45_1.png",
+      "class_id": 13,
+      "bbox": [
+        239,
+        801,
+        311,
+        871
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_2",
+      "image_id": "45",
+      "roi_file": "roi_45_2.png",
+      "class_id": 12,
+      "bbox": [
+        877,
+        405,
+        943,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_3",
+      "image_id": "45",
+      "roi_file": "roi_45_3.png",
+      "class_id": 6,
+      "bbox": [
+        236,
+        602,
+        310,
+        676
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_45_0",
+      "image_id": "45",
+      "roi_file": "bg_45_0.png",
+      "class_id": -1,
+      "bbox": [
+        699,
+        992,
+        770,
+        1064
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_45_1",
+      "image_id": "45",
+      "roi_file": "bg_45_1.png",
+      "class_id": -1,
+      "bbox": [
+        927,
+        127,
+        985,
+        191
+      ],
+      "is_background": true
+    },
+    {
+      "id": "45_0",
+      "image_id": "45",
+      "roi_file": "roi_45_0.png",
+      "class_id": 12,
+      "bbox": [
+        239,
+        703,
+        309,
+        771
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_1",
+      "image_id": "45",
+      "roi_file": "roi_45_1.png",
+      "class_id": 13,
+      "bbox": [
+        239,
+        801,
+        311,
+        871
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_2",
+      "image_id": "45",
+      "roi_file": "roi_45_2.png",
+      "class_id": 12,
+      "bbox": [
+        877,
+        405,
+        943,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_3",
+      "image_id": "45",
+      "roi_file": "roi_45_3.png",
+      "class_id": 6,
+      "bbox": [
+        236,
+        602,
+        310,
+        676
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_45_0",
+      "image_id": "45",
+      "roi_file": "bg_45_0.png",
+      "class_id": -1,
+      "bbox": [
+        565,
+        569,
+        631,
+        636
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_45_1",
+      "image_id": "45",
+      "roi_file": "bg_45_1.png",
+      "class_id": -1,
+      "bbox": [
+        625,
+        853,
+        707,
+        910
+      ],
+      "is_background": true
+    },
+    {
+      "id": "45_0",
+      "image_id": "45",
+      "roi_file": "roi_45_0.png",
+      "class_id": 12,
+      "bbox": [
+        239,
+        703,
+        309,
+        771
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_1",
+      "image_id": "45",
+      "roi_file": "roi_45_1.png",
+      "class_id": 13,
+      "bbox": [
+        239,
+        801,
+        311,
+        871
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_2",
+      "image_id": "45",
+      "roi_file": "roi_45_2.png",
+      "class_id": 12,
+      "bbox": [
+        877,
+        405,
+        943,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "45_3",
+      "image_id": "45",
+      "roi_file": "roi_45_3.png",
+      "class_id": 6,
+      "bbox": [
+        236,
+        602,
+        310,
+        676
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_45_0",
+      "image_id": "45",
+      "roi_file": "bg_45_0.png",
+      "class_id": -1,
+      "bbox": [
+        489,
+        784,
+        555,
+        847
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_45_1",
+      "image_id": "45",
+      "roi_file": "bg_45_1.png",
+      "class_id": -1,
+      "bbox": [
+        245,
+        1062,
+        325,
+        1121
+      ],
+      "is_background": true
+    },
+    {
+      "id": "48_0",
+      "image_id": "48",
+      "roi_file": "roi_48_0.png",
+      "class_id": 12,
+      "bbox": [
+        745,
+        339,
+        819,
+        413
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_48_0",
+      "image_id": "48",
+      "roi_file": "bg_48_0.png",
+      "class_id": -1,
+      "bbox": [
+        920,
+        407,
+        987,
+        490
+      ],
+      "is_background": true
+    },
+    {
+      "id": "51_0",
+      "image_id": "51",
+      "roi_file": "roi_51_0.png",
+      "class_id": 12,
+      "bbox": [
+        806,
+        212,
+        864,
+        272
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_51_0",
+      "image_id": "51",
+      "roi_file": "bg_51_0.png",
+      "class_id": -1,
+      "bbox": [
+        35,
+        684,
+        102,
+        744
+      ],
+      "is_background": true
+    },
+    {
+      "id": "57_0",
+      "image_id": "57",
+      "roi_file": "roi_57_0.png",
+      "class_id": 1,
+      "bbox": [
+        449,
+        543,
+        511,
+        603
+      ],
+      "is_background": false
+    },
+    {
+      "id": "57_1",
+      "image_id": "57",
+      "roi_file": "roi_57_1.png",
+      "class_id": 8,
+      "bbox": [
+        525,
+        541,
+        589,
+        601
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_57_0",
+      "image_id": "57",
+      "roi_file": "bg_57_0.png",
+      "class_id": -1,
+      "bbox": [
+        399,
+        653,
+        454,
+        702
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_57_1",
+      "image_id": "57",
+      "roi_file": "bg_57_1.png",
+      "class_id": -1,
+      "bbox": [
+        1115,
+        833,
+        1187,
+        889
+      ],
+      "is_background": true
+    },
+    {
+      "id": "57_0",
+      "image_id": "57",
+      "roi_file": "roi_57_0.png",
+      "class_id": 1,
+      "bbox": [
+        449,
+        543,
+        511,
+        603
+      ],
+      "is_background": false
+    },
+    {
+      "id": "57_1",
+      "image_id": "57",
+      "roi_file": "roi_57_1.png",
+      "class_id": 8,
+      "bbox": [
+        525,
+        541,
+        589,
+        601
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_57_0",
+      "image_id": "57",
+      "roi_file": "bg_57_0.png",
+      "class_id": -1,
+      "bbox": [
+        50,
+        574,
+        111,
+        638
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_57_1",
+      "image_id": "57",
+      "roi_file": "bg_57_1.png",
+      "class_id": -1,
+      "bbox": [
+        569,
+        304,
+        644,
+        372
+      ],
+      "is_background": true
+    },
+    {
+      "id": "72_0",
+      "image_id": "72",
+      "roi_file": "roi_72_0.png",
+      "class_id": 1,
+      "bbox": [
+        799,
+        407,
+        849,
+        463
+      ],
+      "is_background": false
+    },
+    {
+      "id": "72_1",
+      "image_id": "72",
+      "roi_file": "roi_72_1.png",
+      "class_id": 1,
+      "bbox": [
+        798,
+        854,
+        842,
+        902
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_72_0",
+      "image_id": "72",
+      "roi_file": "bg_72_0.png",
+      "class_id": -1,
+      "bbox": [
+        1077,
+        1002,
+        1115,
+        1060
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_72_1",
+      "image_id": "72",
+      "roi_file": "bg_72_1.png",
+      "class_id": -1,
+      "bbox": [
+        1076,
+        1003,
+        1115,
+        1055
+      ],
+      "is_background": true
+    },
+    {
+      "id": "72_0",
+      "image_id": "72",
+      "roi_file": "roi_72_0.png",
+      "class_id": 1,
+      "bbox": [
+        799,
+        407,
+        849,
+        463
+      ],
+      "is_background": false
+    },
+    {
+      "id": "72_1",
+      "image_id": "72",
+      "roi_file": "roi_72_1.png",
+      "class_id": 1,
+      "bbox": [
+        798,
+        854,
+        842,
+        902
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_72_0",
+      "image_id": "72",
+      "roi_file": "bg_72_0.png",
+      "class_id": -1,
+      "bbox": [
+        866,
+        822,
+        907,
+        872
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_72_1",
+      "image_id": "72",
+      "roi_file": "bg_72_1.png",
+      "class_id": -1,
+      "bbox": [
+        369,
+        635,
+        409,
+        679
+      ],
+      "is_background": true
+    },
+    {
+      "id": "75_0",
+      "image_id": "75",
+      "roi_file": "roi_75_0.png",
+      "class_id": 12,
+      "bbox": [
+        543,
+        613,
+        613,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "75_1",
+      "image_id": "75",
+      "roi_file": "roi_75_1.png",
+      "class_id": 8,
+      "bbox": [
+        547,
+        525,
+        615,
+        587
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_75_0",
+      "image_id": "75",
+      "roi_file": "bg_75_0.png",
+      "class_id": -1,
+      "bbox": [
+        119,
+        830,
+        193,
+        882
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_75_1",
+      "image_id": "75",
+      "roi_file": "bg_75_1.png",
+      "class_id": -1,
+      "bbox": [
+        1369,
+        740,
+        1436,
+        810
+      ],
+      "is_background": true
+    },
+    {
+      "id": "75_0",
+      "image_id": "75",
+      "roi_file": "roi_75_0.png",
+      "class_id": 12,
+      "bbox": [
+        543,
+        613,
+        613,
+        679
+      ],
+      "is_background": false
+    },
+    {
+      "id": "75_1",
+      "image_id": "75",
+      "roi_file": "roi_75_1.png",
+      "class_id": 8,
+      "bbox": [
+        547,
+        525,
+        615,
+        587
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_75_0",
+      "image_id": "75",
+      "roi_file": "bg_75_0.png",
+      "class_id": -1,
+      "bbox": [
+        1150,
+        1012,
+        1210,
+        1065
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_75_1",
+      "image_id": "75",
+      "roi_file": "bg_75_1.png",
+      "class_id": -1,
+      "bbox": [
+        801,
+        1119,
+        857,
+        1193
+      ],
+      "is_background": true
+    },
+    {
+      "id": "78_0",
+      "image_id": "78",
+      "roi_file": "roi_78_0.png",
+      "class_id": 1,
+      "bbox": [
+        503,
+        499,
+        595,
+        589
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_78_0",
+      "image_id": "78",
+      "roi_file": "bg_78_0.png",
+      "class_id": -1,
+      "bbox": [
+        487,
+        896,
+        580,
+        993
+      ],
+      "is_background": true
+    },
+    {
+      "id": "81_0",
+      "image_id": "81",
+      "roi_file": "roi_81_0.png",
+      "class_id": 5,
+      "bbox": [
+        817,
+        569,
+        877,
+        625
+      ],
+      "is_background": false
+    },
+    {
+      "id": "81_1",
+      "image_id": "81",
+      "roi_file": "roi_81_1.png",
+      "class_id": 1,
+      "bbox": [
+        816,
+        496,
+        874,
+        546
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_81_0",
+      "image_id": "81",
+      "roi_file": "bg_81_0.png",
+      "class_id": -1,
+      "bbox": [
+        1470,
+        580,
+        1539,
+        638
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_81_1",
+      "image_id": "81",
+      "roi_file": "bg_81_1.png",
+      "class_id": -1,
+      "bbox": [
+        1099,
+        153,
+        1160,
+        204
+      ],
+      "is_background": true
+    },
+    {
+      "id": "81_0",
+      "image_id": "81",
+      "roi_file": "roi_81_0.png",
+      "class_id": 5,
+      "bbox": [
+        817,
+        569,
+        877,
+        625
+      ],
+      "is_background": false
+    },
+    {
+      "id": "81_1",
+      "image_id": "81",
+      "roi_file": "roi_81_1.png",
+      "class_id": 1,
+      "bbox": [
+        816,
+        496,
+        874,
+        546
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_81_0",
+      "image_id": "81",
+      "roi_file": "bg_81_0.png",
+      "class_id": -1,
+      "bbox": [
+        696,
+        1092,
+        751,
+        1150
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_81_1",
+      "image_id": "81",
+      "roi_file": "bg_81_1.png",
+      "class_id": -1,
+      "bbox": [
+        957,
+        1011,
+        1006,
+        1060
+      ],
+      "is_background": true
+    },
+    {
+      "id": "84_0",
+      "image_id": "84",
+      "roi_file": "roi_84_0.png",
+      "class_id": 8,
+      "bbox": [
+        821,
+        583,
+        935,
+        697
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_84_0",
+      "image_id": "84",
+      "roi_file": "bg_84_0.png",
+      "class_id": -1,
+      "bbox": [
+        473,
+        431,
+        572,
+        522
+      ],
+      "is_background": true
+    },
+    {
+      "id": "87_0",
+      "image_id": "87",
+      "roi_file": "roi_87_0.png",
+      "class_id": 1,
+      "bbox": [
+        451,
+        167,
+        573,
+        291
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_87_0",
+      "image_id": "87",
+      "roi_file": "bg_87_0.png",
+      "class_id": -1,
+      "bbox": [
+        1277,
+        356,
+        1413,
+        472
+      ],
+      "is_background": true
+    },
+    {
+      "id": "90_0",
+      "image_id": "90",
+      "roi_file": "roi_90_0.png",
+      "class_id": 1,
+      "bbox": [
+        401,
+        339,
+        555,
+        497
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_1",
+      "image_id": "90",
+      "roi_file": "roi_90_1.png",
+      "class_id": 5,
+      "bbox": [
+        407,
+        573,
+        559,
+        727
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_2",
+      "image_id": "90",
+      "roi_file": "roi_90_2.png",
+      "class_id": 8,
+      "bbox": [
+        415,
+        787,
+        563,
+        935
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_90_0",
+      "image_id": "90",
+      "roi_file": "bg_90_0.png",
+      "class_id": -1,
+      "bbox": [
+        1123,
+        801,
+        1268,
+        961
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_90_1",
+      "image_id": "90",
+      "roi_file": "bg_90_1.png",
+      "class_id": -1,
+      "bbox": [
+        1039,
+        791,
+        1192,
+        955
+      ],
+      "is_background": true
+    },
+    {
+      "id": "90_0",
+      "image_id": "90",
+      "roi_file": "roi_90_0.png",
+      "class_id": 1,
+      "bbox": [
+        401,
+        339,
+        555,
+        497
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_1",
+      "image_id": "90",
+      "roi_file": "roi_90_1.png",
+      "class_id": 5,
+      "bbox": [
+        407,
+        573,
+        559,
+        727
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_2",
+      "image_id": "90",
+      "roi_file": "roi_90_2.png",
+      "class_id": 8,
+      "bbox": [
+        415,
+        787,
+        563,
+        935
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_90_0",
+      "image_id": "90",
+      "roi_file": "bg_90_0.png",
+      "class_id": -1,
+      "bbox": [
+        895,
+        159,
+        1073,
+        339
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_90_1",
+      "image_id": "90",
+      "roi_file": "bg_90_1.png",
+      "class_id": -1,
+      "bbox": [
+        689,
+        379,
+        866,
+        536
+      ],
+      "is_background": true
+    },
+    {
+      "id": "90_0",
+      "image_id": "90",
+      "roi_file": "roi_90_0.png",
+      "class_id": 1,
+      "bbox": [
+        401,
+        339,
+        555,
+        497
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_1",
+      "image_id": "90",
+      "roi_file": "roi_90_1.png",
+      "class_id": 5,
+      "bbox": [
+        407,
+        573,
+        559,
+        727
+      ],
+      "is_background": false
+    },
+    {
+      "id": "90_2",
+      "image_id": "90",
+      "roi_file": "roi_90_2.png",
+      "class_id": 8,
+      "bbox": [
+        415,
+        787,
+        563,
+        935
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_90_0",
+      "image_id": "90",
+      "roi_file": "bg_90_0.png",
+      "class_id": -1,
+      "bbox": [
+        1450,
+        284,
+        1578,
+        456
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_90_1",
+      "image_id": "90",
+      "roi_file": "bg_90_1.png",
+      "class_id": -1,
+      "bbox": [
+        1276,
+        498,
+        1401,
+        626
+      ],
+      "is_background": true
+    },
+    {
+      "id": "99_0",
+      "image_id": "99",
+      "roi_file": "roi_99_0.png",
+      "class_id": 1,
+      "bbox": [
+        627,
+        411,
+        705,
+        485
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_1",
+      "image_id": "99",
+      "roi_file": "roi_99_1.png",
+      "class_id": 5,
+      "bbox": [
+        627,
+        511,
+        703,
+        585
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_2",
+      "image_id": "99",
+      "roi_file": "roi_99_2.png",
+      "class_id": 8,
+      "bbox": [
+        627,
+        615,
+        701,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_99_0",
+      "image_id": "99",
+      "roi_file": "bg_99_0.png",
+      "class_id": -1,
+      "bbox": [
+        89,
+        775,
+        168,
+        842
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_99_1",
+      "image_id": "99",
+      "roi_file": "bg_99_1.png",
+      "class_id": -1,
+      "bbox": [
+        1021,
+        417,
+        1093,
+        494
+      ],
+      "is_background": true
+    },
+    {
+      "id": "99_0",
+      "image_id": "99",
+      "roi_file": "roi_99_0.png",
+      "class_id": 1,
+      "bbox": [
+        627,
+        411,
+        705,
+        485
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_1",
+      "image_id": "99",
+      "roi_file": "roi_99_1.png",
+      "class_id": 5,
+      "bbox": [
+        627,
+        511,
+        703,
+        585
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_2",
+      "image_id": "99",
+      "roi_file": "roi_99_2.png",
+      "class_id": 8,
+      "bbox": [
+        627,
+        615,
+        701,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_99_0",
+      "image_id": "99",
+      "roi_file": "bg_99_0.png",
+      "class_id": -1,
+      "bbox": [
+        825,
+        1098,
+        893,
+        1169
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_99_1",
+      "image_id": "99",
+      "roi_file": "bg_99_1.png",
+      "class_id": -1,
+      "bbox": [
+        1300,
+        1020,
+        1387,
+        1098
+      ],
+      "is_background": true
+    },
+    {
+      "id": "99_0",
+      "image_id": "99",
+      "roi_file": "roi_99_0.png",
+      "class_id": 1,
+      "bbox": [
+        627,
+        411,
+        705,
+        485
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_1",
+      "image_id": "99",
+      "roi_file": "roi_99_1.png",
+      "class_id": 5,
+      "bbox": [
+        627,
+        511,
+        703,
+        585
+      ],
+      "is_background": false
+    },
+    {
+      "id": "99_2",
+      "image_id": "99",
+      "roi_file": "roi_99_2.png",
+      "class_id": 8,
+      "bbox": [
+        627,
+        615,
+        701,
+        683
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_99_0",
+      "image_id": "99",
+      "roi_file": "bg_99_0.png",
+      "class_id": -1,
+      "bbox": [
+        456,
+        919,
+        525,
+        981
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_99_1",
+      "image_id": "99",
+      "roi_file": "bg_99_1.png",
+      "class_id": -1,
+      "bbox": [
+        977,
+        1008,
+        1062,
+        1094
+      ],
+      "is_background": true
+    },
+    {
+      "id": "102_0",
+      "image_id": "102",
+      "roi_file": "roi_102_0.png",
+      "class_id": 1,
+      "bbox": [
+        582,
+        520,
+        632,
+        570
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_102_0",
+      "image_id": "102",
+      "roi_file": "bg_102_0.png",
+      "class_id": -1,
+      "bbox": [
+        1213,
+        36,
+        1268,
+        82
+      ],
+      "is_background": true
+    },
+    {
+      "id": "114_0",
+      "image_id": "114",
+      "roi_file": "roi_114_0.png",
+      "class_id": 14,
+      "bbox": [
+        729,
+        591,
+        831,
+        691
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_114_0",
+      "image_id": "114",
+      "roi_file": "bg_114_0.png",
+      "class_id": -1,
+      "bbox": [
+        278,
+        216,
+        369,
+        323
+      ],
+      "is_background": true
+    },
+    {
+      "id": "120_0",
+      "image_id": "120",
+      "roi_file": "roi_120_0.png",
+      "class_id": 1,
+      "bbox": [
+        600,
+        734,
+        720,
+        862
+      ],
+      "is_background": false
+    },
+    {
+      "id": "120_1",
+      "image_id": "120",
+      "roi_file": "roi_120_1.png",
+      "class_id": 14,
+      "bbox": [
+        606,
+        898,
+        726,
+        1024
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_120_0",
+      "image_id": "120",
+      "roi_file": "bg_120_0.png",
+      "class_id": -1,
+      "bbox": [
+        61,
+        595,
+        168,
+        715
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_120_1",
+      "image_id": "120",
+      "roi_file": "bg_120_1.png",
+      "class_id": -1,
+      "bbox": [
+        698,
+        1042,
+        833,
+        1159
+      ],
+      "is_background": true
+    },
+    {
+      "id": "120_0",
+      "image_id": "120",
+      "roi_file": "roi_120_0.png",
+      "class_id": 1,
+      "bbox": [
+        600,
+        734,
+        720,
+        862
+      ],
+      "is_background": false
+    },
+    {
+      "id": "120_1",
+      "image_id": "120",
+      "roi_file": "roi_120_1.png",
+      "class_id": 14,
+      "bbox": [
+        606,
+        898,
+        726,
+        1024
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_120_0",
+      "image_id": "120",
+      "roi_file": "bg_120_0.png",
+      "class_id": -1,
+      "bbox": [
+        1256,
+        75,
+        1370,
+        177
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_120_1",
+      "image_id": "120",
+      "roi_file": "bg_120_1.png",
+      "class_id": -1,
+      "bbox": [
+        734,
+        850,
+        847,
+        1000
+      ],
+      "is_background": true
+    },
+    {
+      "id": "123_0",
+      "image_id": "123",
+      "roi_file": "roi_123_0.png",
+      "class_id": 6,
+      "bbox": [
+        692,
+        508,
+        914,
+        726
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_123_0",
+      "image_id": "123",
+      "roi_file": "bg_123_0.png",
+      "class_id": -1,
+      "bbox": [
+        1092,
+        98,
+        1313,
+        279
+      ],
+      "is_background": true
+    },
+    {
+      "id": "126_0",
+      "image_id": "126",
+      "roi_file": "roi_126_0.png",
+      "class_id": 6,
+      "bbox": [
+        523,
+        633,
+        597,
+        705
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_126_0",
+      "image_id": "126",
+      "roi_file": "bg_126_0.png",
+      "class_id": -1,
+      "bbox": [
+        1492,
+        568,
+        1569,
+        641
+      ],
+      "is_background": true
+    },
+    {
+      "id": "132_0",
+      "image_id": "132",
+      "roi_file": "roi_132_0.png",
+      "class_id": 6,
+      "bbox": [
+        423,
+        483,
+        513,
+        575
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_132_0",
+      "image_id": "132",
+      "roi_file": "bg_132_0.png",
+      "class_id": -1,
+      "bbox": [
+        1209,
+        934,
+        1285,
+        1041
+      ],
+      "is_background": true
+    },
+    {
+      "id": "138_0",
+      "image_id": "138",
+      "roi_file": "roi_138_0.png",
+      "class_id": 9,
+      "bbox": [
+        559,
+        343,
+        711,
+        493
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_138_0",
+      "image_id": "138",
+      "roi_file": "bg_138_0.png",
+      "class_id": -1,
+      "bbox": [
+        1186,
+        732,
+        1368,
+        855
+      ],
+      "is_background": true
+    },
+    {
+      "id": "141_0",
+      "image_id": "141",
+      "roi_file": "roi_141_0.png",
+      "class_id": 9,
+      "bbox": [
+        345,
+        243,
+        483,
+        381
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_141_0",
+      "image_id": "141",
+      "roi_file": "bg_141_0.png",
+      "class_id": -1,
+      "bbox": [
+        587,
+        1032,
+        716,
+        1148
+      ],
+      "is_background": true
+    },
+    {
+      "id": "144_0",
+      "image_id": "144",
+      "roi_file": "roi_144_0.png",
+      "class_id": 9,
+      "bbox": [
+        263,
+        417,
+        313,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "144_1",
+      "image_id": "144",
+      "roi_file": "roi_144_1.png",
+      "class_id": 6,
+      "bbox": [
+        868,
+        406,
+        922,
+        460
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_144_0",
+      "image_id": "144",
+      "roi_file": "bg_144_0.png",
+      "class_id": -1,
+      "bbox": [
+        1276,
+        169,
+        1333,
+        226
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_144_1",
+      "image_id": "144",
+      "roi_file": "bg_144_1.png",
+      "class_id": -1,
+      "bbox": [
+        1217,
+        28,
+        1266,
+        91
+      ],
+      "is_background": true
+    },
+    {
+      "id": "144_0",
+      "image_id": "144",
+      "roi_file": "roi_144_0.png",
+      "class_id": 9,
+      "bbox": [
+        263,
+        417,
+        313,
+        473
+      ],
+      "is_background": false
+    },
+    {
+      "id": "144_1",
+      "image_id": "144",
+      "roi_file": "roi_144_1.png",
+      "class_id": 6,
+      "bbox": [
+        868,
+        406,
+        922,
+        460
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_144_0",
+      "image_id": "144",
+      "roi_file": "bg_144_0.png",
+      "class_id": -1,
+      "bbox": [
+        1519,
+        499,
+        1562,
+        564
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_144_1",
+      "image_id": "144",
+      "roi_file": "bg_144_1.png",
+      "class_id": -1,
+      "bbox": [
+        1324,
+        1093,
+        1370,
+        1156
+      ],
+      "is_background": true
+    },
+    {
+      "id": "147_0",
+      "image_id": "147",
+      "roi_file": "roi_147_0.png",
+      "class_id": 1,
+      "bbox": [
+        751,
+        515,
+        819,
+        585
+      ],
+      "is_background": false
+    },
+    {
+      "id": "147_1",
+      "image_id": "147",
+      "roi_file": "roi_147_1.png",
+      "class_id": 2,
+      "bbox": [
+        831,
+        515,
+        899,
+        583
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_147_0",
+      "image_id": "147",
+      "roi_file": "bg_147_0.png",
+      "class_id": -1,
+      "bbox": [
+        875,
+        166,
+        948,
+        234
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_147_1",
+      "image_id": "147",
+      "roi_file": "bg_147_1.png",
+      "class_id": -1,
+      "bbox": [
+        38,
+        172,
+        103,
+        252
+      ],
+      "is_background": true
+    },
+    {
+      "id": "147_0",
+      "image_id": "147",
+      "roi_file": "roi_147_0.png",
+      "class_id": 1,
+      "bbox": [
+        751,
+        515,
+        819,
+        585
+      ],
+      "is_background": false
+    },
+    {
+      "id": "147_1",
+      "image_id": "147",
+      "roi_file": "roi_147_1.png",
+      "class_id": 2,
+      "bbox": [
+        831,
+        515,
+        899,
+        583
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_147_0",
+      "image_id": "147",
+      "roi_file": "bg_147_0.png",
+      "class_id": -1,
+      "bbox": [
+        1081,
+        475,
+        1135,
+        543
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_147_1",
+      "image_id": "147",
+      "roi_file": "bg_147_1.png",
+      "class_id": -1,
+      "bbox": [
+        1024,
+        386,
+        1099,
+        463
+      ],
+      "is_background": true
+    },
+    {
+      "id": "150_0",
+      "image_id": "150",
+      "roi_file": "roi_150_0.png",
+      "class_id": 1,
+      "bbox": [
+        493,
+        497,
+        549,
+        553
+      ],
+      "is_background": false
+    },
+    {
+      "id": "150_1",
+      "image_id": "150",
+      "roi_file": "roi_150_1.png",
+      "class_id": 2,
+      "bbox": [
+        557,
+        497,
+        615,
+        553
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_150_0",
+      "image_id": "150",
+      "roi_file": "bg_150_0.png",
+      "class_id": -1,
+      "bbox": [
+        1214,
+        823,
+        1272,
+        889
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_150_1",
+      "image_id": "150",
+      "roi_file": "bg_150_1.png",
+      "class_id": -1,
+      "bbox": [
+        57,
+        684,
+        114,
+        738
+      ],
+      "is_background": true
+    },
+    {
+      "id": "150_0",
+      "image_id": "150",
+      "roi_file": "roi_150_0.png",
+      "class_id": 1,
+      "bbox": [
+        493,
+        497,
+        549,
+        553
+      ],
+      "is_background": false
+    },
+    {
+      "id": "150_1",
+      "image_id": "150",
+      "roi_file": "roi_150_1.png",
+      "class_id": 2,
+      "bbox": [
+        557,
+        497,
+        615,
+        553
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_150_0",
+      "image_id": "150",
+      "roi_file": "bg_150_0.png",
+      "class_id": -1,
+      "bbox": [
+        1172,
+        79,
+        1239,
+        124
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_150_1",
+      "image_id": "150",
+      "roi_file": "bg_150_1.png",
+      "class_id": -1,
+      "bbox": [
+        1252,
+        46,
+        1309,
+        113
+      ],
+      "is_background": true
+    },
+    {
+      "id": "153_0",
+      "image_id": "153",
+      "roi_file": "roi_153_0.png",
+      "class_id": 1,
+      "bbox": [
+        973,
+        481,
+        1063,
+        575
+      ],
+      "is_background": false
+    },
+    {
+      "id": "153_1",
+      "image_id": "153",
+      "roi_file": "roi_153_1.png",
+      "class_id": 2,
+      "bbox": [
+        1075,
+        479,
+        1163,
+        571
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_153_0",
+      "image_id": "153",
+      "roi_file": "bg_153_0.png",
+      "class_id": -1,
+      "bbox": [
+        1438,
+        655,
+        1531,
+        755
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_153_1",
+      "image_id": "153",
+      "roi_file": "bg_153_1.png",
+      "class_id": -1,
+      "bbox": [
+        1353,
+        735,
+        1450,
+        843
+      ],
+      "is_background": true
+    },
+    {
+      "id": "153_0",
+      "image_id": "153",
+      "roi_file": "roi_153_0.png",
+      "class_id": 1,
+      "bbox": [
+        973,
+        481,
+        1063,
+        575
+      ],
+      "is_background": false
+    },
+    {
+      "id": "153_1",
+      "image_id": "153",
+      "roi_file": "roi_153_1.png",
+      "class_id": 2,
+      "bbox": [
+        1075,
+        479,
+        1163,
+        571
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_153_0",
+      "image_id": "153",
+      "roi_file": "bg_153_0.png",
+      "class_id": -1,
+      "bbox": [
+        1431,
+        667,
+        1504,
+        756
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_153_1",
+      "image_id": "153",
+      "roi_file": "bg_153_1.png",
+      "class_id": -1,
+      "bbox": [
+        675,
+        89,
+        758,
+        169
+      ],
+      "is_background": true
+    },
+    {
+      "id": "156_0",
+      "image_id": "156",
+      "roi_file": "roi_156_0.png",
+      "class_id": 1,
+      "bbox": [
+        221,
+        637,
+        331,
+        745
+      ],
+      "is_background": false
+    },
+    {
+      "id": "156_1",
+      "image_id": "156",
+      "roi_file": "roi_156_1.png",
+      "class_id": 2,
+      "bbox": [
+        223,
+        785,
+        333,
+        895
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_156_0",
+      "image_id": "156",
+      "roi_file": "bg_156_0.png",
+      "class_id": -1,
+      "bbox": [
+        539,
+        731,
+        644,
+        828
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_156_1",
+      "image_id": "156",
+      "roi_file": "bg_156_1.png",
+      "class_id": -1,
+      "bbox": [
+        501,
+        958,
+        604,
+        1056
+      ],
+      "is_background": true
+    },
+    {
+      "id": "156_0",
+      "image_id": "156",
+      "roi_file": "roi_156_0.png",
+      "class_id": 1,
+      "bbox": [
+        221,
+        637,
+        331,
+        745
+      ],
+      "is_background": false
+    },
+    {
+      "id": "156_1",
+      "image_id": "156",
+      "roi_file": "roi_156_1.png",
+      "class_id": 2,
+      "bbox": [
+        223,
+        785,
+        333,
+        895
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_156_0",
+      "image_id": "156",
+      "roi_file": "bg_156_0.png",
+      "class_id": -1,
+      "bbox": [
+        460,
+        731,
+        571,
+        831
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_156_1",
+      "image_id": "156",
+      "roi_file": "bg_156_1.png",
+      "class_id": -1,
+      "bbox": [
+        1276,
+        389,
+        1375,
+        482
+      ],
+      "is_background": true
+    },
+    {
+      "id": "159_0",
+      "image_id": "159",
+      "roi_file": "roi_159_0.png",
+      "class_id": 2,
+      "bbox": [
+        455,
+        441,
+        547,
+        537
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_159_0",
+      "image_id": "159",
+      "roi_file": "bg_159_0.png",
+      "class_id": -1,
+      "bbox": [
+        449,
+        9,
+        557,
+        113
+      ],
+      "is_background": true
+    },
+    {
+      "id": "162_0",
+      "image_id": "162",
+      "roi_file": "roi_162_0.png",
+      "class_id": 2,
+      "bbox": [
+        397,
+        293,
+        509,
+        403
+      ],
+      "is_background": false
+    },
+    {
+      "id": "162_1",
+      "image_id": "162",
+      "roi_file": "roi_162_1.png",
+      "class_id": 1,
+      "bbox": [
+        1271,
+        461,
+        1369,
+        565
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_162_0",
+      "image_id": "162",
+      "roi_file": "bg_162_0.png",
+      "class_id": -1,
+      "bbox": [
+        876,
+        1028,
+        999,
+        1150
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_162_1",
+      "image_id": "162",
+      "roi_file": "bg_162_1.png",
+      "class_id": -1,
+      "bbox": [
+        1088,
+        145,
+        1173,
+        246
+      ],
+      "is_background": true
+    },
+    {
+      "id": "162_0",
+      "image_id": "162",
+      "roi_file": "roi_162_0.png",
+      "class_id": 2,
+      "bbox": [
+        397,
+        293,
+        509,
+        403
+      ],
+      "is_background": false
+    },
+    {
+      "id": "162_1",
+      "image_id": "162",
+      "roi_file": "roi_162_1.png",
+      "class_id": 1,
+      "bbox": [
+        1271,
+        461,
+        1369,
+        565
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_162_0",
+      "image_id": "162",
+      "roi_file": "bg_162_0.png",
+      "class_id": -1,
+      "bbox": [
+        852,
+        62,
+        977,
+        154
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_162_1",
+      "image_id": "162",
+      "roi_file": "bg_162_1.png",
+      "class_id": -1,
+      "bbox": [
+        688,
+        104,
+        788,
+        225
+      ],
+      "is_background": true
+    },
+    {
+      "id": "168_0",
+      "image_id": "168",
+      "roi_file": "roi_168_0.png",
+      "class_id": 2,
+      "bbox": [
+        503,
+        505,
+        573,
+        583
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_168_0",
+      "image_id": "168",
+      "roi_file": "bg_168_0.png",
+      "class_id": -1,
+      "bbox": [
+        822,
+        517,
+        889,
+        587
+      ],
+      "is_background": true
+    },
+    {
+      "id": "174_0",
+      "image_id": "174",
+      "roi_file": "roi_174_0.png",
+      "class_id": 3,
+      "bbox": [
+        229,
+        147,
+        369,
+        301
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_174_0",
+      "image_id": "174",
+      "roi_file": "bg_174_0.png",
+      "class_id": -1,
+      "bbox": [
+        770,
+        996,
+        920,
+        1152
+      ],
+      "is_background": true
+    },
+    {
+      "id": "177_0",
+      "image_id": "177",
+      "roi_file": "roi_177_0.png",
+      "class_id": 2,
+      "bbox": [
+        338,
+        304,
+        418,
+        394
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_177_0",
+      "image_id": "177",
+      "roi_file": "bg_177_0.png",
+      "class_id": -1,
+      "bbox": [
+        82,
+        456,
+        169,
+        555
+      ],
+      "is_background": true
+    },
+    {
+      "id": "183_0",
+      "image_id": "183",
+      "roi_file": "roi_183_0.png",
+      "class_id": 3,
+      "bbox": [
+        482,
+        456,
+        732,
+        724
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_183_0",
+      "image_id": "183",
+      "roi_file": "bg_183_0.png",
+      "class_id": -1,
+      "bbox": [
+        716,
+        771,
+        928,
+        1087
+      ],
+      "is_background": true
+    },
+    {
+      "id": "186_0",
+      "image_id": "186",
+      "roi_file": "roi_186_0.png",
+      "class_id": 3,
+      "bbox": [
+        539,
+        591,
+        657,
+        721
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_186_0",
+      "image_id": "186",
+      "roi_file": "bg_186_0.png",
+      "class_id": -1,
+      "bbox": [
+        33,
+        94,
+        138,
+        232
+      ],
+      "is_background": true
+    },
+    {
+      "id": "192_0",
+      "image_id": "192",
+      "roi_file": "roi_192_0.png",
+      "class_id": 3,
+      "bbox": [
+        658,
+        724,
+        750,
+        808
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_192_0",
+      "image_id": "192",
+      "roi_file": "bg_192_0.png",
+      "class_id": -1,
+      "bbox": [
+        673,
+        437,
+        750,
+        526
+      ],
+      "is_background": true
+    },
+    {
+      "id": "195_0",
+      "image_id": "195",
+      "roi_file": "roi_195_0.png",
+      "class_id": 9,
+      "bbox": [
+        529,
+        259,
+        631,
+        361
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_195_0",
+      "image_id": "195",
+      "roi_file": "bg_195_0.png",
+      "class_id": -1,
+      "bbox": [
+        267,
+        1077,
+        380,
+        1179
+      ],
+      "is_background": true
+    },
+    {
+      "id": "198_0",
+      "image_id": "198",
+      "roi_file": "roi_198_0.png",
+      "class_id": 3,
+      "bbox": [
+        661,
+        385,
+        747,
+        469
+      ],
+      "is_background": false
+    },
+    {
+      "id": "198_1",
+      "image_id": "198",
+      "roi_file": "roi_198_1.png",
+      "class_id": 2,
+      "bbox": [
+        1173,
+        397,
+        1251,
+        479
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_198_0",
+      "image_id": "198",
+      "roi_file": "bg_198_0.png",
+      "class_id": -1,
+      "bbox": [
+        762,
+        400,
+        859,
+        469
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_198_1",
+      "image_id": "198",
+      "roi_file": "bg_198_1.png",
+      "class_id": -1,
+      "bbox": [
+        1230,
+        852,
+        1299,
+        919
+      ],
+      "is_background": true
+    },
+    {
+      "id": "198_0",
+      "image_id": "198",
+      "roi_file": "roi_198_0.png",
+      "class_id": 3,
+      "bbox": [
+        661,
+        385,
+        747,
+        469
+      ],
+      "is_background": false
+    },
+    {
+      "id": "198_1",
+      "image_id": "198",
+      "roi_file": "roi_198_1.png",
+      "class_id": 2,
+      "bbox": [
+        1173,
+        397,
+        1251,
+        479
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_198_0",
+      "image_id": "198",
+      "roi_file": "bg_198_0.png",
+      "class_id": -1,
+      "bbox": [
+        102,
+        763,
+        188,
+        856
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_198_1",
+      "image_id": "198",
+      "roi_file": "bg_198_1.png",
+      "class_id": -1,
+      "bbox": [
+        797,
+        858,
+        894,
+        944
+      ],
+      "is_background": true
+    },
+    {
+      "id": "201_0",
+      "image_id": "201",
+      "roi_file": "roi_201_0.png",
+      "class_id": 7,
+      "bbox": [
+        926,
+        462,
+        1230,
+        730
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_201_0",
+      "image_id": "201",
+      "roi_file": "bg_201_0.png",
+      "class_id": -1,
+      "bbox": [
+        248,
+        165,
+        502,
+        457
+      ],
+      "is_background": true
+    },
+    {
+      "id": "210_0",
+      "image_id": "210",
+      "roi_file": "roi_210_0.png",
+      "class_id": 3,
+      "bbox": [
+        507,
+        585,
+        625,
+        701
+      ],
+      "is_background": false
+    },
+    {
+      "id": "210_1",
+      "image_id": "210",
+      "roi_file": "roi_210_1.png",
+      "class_id": 7,
+      "bbox": [
+        643,
+        585,
+        759,
+        697
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_210_0",
+      "image_id": "210",
+      "roi_file": "bg_210_0.png",
+      "class_id": -1,
+      "bbox": [
+        541,
+        758,
+        655,
+        890
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_210_1",
+      "image_id": "210",
+      "roi_file": "bg_210_1.png",
+      "class_id": -1,
+      "bbox": [
+        796,
+        899,
+        914,
+        1022
+      ],
+      "is_background": true
+    },
+    {
+      "id": "210_0",
+      "image_id": "210",
+      "roi_file": "roi_210_0.png",
+      "class_id": 3,
+      "bbox": [
+        507,
+        585,
+        625,
+        701
+      ],
+      "is_background": false
+    },
+    {
+      "id": "210_1",
+      "image_id": "210",
+      "roi_file": "roi_210_1.png",
+      "class_id": 7,
+      "bbox": [
+        643,
+        585,
+        759,
+        697
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_210_0",
+      "image_id": "210",
+      "roi_file": "bg_210_0.png",
+      "class_id": -1,
+      "bbox": [
+        784,
+        983,
+        899,
+        1112
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_210_1",
+      "image_id": "210",
+      "roi_file": "bg_210_1.png",
+      "class_id": -1,
+      "bbox": [
+        1473,
+        204,
+        1568,
+        323
+      ],
+      "is_background": true
+    },
+    {
+      "id": "213_0",
+      "image_id": "213",
+      "roi_file": "roi_213_0.png",
+      "class_id": 3,
+      "bbox": [
+        547,
+        317,
+        615,
+        385
+      ],
+      "is_background": false
+    },
+    {
+      "id": "213_1",
+      "image_id": "213",
+      "roi_file": "roi_213_1.png",
+      "class_id": 7,
+      "bbox": [
+        555,
+        411,
+        621,
+        477
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_213_0",
+      "image_id": "213",
+      "roi_file": "bg_213_0.png",
+      "class_id": -1,
+      "bbox": [
+        110,
+        760,
+        169,
+        829
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_213_1",
+      "image_id": "213",
+      "roi_file": "bg_213_1.png",
+      "class_id": -1,
+      "bbox": [
+        1397,
+        899,
+        1462,
+        968
+      ],
+      "is_background": true
+    },
+    {
+      "id": "213_0",
+      "image_id": "213",
+      "roi_file": "roi_213_0.png",
+      "class_id": 3,
+      "bbox": [
+        547,
+        317,
+        615,
+        385
+      ],
+      "is_background": false
+    },
+    {
+      "id": "213_1",
+      "image_id": "213",
+      "roi_file": "roi_213_1.png",
+      "class_id": 7,
+      "bbox": [
+        555,
+        411,
+        621,
+        477
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_213_0",
+      "image_id": "213",
+      "roi_file": "bg_213_0.png",
+      "class_id": -1,
+      "bbox": [
+        1218,
+        666,
+        1276,
+        728
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_213_1",
+      "image_id": "213",
+      "roi_file": "bg_213_1.png",
+      "class_id": -1,
+      "bbox": [
+        633,
+        1074,
+        704,
+        1132
+      ],
+      "is_background": true
+    },
+    {
+      "id": "216_0",
+      "image_id": "216",
+      "roi_file": "roi_216_0.png",
+      "class_id": 8,
+      "bbox": [
+        900,
+        608,
+        982,
+        692
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_216_0",
+      "image_id": "216",
+      "roi_file": "bg_216_0.png",
+      "class_id": -1,
+      "bbox": [
+        603,
+        681,
+        669,
+        753
+      ],
+      "is_background": true
+    },
+    {
+      "id": "219_0",
+      "image_id": "219",
+      "roi_file": "roi_219_0.png",
+      "class_id": 8,
+      "bbox": [
+        623,
+        473,
+        681,
+        529
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_219_0",
+      "image_id": "219",
+      "roi_file": "bg_219_0.png",
+      "class_id": -1,
+      "bbox": [
+        1536,
+        644,
+        1586,
+        690
+      ],
+      "is_background": true
+    },
+    {
+      "id": "222_0",
+      "image_id": "222",
+      "roi_file": "roi_222_0.png",
+      "class_id": 8,
+      "bbox": [
+        551,
+        577,
+        651,
+        681
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_222_0",
+      "image_id": "222",
+      "roi_file": "bg_222_0.png",
+      "class_id": -1,
+      "bbox": [
+        545,
+        1101,
+        643,
+        1192
+      ],
+      "is_background": true
+    },
+    {
+      "id": "225_0",
+      "image_id": "225",
+      "roi_file": "roi_225_0.png",
+      "class_id": 13,
+      "bbox": [
+        609,
+        519,
+        723,
+        627
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_225_0",
+      "image_id": "225",
+      "roi_file": "bg_225_0.png",
+      "class_id": -1,
+      "bbox": [
+        793,
+        248,
+        899,
+        348
+      ],
+      "is_background": true
+    },
+    {
+      "id": "228_0",
+      "image_id": "228",
+      "roi_file": "roi_228_0.png",
+      "class_id": 8,
+      "bbox": [
+        508,
+        284,
+        588,
+        368
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_228_0",
+      "image_id": "228",
+      "roi_file": "bg_228_0.png",
+      "class_id": -1,
+      "bbox": [
+        1079,
+        349,
+        1158,
+        439
+      ],
+      "is_background": true
+    },
+    {
+      "id": "234_0",
+      "image_id": "234",
+      "roi_file": "roi_234_0.png",
+      "class_id": 8,
+      "bbox": [
+        518,
+        604,
+        596,
+        680
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_234_0",
+      "image_id": "234",
+      "roi_file": "bg_234_0.png",
+      "class_id": -1,
+      "bbox": [
+        336,
+        1049,
+        403,
+        1121
+      ],
+      "is_background": true
+    },
+    {
+      "id": "240_0",
+      "image_id": "240",
+      "roi_file": "roi_240_0.png",
+      "class_id": 13,
+      "bbox": [
+        637,
+        555,
+        779,
+        695
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_240_0",
+      "image_id": "240",
+      "roi_file": "bg_240_0.png",
+      "class_id": -1,
+      "bbox": [
+        1276,
+        718,
+        1438,
+        834
+      ],
+      "is_background": true
+    },
+    {
+      "id": "243_0",
+      "image_id": "243",
+      "roi_file": "roi_243_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        527,
+        665,
+        589
+      ],
+      "is_background": false
+    },
+    {
+      "id": "243_1",
+      "image_id": "243",
+      "roi_file": "roi_243_1.png",
+      "class_id": 12,
+      "bbox": [
+        607,
+        611,
+        667,
+        671
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_243_0",
+      "image_id": "243",
+      "roi_file": "bg_243_0.png",
+      "class_id": -1,
+      "bbox": [
+        525,
+        473,
+        586,
+        544
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_243_1",
+      "image_id": "243",
+      "roi_file": "bg_243_1.png",
+      "class_id": -1,
+      "bbox": [
+        1409,
+        364,
+        1476,
+        425
+      ],
+      "is_background": true
+    },
+    {
+      "id": "243_0",
+      "image_id": "243",
+      "roi_file": "roi_243_0.png",
+      "class_id": 1,
+      "bbox": [
+        603,
+        527,
+        665,
+        589
+      ],
+      "is_background": false
+    },
+    {
+      "id": "243_1",
+      "image_id": "243",
+      "roi_file": "roi_243_1.png",
+      "class_id": 12,
+      "bbox": [
+        607,
+        611,
+        667,
+        671
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_243_0",
+      "image_id": "243",
+      "roi_file": "bg_243_0.png",
+      "class_id": -1,
+      "bbox": [
+        882,
+        1030,
+        932,
+        1082
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_243_1",
+      "image_id": "243",
+      "roi_file": "bg_243_1.png",
+      "class_id": -1,
+      "bbox": [
+        362,
+        805,
+        427,
+        874
+      ],
+      "is_background": true
+    },
+    {
+      "id": "246_0",
+      "image_id": "246",
+      "roi_file": "roi_246_0.png",
+      "class_id": 12,
+      "bbox": [
+        415,
+        623,
+        503,
+        709
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_246_0",
+      "image_id": "246",
+      "roi_file": "bg_246_0.png",
+      "class_id": -1,
+      "bbox": [
+        484,
+        27,
+        573,
+        104
+      ],
+      "is_background": true
+    },
+    {
+      "id": "249_0",
+      "image_id": "249",
+      "roi_file": "roi_249_0.png",
+      "class_id": 12,
+      "bbox": [
+        489,
+        583,
+        565,
+        655
+      ],
+      "is_background": false
+    },
+    {
+      "id": "249_1",
+      "image_id": "249",
+      "roi_file": "roi_249_1.png",
+      "class_id": 10,
+      "bbox": [
+        491,
+        483,
+        569,
+        557
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_249_0",
+      "image_id": "249",
+      "roi_file": "bg_249_0.png",
+      "class_id": -1,
+      "bbox": [
+        1254,
+        85,
+        1316,
+        152
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_249_1",
+      "image_id": "249",
+      "roi_file": "bg_249_1.png",
+      "class_id": -1,
+      "bbox": [
+        144,
+        24,
+        215,
+        85
+      ],
+      "is_background": true
+    },
+    {
+      "id": "249_0",
+      "image_id": "249",
+      "roi_file": "roi_249_0.png",
+      "class_id": 12,
+      "bbox": [
+        489,
+        583,
+        565,
+        655
+      ],
+      "is_background": false
+    },
+    {
+      "id": "249_1",
+      "image_id": "249",
+      "roi_file": "roi_249_1.png",
+      "class_id": 10,
+      "bbox": [
+        491,
+        483,
+        569,
+        557
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_249_0",
+      "image_id": "249",
+      "roi_file": "bg_249_0.png",
+      "class_id": -1,
+      "bbox": [
+        108,
+        110,
+        190,
+        191
+      ],
+      "is_background": true
+    },
+    {
+      "id": "bg_249_1",
+      "image_id": "249",
+      "roi_file": "bg_249_1.png",
+      "class_id": -1,
+      "bbox": [
+        622,
+        747,
+        701,
+        826
+      ],
+      "is_background": true
+    },
+    {
+      "id": "252_0",
+      "image_id": "252",
+      "roi_file": "roi_252_0.png",
+      "class_id": 10,
+      "bbox": [
+        601,
+        389,
+        673,
+        463
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_252_0",
+      "image_id": "252",
+      "roi_file": "bg_252_0.png",
+      "class_id": -1,
+      "bbox": [
+        691,
+        314,
+        752,
+        381
+      ],
+      "is_background": true
+    },
+    {
+      "id": "258_0",
+      "image_id": "258",
+      "roi_file": "roi_258_0.png",
+      "class_id": 10,
+      "bbox": [
+        545,
+        381,
+        607,
+        445
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_258_0",
+      "image_id": "258",
+      "roi_file": "bg_258_0.png",
+      "class_id": -1,
+      "bbox": [
+        1312,
+        661,
+        1386,
+        727
+      ],
+      "is_background": true
+    },
+    {
+      "id": "261_0",
+      "image_id": "261",
+      "roi_file": "roi_261_0.png",
+      "class_id": 10,
+      "bbox": [
+        609,
+        535,
+        705,
+        621
+      ],
+      "is_background": false
+    },
+    {
+      "id": "bg_261_0",
+      "image_id": "261",
+      "roi_file": "bg_261_0.png",
+      "class_id": -1,
+      "bbox": [
+        349,
+        822,
+        458,
+        893
+      ],
+      "is_background": true
+    }
+  ],
+  "class_distribution": {
+    "7": 24,
+    "1": 50,
+    "4": 24,
+    "11": 19,
+    "14": 22,
+    "-1": 177,
+    "13": 14,
+    "12": 31,
+    "6": 17,
+    "8": 16,
+    "5": 8,
+    "9": 5,
+    "2": 15,
+    "3": 10,
+    "10": 5
+  },
+  "total_samples": 437,
+  "dataset_type": "train",
+  "creation_params": {
+    "add_background_samples": true,
+    "background_class_id": -1,
+    "random_seed": 42
+  }
+}

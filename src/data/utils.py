@@ -209,16 +209,6 @@ def show_image(image: np.ndarray, title: str = "Image", wait: bool = True) -> No
 def show_image_with_boxes(image: np.ndarray, boxes: List[Tuple[int, int, int, int, int]], 
                           class_names: Optional[Dict[int, str]] = None, title: str = "Detection Results",
                           wait: bool = True) -> None:
-    """
-    显示带有边界框的图像
-    
-    Args:
-        image: 图像数组
-        boxes: 边界框列表，格式为[(x1, y1, x2, y2, class_id), ...]
-        class_names: 类别名称字典，格式为{class_id: name}
-        title: 窗口标题
-        wait: 是否等待键盘输入
-    """
     import matplotlib.patches as patches
     
     # 确保图像是RGB格式

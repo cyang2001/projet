@@ -314,7 +314,7 @@ def visualize_dominant_color(img, roi, hsv_color, line_id, x1, y1, x2, y2):
     
     plt.subplot(1, 3, 1)
     plt.imshow(img)
-    plt.gca().add_patch(plt.Rectangle((x1, y1), x2-x1, y2-y1, 
+    plt.gca().add_patch(plt.Rectangle((x1, y1), x2-x1, y2-y1,  # type: ignore
                                     edgecolor='g', facecolor='none', linewidth=2)) 
     plt.title(f"Original Image with Line {line_id} ROI")
 
@@ -365,7 +365,7 @@ def extract_dominant_hsv(
     ret, labels, centers = cv2.kmeans(
         pixels,
         K,
-        None,
+        None, # type: ignore
         criteria,
         attempts,
         flags=cv2.KMEANS_PP_CENTERS
@@ -380,7 +380,7 @@ def extract_dominant_hsv(
     dominant_center = centers[dominant_idx]  # HSV 坐标
 
     # 6. 返回整数化的 HSV 三元组
-    return tuple(map(int, dominant_center))
+    return tuple(map(int, dominant_center)) #type: ignore
 
 def visualize_detection_steps(detector, image: np.ndarray):
     """

@@ -1,0 +1,9 @@
+{
+  "roi_dataset_dir": "/Users/gregyoungforever/Documents/ISEP2024-2025/Vision par Ordi/projet/data/",
+  "add_background_samples": true,
+  "background_class_id": -1,
+  "num_bg_samples_per_image": 2,
+  "random_seed": 42,
+  "train_dir": "/Users/gregyoungforever/Documents/ISEP2024-2025/Vision par Ordi/projet/data/train",
+  "val_dir": "/Users/gregyoungforever/Documents/ISEP2024-2025/Vision par Ordi/projet/data/val"
+}
